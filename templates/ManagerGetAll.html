@@ -1,0 +1,80 @@
+<script id="ManagerGetAll-template" type="text/x-handlebars-template">
+<div class="itemlist-header">
+	<h2>مدیران</h2>
+	<ul class="header-icons list-unstyled">
+		<li>
+			<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#manager-add"><i class="icon-plus"></i> مورد جدید</a>
+		</li>
+	</ul>
+</div>
+<table class="table table-bordered table-hover table-striped table-condensed">
+	<thead>
+		<th class="col-xs-2">نام</th>
+		<th class="col-xs-2">نام خانوادگی</th>
+		<th class="col-xs-2">نام کاربری</th>
+		<th class="col-xs-2">کدملی</th>
+		<th class="col-xs-2">موبایل</th>
+		<th class="col-xs-2"></th>
+	</thead>
+	<tbody>
+		{{#each []}}
+        <tr>
+            <td>{{Name}}</td>
+            <td>{{Famili}}</td>
+            <td>{{UserName}}</td>
+            <td>{{NationalId}}</td>
+            <td>{{Mobile}}</td>
+            <td>
+				<figure>
+					<img src="{{ImageAddress}}" alt="{{Guid}}" />
+				</figure>
+			</td>
+        </tr>
+		{{/each}}
+    </tbody>
+</table>
+<div class="modal zoom fade" id="manager-add" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">مورد جدید</h4>
+			</div>
+			<form class="manager-add-form" role="form" action="ManagerAdd" data-next="toast">
+				<div class="modal-body">
+					<div class="form-group">
+						<input type="text" name="UserName" class="form-control" id="manager-add-username-input" placeholder="نام کاربری" required />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Tel" class="form-control" id="manager-add-tell-input" placeholder="تلفن" required />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Phone" class="form-control" id="manager-add-cell-input" placeholder="موبایل" required />
+					</div>
+					<div class="form-group">
+						<input type="text" name="NationalId" class="form-control" id="manager-add-natid-input" placeholder="کدملی" required />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Name" class="form-control rtl" id="manager-add-name-input" placeholder="نام" required />
+					</div>
+					<div class="form-group">
+						<input type="text" name="Famili" class="form-control rtl" id="manager-add-family-input" placeholder="نام خانوادگی" required />
+					</div>
+					<div class="form-group">
+						<input type="email" name="Email" class="form-control" id="manager-add-email-input" placeholder="ایمیل" required />
+					</div>
+					<div class="form-group">
+						<input type="text" name="ImageAddress" class="form-control" id="manager-add-img-input" placeholder="آدرس تصویر" required />
+					</div>
+					<div class="form-group">
+						<textarea name="Descr" class="form-control rtl" id="manager-add-desc-input" placeholder="توضیحات" required></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">ثبت</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</script>

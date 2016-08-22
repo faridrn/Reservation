@@ -1,0 +1,1028 @@
+html, body { height: 100%; }
+body { height: 100%; max-width: 100vw; overflow: hidden; }
+a { outline: 0 none; transition: @t; }
+
+.close { float: left; }
+.modal { color: @text-color; }
+.modal-dialog { margin-top: 20vh; width: 800px; }
+
+table {
+    figure {
+        min-width: 75px; max-width: 100px; margin: 0; padding: 0;
+        img { display: inlin-block; width: 100%; height: auto; text-align: center; }
+    }
+    ul.list-inline {
+        li {
+            padding: 0;
+            .btn { padding: 4px 6px; }
+        }
+    }
+}
+.rtl { direction: rtl; text-align: right; }
+
+.pace {
+    -webkit-pointer-events: none; pointer-events: none; -webkit-user-select: none; -moz-user-select: none; user-select: none;
+    &.pace-inactive { display: none; }
+    .pace-progress {
+        background: @blue; width: 100%; height: 4px; margin: 0 auto; position: fixed; z-index: 2000; top: 0; right: 100%; opacity: 0.9;
+        pace-progress-inner { margin: 0 auto; }
+    }
+}
+
+.carousel {
+    display: none;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    z-index: 1;
+    .animated {
+        -webkit-animation-duration: 1000ms;
+        animation-duration: 1000ms;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+    .owl-animated-in {
+        z-index: 0;
+    }
+    .owl-animated-out {
+        z-index: 1;
+    }
+    .fadeOut {
+        -webkit-animation-name: fadeOut;
+        animation-name: fadeOut;
+    }
+    .owl-stage {
+        position: relative;
+        -ms-touch-action: pan-Y;
+        &:after {
+            content: ".";
+            display: block;
+            clear: both;
+            visibility: hidden;
+            line-height: 0;
+            height: 0;
+        }
+    }
+    .owl-stage-outer {
+        position: relative;
+        overflow: hidden;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+    }
+    .owl-controls {
+        .owl-nav .owl-prev {
+            cursor: hand;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .owl-nav .owl-next {
+            cursor: hand;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .owl-dot {
+            cursor: hand;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    }
+    &.owl-loaded {
+        display: block;
+    }
+    &.owl-loading {
+        opacity: 0;
+        display: block;
+    }
+    &.owl-hidden {
+        opacity: 0;
+    }
+    .owl-refresh {
+        .owl-item {
+            display: none;
+        }
+    }
+    .owl-item {
+        position: relative;
+        min-height: 1px;
+        float: left;
+        -webkit-backface-visibility: hidden;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        img {
+            display: block;
+            width: 100%;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+        .owl-lazy {
+            opacity: 0;
+            -webkit-transition: opacity 400ms ease;
+            -moz-transition: opacity 400ms ease;
+            -ms-transition: opacity 400ms ease;
+            -o-transition: opacity 400ms ease;
+            transition: opacity 400ms ease;
+        }
+    }
+    &.owl-text-select-on {
+        .owl-item {
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+        }
+    }
+    .owl-grab {
+        cursor: grab;
+    }
+    &.owl-rtl {
+        direction: rtl;
+        .owl-item {
+            float: right;
+        }
+    }
+    .owl-video-wrapper {
+        position: relative;
+        height: 100%;
+        background: #000;
+    }
+    .owl-video-play-icon {
+        position: absolute;
+        height: 80px;
+        width: 80px;
+        left: 50%;
+        top: 50%;
+        margin-left: -40px;
+        margin-top: -40px;
+        cursor: pointer;
+        z-index: 1;
+        -webkit-backface-visibility: hidden;
+        -webkit-transition: scale 100ms ease;
+        -moz-transition: scale 100ms ease;
+        -ms-transition: scale 100ms ease;
+        -o-transition: scale 100ms ease;
+        transition: scale 100ms ease;
+        &:hover {
+            -webkit-transition: scale(1.3, 1.3);
+            -moz-transition: scale(1.3, 1.3);
+            -ms-transition: scale(1.3, 1.3);
+            -o-transition: scale(1.3, 1.3);
+            transition: scale(1.3, 1.3);
+        }
+    }
+    .owl-video-playing {
+        .owl-video-tn {
+            display: none;
+        }
+        .owl-video-play-icon {
+            display: none;
+        }
+    }
+    .owl-video-tn {
+        opacity: 0;
+        height: 100%;
+        background-position: center center;
+        background-repeat: no-repeat;
+        -webkit-background-size: contain;
+        -moz-background-size: contain;
+        -o-background-size: contain;
+        background-size: contain;
+        -webkit-transition: opacity 400ms ease;
+        -moz-transition: opacity 400ms ease;
+        -ms-transition: opacity 400ms ease;
+        -o-transition: opacity 400ms ease;
+        transition: opacity 400ms ease;
+    }
+    .owl-video-frame {
+        position: relative;
+        z-index: 1;
+    }
+}
+.owl-height {
+    -webkit-transition: height 500ms ease-in-out;
+    -moz-transition: height 500ms ease-in-out;
+    -ms-transition: height 500ms ease-in-out;
+    -o-transition: height 500ms ease-in-out;
+    transition: height 500ms ease-in-out;
+}
+.no-js {
+    .owl-carousel {
+        display: block;
+    }
+}
+@keyframes fadeOut { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+
+.breadcrumb {
+    background: transparent; margin-top: @grid-gutter-width; margin-bottom: 0; padding-left: 0;
+    & > li {
+        color: @gray;
+        &.active { color: @gray; }
+        & + li{
+            padding-left: 8px;
+            &:before { content: '\e819\00a0\00a0\00a0'; font-family: 'ott'; }
+        }
+    }
+    a {
+        color: @gray-light;
+        &:hover { color: #fff; text-decoration: none; }
+    }
+}
+
+
+// Modal effects
+@backdrop-animation-duration: 0.4s;
+@modal-animation-duration: .5s;
+
+//  IMPORTANT : whatever transition you choose,
+//  you have to preseve the original fade transition effect
+//  in order to preserve the boostrap js transition on hiding modals
+//  example with newspaper effect :
+//  --
+//
+//  <div class="modal fade newspaper" id="myModalId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+//    <div class="modal-dialog">
+//      <div class="modal-content">
+//        ...
+//      </div>
+//    </div>
+//  </div>
+
+// Global Backdrop background
+// ---------------------------
+.modal-backdrop {
+    // Fade for backdrop  
+    -webkit-backface-visibility:hidden;
+    &.zoom, &.newspaper, &.move-horizontal, &.move-from-top, &.unfold-3d, &.zoom-out {
+        opacity: 0;
+        transition: opacity @backdrop-animation-duration ease;
+    }
+    &.in {
+        opacity: @modal-backdrop-opacity;
+    }
+
+    &.unfold-3d {
+        perspective: 500;
+    }
+}
+
+// transition effects
+// --------------------
+
+.modal {
+    // Zoom effect
+    // -------------
+    &.zoom .modal-dialog {
+        opacity: 0;
+        .transition(all @modal-animation-duration ease-in-out);
+        transform: scale(0.6);
+    }
+    &.in .modal-dialog {
+        opacity: 1;
+        .transition(all 0.4s ease-in-out);
+        transform: scale(1); 
+    }
+
+    // Newspaper effect
+    // --------------------
+    &.fade.newspaper .modal-dialog,
+    &.newspaper .modal-dialog {
+        opacity: 0;
+        -webkit-transition: all @modal-animation-duration ease-in-out; 
+        transition: all @modal-animation-duration;
+        transform: scale(0) rotate(500deg);
+    }
+    &.fade.newspaper.in .modal-dialog,
+    &.in .modal-dialog {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+
+    // Move-horizontal effect
+    // --------------------
+
+    &.move-horizontal .modal-dialog {
+        opacity: 0;
+        transition: all @modal-animation-duration;
+        transform: translateX(-50px);
+    }
+    &.in .modal-dialog {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    // Move-from-top effect
+    // --------------------
+
+    &.move-from-top .modal-dialog {
+        opacity: 0;
+        transition: all @modal-animation-duration;
+        transform: translateY(-100px);
+    }
+    &.in .modal-dialog {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    // 3d unfold
+    // --------------------
+    &.unfold-3d .modal-dialog {
+        opacity: 0;
+        transition: all @modal-animation-duration ease-in-out;
+        transform-style: preserve-3d;
+        transform: rotateY(-60deg);
+    }
+    &.in .modal-dialog {
+        opacity: 1;
+        transform: rotateY(0deg);
+    }
+
+    // Zoom-out effect
+    // --------------------
+
+    &.fade.zoom-out .modal-dialog,
+    &.zoom-out .modal-dialog {
+        opacity: 0;
+        transition: all @modal-animation-duration;
+        transform: scale(1.3);
+    }
+    &.fade.zoom-out.in .modal-dialog,
+    &.in .modal-dialog {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+//special 3d transition (use of modernizr to detect browser support)
+// -------------------------------------------------------------------
+
+.csstransforms3d {
+    .modal {
+        // real 3d unfold
+        // --------------------
+        &.unfold-3d .modal-dialog {
+            transform: none;
+            transform-origin: 50% 100%;
+            transform: scale(.7) rotate3d(-1, 1, 0, -60deg);
+        }
+        &.in .modal-dialog {
+            transform: scale(1) rotate3d(-1, 1, 0, 0deg);
+        }
+    }
+}
+
+
+
+/**
+ * @author zhixin wen <wenzhixin2010@gmail.com>
+ * version: 1.11.0
+ * https://github.com/wenzhixin/bootstrap-table/
+ */
+
+.bootstrap-table .table {
+    margin-bottom: 0 !important;
+    border-bottom: 1px solid #dddddd;
+    border-collapse: collapse !important;
+    border-radius: 1px;
+}
+
+.bootstrap-table .table:not(.table-condensed),
+.bootstrap-table .table:not(.table-condensed) > tbody > tr > th,
+.bootstrap-table .table:not(.table-condensed) > tfoot > tr > th,
+.bootstrap-table .table:not(.table-condensed) > thead > tr > td,
+.bootstrap-table .table:not(.table-condensed) > tbody > tr > td,
+.bootstrap-table .table:not(.table-condensed) > tfoot > tr > td {
+    padding: 8px;
+}
+
+.bootstrap-table .table.table-no-bordered > thead > tr > th,
+.bootstrap-table .table.table-no-bordered > tbody > tr > td {
+    border-right: 2px solid transparent;
+}
+
+.bootstrap-table .table.table-no-bordered > tbody > tr > td:last-child {
+    border-right: none;
+}
+
+.fixed-table-container {
+    position: relative;
+    clear: both;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.fixed-table-container.table-no-bordered {
+    border: 1px solid transparent;
+}
+
+.fixed-table-footer,
+.fixed-table-header {
+    overflow: hidden;
+}
+
+.fixed-table-footer {
+    border-top: 1px solid #dddddd;
+}
+
+.fixed-table-body {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.fixed-table-container table {
+    width: 100%;
+}
+
+.fixed-table-container thead th {
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border-left: 1px solid #dddddd;
+}
+
+.fixed-table-container thead th:focus {
+    outline: 0 solid transparent;
+}
+
+.fixed-table-container thead th:first-child {
+    border-left: none;
+    border-top-left-radius: 4px;
+    -webkit-border-top-left-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+}
+
+.fixed-table-container thead th .th-inner,
+.fixed-table-container tbody td .th-inner {
+    padding: 8px;
+    line-height: 24px;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fixed-table-container thead th .sortable {
+    cursor: pointer;
+    background-position: right;
+    background-repeat: no-repeat;
+    padding-right: 30px;
+}
+
+.fixed-table-container thead th .both {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7X QMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC');
+}
+
+.fixed-table-container thead th .asc {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==');
+}
+
+.fixed-table-container thead th .desc {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII= ');
+}
+
+.fixed-table-container th.detail {
+    width: 30px;
+}
+
+.fixed-table-container tbody td {
+    border-left: 1px solid #dddddd;
+}
+
+.fixed-table-container tbody tr:first-child td {
+    border-top: none;
+}
+
+.fixed-table-container tbody td:first-child {
+    border-left: none;
+}
+
+/* the same color with .active */
+.fixed-table-container tbody .selected td {
+    background-color: #f5f5f5;
+}
+
+.fixed-table-container .bs-checkbox {
+    text-align: center;
+}
+
+.fixed-table-container .bs-checkbox .th-inner {
+    padding: 8px 0;
+}
+
+.fixed-table-container input[type="radio"],
+.fixed-table-container input[type="checkbox"] {
+    margin: 0 auto !important;
+}
+
+.fixed-table-container .no-records-found {
+    text-align: center;
+}
+
+.fixed-table-pagination div.pagination,
+.fixed-table-pagination .pagination-detail {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.fixed-table-pagination div.pagination .pagination {
+    margin: 0;
+}
+
+.fixed-table-pagination .pagination a {
+    padding: 6px 12px;
+    line-height: 1.428571429;
+}
+
+.fixed-table-pagination .pagination-info {
+    line-height: 34px;
+    margin-right: 5px;
+}
+
+.fixed-table-pagination .btn-group {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.fixed-table-pagination .dropup .dropdown-menu {
+    margin-bottom: 0;
+}
+
+.fixed-table-pagination .page-list {
+    display: inline-block;
+}
+
+.fixed-table-toolbar .columns-left {
+    margin-right: 5px;
+}
+
+.fixed-table-toolbar .columns-right {
+    margin-left: 5px;
+}
+
+.fixed-table-toolbar .columns label {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+}
+
+.fixed-table-toolbar .bs-bars,
+.fixed-table-toolbar .search,
+.fixed-table-toolbar .columns {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 34px;
+}
+
+.fixed-table-pagination li.disabled a {
+    pointer-events: none;
+    cursor: default;
+}
+
+.fixed-table-loading {
+    display: none;
+    position: absolute;
+    top: 42px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    background-color: #fff;
+    text-align: center;
+}
+
+.fixed-table-body .card-view .title {
+    font-weight: bold;
+    display: inline-block;
+    min-width: 30%;
+    text-align: left !important;
+}
+
+/* support bootstrap 2 */
+.fixed-table-body thead th .th-inner {
+    box-sizing: border-box;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+.fixed-table-toolbar .dropdown-menu {
+    text-align: left;
+    max-height: 300px;
+    overflow: auto;
+}
+
+.fixed-table-toolbar .btn-group > .btn-group {
+    display: inline-block;
+    margin-left: -1px !important;
+}
+
+.fixed-table-toolbar .btn-group > .btn-group > .btn {
+    border-radius: 0;
+}
+
+.fixed-table-toolbar .btn-group > .btn-group:first-child > .btn {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.fixed-table-toolbar .btn-group > .btn-group:last-child > .btn {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.bootstrap-table .table > thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #ddd;
+}
+
+/* support bootstrap 3 */
+.bootstrap-table .table thead > tr > th {
+    padding: 0;
+    margin: 0;
+}
+
+.bootstrap-table .fixed-table-footer tbody > tr > td {
+    padding: 0 !important;
+}
+
+.bootstrap-table .fixed-table-footer .table {
+    border-bottom: none;
+    border-radius: 0;
+    padding: 0 !important;
+}
+
+.bootstrap-table .pull-right .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+/* calculate scrollbar width */
+p.fixed-table-scroll-inner {
+    width: 100%;
+    height: 200px;
+}
+
+div.fixed-table-scroll-outer {
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    width: 200px;
+    height: 150px;
+    overflow: hidden;
+}
+
+/* for get correct heights  */
+.fixed-table-toolbar:after, .fixed-table-pagination:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+
+
+
+
+.datepicker-plot-area { z-index: 9999; }
+.unselectable, .datepicker-plot-area {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none; }
+
+.animation, .datepicker-plot-area .datepicker-time-view .down-btn,
+.datepicker-plot-area .datepicker-time-view .up-btn {
+    -webkit-transition: all 100ms ease;
+    -moz-transition: all 100ms ease;
+    -ms-transition: all 100ms ease;
+    -o-transition: all 100ms ease;
+    transition: all 100ms ease; }
+
+.reset-curve, .date-item-disable, .datepicker-plot-area .datepicker-day-view .table-days td.disabled span, .datepicker-plot-area .datepicker-year-view .year-item-disable,
+.datepicker-plot-area .datepicker-month-view .month-item-disable {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px; }
+
+.top-big-curve, .datepicker-plot-area .datepicker-time-view .down-btn,
+.datepicker-plot-area .datepicker-time-view .up-btn {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px; }
+
+.bottom-big-curve, .datepicker-plot-area .datepicker-time-view .down-btn {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    -webkit-border-bottom-right-radius: 6px;
+    -webkit-border-bottom-left-radius: 6px;
+    -moz-border-radius-bottomright: 6px;
+    -moz-border-radius-bottomleft: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px; }
+
+.big-curve, .datepicker-plot-area, .datepicker-plot-area .datepicker-time-view > div.time-segment {
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px; }
+
+.small-curve, .date-item, .datepicker-plot-area .datepicker-day-view .table-days td span, .datepicker-plot-area .datepicker-year-view .year-item,
+.datepicker-plot-area .datepicker-month-view .month-item {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px; }
+
+.main-box-shadow, .datepicker-plot-area {
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); }
+
+.interactive-item, .date-item, .datepicker-plot-area .datepicker-day-view .table-days td span, .datepicker-plot-area .datepicker-year-view .year-item,
+.datepicker-plot-area .datepicker-month-view .month-item, .date-item-disable, .datepicker-plot-area .datepicker-day-view .table-days td.disabled span, .datepicker-plot-area .datepicker-year-view .year-item-disable,
+.datepicker-plot-area .datepicker-month-view .month-item-disable, .datepicker-plot-area .datepicker-time-view > div.time-segment, .datepicker-plot-area .datepicker-time-view .down-btn,
+.datepicker-plot-area .datepicker-time-view .up-btn, .datepicker-plot-area .datepicker-time-view input, .datepicker-plot-area .datepicker-header .btn-next,
+.datepicker-plot-area .datepicker-header .btn-switch,
+.datepicker-plot-area .datepicker-header .btn-prev, .datepicker-plot-area .toolbox .btn-today {
+    cursor: pointer; }
+
+.date-item, .datepicker-plot-area .datepicker-day-view .table-days td span, .datepicker-plot-area .datepicker-year-view .year-item,
+.datepicker-plot-area .datepicker-month-view .month-item {
+    font: 14px;
+    background-color: #ffffff;
+    color: #333333;
+    border: 0px;
+    text-shadow: none; }
+
+.date-item-disable, .datepicker-plot-area .datepicker-day-view .table-days td.disabled span, .datepicker-plot-area .datepicker-year-view .year-item-disable,
+.datepicker-plot-area .datepicker-month-view .month-item-disable {
+    background-color: #f1f1f1 !important;
+    color: #cccccc !important;
+    border: none !important;
+    text-shadow: none !important;
+    cursor: default; }
+
+.date-item-today, .datepicker-plot-area .datepicker-day-view .table-days td span.today {
+    background-color: #333333;
+    color: #ffffff;
+    border: 0px;
+    text-shadow: none; }
+
+.date-item-numb, .datepicker-plot-area .datepicker-day-view .table-days td span.other-month {
+    background-color: "";
+    color: #cccccc;
+    border: none;
+    text-shadow: none; }
+
+.date-item-selected, .datepicker-plot-area .datepicker-day-view .table-days td span.selected, .datepicker-plot-area .datepicker-year-view .year-item.selected,
+.datepicker-plot-area .datepicker-month-view .month-item.selected {
+    background-color: #006dcc !important;
+    color: #ffffff;
+    border: none;
+    text-shadow: 1px 1px 1px #000000; }
+
+.date-item-hover, .datepicker-plot-area .datepicker-day-view .table-days td span:hover, .datepicker-plot-area .datepicker-year-view .year-item:hover,
+.datepicker-plot-area .datepicker-month-view .month-item:hover {
+    background-color: #eeeeee;
+    color: "";
+    border: 0px;
+    text-shadow: none; }
+
+.datepicker-plot-area {
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 70px;
+    display: block;
+    width: 200px;
+    padding: 0px 5px 0px 5px;
+    position: absolute;
+    top: 100px;
+    font: 12px tahoma;
+    border: 1px solid #cccccc;
+    background-color: #ffffff; }
+.datepicker-plot-area table,
+.datepicker-plot-area th,
+.datepicker-plot-area td {
+    border: none;
+    background: none; }
+.datepicker-plot-area * {
+    text-align: center;
+    color: #333333; }
+
+.datepicker-plot-area-inline-view {
+    display: block !important;
+    width: 100%;
+    position: static;
+    float: left; }
+
+.datepicker-plot-area .datepicker-day-view,
+.datepicker-plot-area .datepicker-month-view,
+.datepicker-plot-area .datepicker-year-view {
+    display: block;
+    width: 98%;
+    float: left;
+    min-height: 200px !important;
+    margin: 0px 1% 0px 1%; }
+
+.datepicker-plot-area .datepicker-time-view {
+    display: block;
+    float: left;
+    width: 100%;
+    padding: 5px 1%;
+    margin: 0px;
+    margin: 3px 0px;
+    background: #f9f9f9;
+    border-top: 1px solid #f1f1f1; }
+.datepicker-plot-area .datepicker-time-view > div.time-segment {
+    display: block;
+    width: 22%;
+    height: 60px;
+    float: left;
+    overflow: hidden; }
+.datepicker-plot-area .datepicker-time-view > div.time-segment:hover .down-btn, .datepicker-plot-area .datepicker-time-view > div.time-segment:hover .up-btn {
+    font-weight: bold;
+    background-color: #ffffff; }
+.datepicker-plot-area .datepicker-time-view .divider {
+    display: block;
+    width: 3%;
+    height: 60px;
+    line-height: 60px !important;
+    float: left;
+    overflow: hidden;
+    font: 12px bold; }
+.datepicker-plot-area .datepicker-time-view .down-btn,
+.datepicker-plot-area .datepicker-time-view .up-btn {
+    display: block;
+    float: left;
+    width: 100%;
+    margin: 0px 0%;
+    height: 20px;
+    line-height: 18px; }
+.datepicker-plot-area .datepicker-time-view .down-btn:hover,
+.datepicker-plot-area .datepicker-time-view .up-btn:hover {
+    background-color: #eeeeee; }
+.datepicker-plot-area .datepicker-time-view input {
+    display: block;
+    width: 90%;
+    margin: 0px 5%;
+    height: 20px;
+    padding: 0px;
+    border: none;
+    background: #f9f9f9; }
+
+.datepicker-plot-area .datepicker-day-view .table-days {
+    width: 100%;
+    float: left;
+    direction: rtl; }
+.datepicker-plot-area .datepicker-day-view .table-days tr {
+    width: 300px; }
+.datepicker-plot-area .datepicker-day-view .table-days td {
+    height: 26px;
+    padding: 0px;
+    margin: 0px; }
+.datepicker-plot-area .datepicker-day-view .table-days td span {
+    display: block;
+    width: 100%;
+    height: 26px;
+    line-height: 26px;
+    padding: 0px;
+    margin: 0px; }
+.datepicker-plot-area .datepicker-day-view .month-grid-box {
+    display: block;
+    width: 100%;
+    float: right;
+    min-width: 150px;
+    height: 180px;
+    margin: 10px 1% 5px 1%; }
+.datepicker-plot-area .datepicker-day-view .month-grid-box .header .header-row {
+    display: block;
+    width: 100%;
+    height: 25px;
+    float: left; }
+.datepicker-plot-area .datepicker-day-view .month-grid-box .header .header-row-cell {
+    display: block;
+    width: 14%;
+    height: 25px;
+    float: right;
+    line-height: 25px;
+    text-indent: 6px;
+    font: 14px tahoma;
+    font-weight: bold;
+    color: #333333; }
+
+.datepicker-plot-area .datepicker-year-view .year-item,
+.datepicker-plot-area .datepicker-month-view .month-item {
+    display: block;
+    width: 31%;
+    margin: 2px 1% 0px 1%;
+    float: right;
+    height: 36px;
+    line-height: 34px; }
+
+.datepicker-plot-area .datepicker-header {
+    display: block;
+    width: 98%;
+    height: 30px;
+    float: left;
+    padding: 3px 1% 0px 1%; }
+.datepicker-plot-area .datepicker-header .btn-next,
+.datepicker-plot-area .datepicker-header .btn-switch,
+.datepicker-plot-area .datepicker-header .btn-prev {
+    display: block;
+    float: left;
+    height: 28px;
+    line-height: 28px;
+    font-weight: bold;
+    background-color: #ffffff;
+    color: #333333; }
+.datepicker-plot-area .datepicker-header .btn-next:hover,
+.datepicker-plot-area .datepicker-header .btn-switch:hover,
+.datepicker-plot-area .datepicker-header .btn-prev:hover {
+    background-color: #eeeeee; }
+.datepicker-plot-area .datepicker-header .btn-next {
+    display: block;
+    width: 15%;
+    float: left; }
+.datepicker-plot-area .datepicker-header .btn-switch {
+    display: block;
+    width: 66%;
+    margin: 0px 2% 0px 2%;
+    float: left; }
+.datepicker-plot-area .datepicker-header .btn-prev {
+    display: block;
+    width: 15%;
+    float: left; }
+
+.datepicker-plot-area .toolbox {
+    display: block;
+    width: 100%;
+    float: left;
+    padding: 3px 0px; }
+.datepicker-plot-area .toolbox .btn-today {
+    display: block;
+    width: 60px;
+    height: 20px;
+    line-height: 16px;
+    margin: 0px auto;
+    font-weight: bold;
+    background-color: #ffffff; }
+.datepicker-plot-area .toolbox .btn-today:hover {
+    background-color: #eeeeee; }
+
+.datepicker-plot-area .datepicker-header {
+    display: block;
+    width: 98%;
+    height: 30px;
+    float: left;
+    padding: 3px 1% 0px 1%; }
+.datepicker-plot-area .datepicker-header .btn-next,
+.datepicker-plot-area .datepicker-header .btn-switch,
+.datepicker-plot-area .datepicker-header .btn-prev {
+    display: block;
+    float: left;
+    height: 28px;
+    line-height: 28px;
+    font-weight: bold;
+    background-color: #ffffff;
+    color: #333333; }
+.datepicker-plot-area .datepicker-header .btn-next:hover,
+.datepicker-plot-area .datepicker-header .btn-switch:hover,
+.datepicker-plot-area .datepicker-header .btn-prev:hover {
+    background-color: #eeeeee; }
+.datepicker-plot-area .datepicker-header .btn-next {
+    display: block;
+    width: 15%;
+    float: left; }
+.datepicker-plot-area .datepicker-header .btn-switch {
+    display: block;
+    width: 66%;
+    margin: 0px 2% 0px 2%;
+    float: left; }
+.datepicker-plot-area .datepicker-header .btn-prev {
+    display: block;
+    width: 15%;
+    float: left; }

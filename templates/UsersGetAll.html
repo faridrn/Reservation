@@ -1,0 +1,16 @@
+<script id="UsersGetAll-template" type="text/x-handlebars-template">
+<table class="table table-bordered table-hover table-striped table-condensed">
+    <tbody>
+		{{#each []}}
+        <tr>
+            <td>{{Guid}}</td>
+            <td>{{UserName}}</td>
+            <td>{{Name}}</td>
+            <td>{{Famili}}</td>
+        </tr>
+		{{else}}
+		No Content
+		{{/each}}
+    </tbody>
+</table>
+</script>

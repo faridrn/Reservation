@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title></title>
+		<meta name="description" content="{Description}">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/toastr.min.css">
+		<script src="js/modernizr-2.6.2.min.js"></script>
+		<script src="js/jquery-3.1.0.min.js"></script>
+		<script src="js/handlebars-v4.0.5.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap-table.js"></script>
+		<script src="js/bootstrap-table/locale/bootstrap-table-fa-IR.js"></script>
+		<script src="js/toastr.min.js"></script>
+		<script src="js/jdate.min.js"></script>
+		<script src="js/persian-date-0.1.8.min.js"></script>
+		<script src="js/persian-datepicker-0.4.5.min.js"></script>
+		<script src="js/global.js"></script>
+		<script>
+			var token = '';
+            if (typeof token === "string" && (typeof Cookie.check() === "undefined" || Cookie.check() === "")) {
+                location.href = 'login.html';
+            } else {
+                token = JSON.parse(Cookie.check());
+            }
+		</script>
+		<script src="js/main.js"></script>
+	</head>
+	<body id="bd" class="app">
+		<div class="app-container">
+			<div class="wrapper">
+				<aside class="sidebar">
+					<div class="sidebar-inner">
+						<div class="icon">
+							<figure>
+								<img src="img/logo_health.png" alt="" />
+							</figure>
+						</div>
+						<div class="app-menu" id="menu">
+							<ul>
+								<!-- Admin -->
+								<li>
+									<a href="#specialities">تخصص‌ها</a>
+								</li>
+								<li>
+									<a href="#doctors">پزشکان</a>
+								</li>
+								<li>
+									<a href="#managers">مدیران</a>
+								</li>
+								<li>
+									<a href="#users">کاربران</a>
+								</li>
+								<!-- Secretary -->
+								<li>
+									<a href="#visits">انواع ویزیت</a>
+								</li>
+								<li>
+									<a href="#shifts">شیفت‌ها</a>
+								</li>
+								<li>
+									<a href="#reservations">رزروها</a>
+								</li>
+							</ul>
+						</div>
+						<div class="user-menu">
+							<span class="username"></span>
+							<a href="#" data-toggle="tooltip" title="Logout"><i class="icon-logout"></i></a>
+							<a href="#"><i class="icon-user"></i></a>
+						</div>
+					</div>
+				</aside>
+				<main class="mainbody">
+					<section class="app-main">
+						<div class="app-inner" id="place">
+							
+						</div>
+					</section>
+				</main>
+			</div>
+		</div>
+	</body>
+</html>

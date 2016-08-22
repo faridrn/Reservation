@@ -1,0 +1,11 @@
+body > * { direction: rtl; text-align: right; }
+[class*="col-"] { float: right; }
+input, select, textarea {
+    direction: ltr;
+    .rtl { text-align: right; direction: rtl; }
+}
+table {
+    &.rtl {
+        th { direction: rtl; text-align: right; }
+    }
+}
