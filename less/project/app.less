@@ -1,30 +1,31 @@
 .app-container {
-    width: @container-lg; background: #fff; margin: 15vh auto; height: 70vh;
+    width: 100%; background: #fff; margin: 0; height: 100%;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); border-radius: 2px; overflow: hidden;
     & > .wrapper { width: 100%; height: 100%; position: relative; }
     .sidebar {
-        width: @sidebar-width; height: 100%; position: absolute; top: 0; right: 0; background: @sidebar-bg; z-index: @sidebar-zindex;
+        width: @sidebar-width; height: 100%; position: absolute; top: 0; right: 0; background: @sidebar-bg; z-index: @sidebar-zindex; padding-top: @grid-gutter-width*5;
         .sidebar-inner { position: relative; height: 100%; }
-        .user-menu {
-            position: absolute; bottom: 0; right: 0; width: 100%; height: 60px; z-index: @sidebar-zindex + 1; background: #1E88E5; line-height: 60px; padding: 0 @grid-gutter-width; color: #efefef;
-            a {
-                display: block; float: left; color: #fff; margin-right: @grid-gutter-width / 3;
-                &:hover { color: #ddd; }
-            }
-        }
-        .icon {
-            figure {
-                padding: @grid-gutter-width;
-                img { display: block; width: 100%; height: auto; }
-            }
+    }
+    .user-menu {
+        position: absolute; top: 0; left: 0; width: @sidebar-width; height: @header-height; z-index: @sidebar-zindex + 1; background: #1E88E5; line-height: @header-height; padding: 0 @grid-gutter-width; color: #efefef;
+        a {
+            display: block; float: left; color: #fff; margin-right: @grid-gutter-width / 3;
+            &:hover { color: #ddd; }
         }
     }
     .mainbody {
         .app-header {
             position: absolute; top: 0; right: 0; width: 100%; height: @header-height; background: @header-bg; z-index: @header-zindex;
+            .icon {
+                figure {
+                    padding: @grid-gutter-width / 2; width: 100px;
+                    img { display: block; width: 100%; height: auto; }
+                }
+            }
+            .title{ color: #fff; margin: 0; font-size: 18px; position: absolute; top: 0; right: 120px; line-height: @header-height; }
         }
         .app-main {
-            position: absolute; top: 0; right: @sidebar-width; width: 100 - @sidebar-width; height: 100%; background: #fff;  padding: @header-height 0 0 0;  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.12); padding-top: @header-height; z-index: @header-zindex +10;
+            position: absolute; top: @header-height; right: 0; width: 100%; height: 100%; background: #fff;  padding: @header-height @sidebar-width 0 0;  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.12); padding-top: @header-height; z-index: @header-zindex +10;
             .app-inner {
                 width: 100%; height: 100%; overflow: auto; overflow-x: hidden; padding: @grid-gutter-width;
                 .itemlist-header {
@@ -48,7 +49,7 @@
                 a { background: #fff; color: @text-color; }
             }
             a {
-                display: block; height: 100%; margin: 0; border-right: (@grid-gutter-width / 3) solid transparent; border-left: (@grid-gutter-width / 3) solid transparent; transition: all 0.2s ease 0s; padding: 0 20px; color: #fff; outline: 0 none; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; z-index: 100;
+                display: block; height: 100%; margin: 0; border-right: (@grid-gutter-width / 3) solid transparent; border-left: (@grid-gutter-width / 3) solid transparent; transition: all 0.2s ease 0s; padding: 0 20px; color: #fff; outline: 0 none; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; position: relative; z-index: 100; font-size: @font-size-base + 2;
                 i { float: left; line-height: 50px; }
                 span { display: inline-block; height: 24px; line-height: 50px; font-size: 16px; margin-left: 6px; }
                 &:hover { background: @gray-lighter; text-decoration: none; color: @text-color; }

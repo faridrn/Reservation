@@ -20,7 +20,7 @@
 		<script src="js/persian-datepicker-0.4.5.min.js"></script>
 		<script src="js/global.js"></script>
 		<script>
-			var token = '';
+            var token = '';
             if (typeof token === "string" && (typeof Cookie.check() === "undefined" || Cookie.check() === "")) {
                 location.href = 'login.html';
             } else {
@@ -34,49 +34,73 @@
 			<div class="wrapper">
 				<aside class="sidebar">
 					<div class="sidebar-inner">
+						<div class="app-menu" id="menu">
+							<ul>
+								<!-- Admin -->
+								<li>
+									<a href="#specialities">
+										<i class="icon-tree"></i> 
+										تخصص‌ها
+									</a>
+								</li>
+								<li>
+									<a href="#doctors">
+										<i class="icon-user-md"></i> 
+										پزشکان
+									</a>
+								</li>
+								<li>
+									<a href="#managers">
+										<i class="icon-users-1"></i> 
+										مدیران
+									</a>
+								</li>
+								<li>
+									<a href="#users">
+										<i class="icon-users"></i> 
+										کاربران
+									</a>
+								</li>
+								<!-- Secretary -->
+								<li>
+									<a href="#visits">
+										<i class="icon-address-book"></i> 
+										انواع ویزیت
+									</a>
+								</li>
+								<li>
+									<a href="#shifts">
+										<i class="icon-calendar-grid"></i> 
+										شیفت‌ها
+									</a>
+								</li>
+								<li>
+									<a href="#reservations">
+										<i class="icon-calendar-check-o"></i> 
+										رزروها
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</aside>
+				<main class="mainbody">
+					<header class="app-header">
 						<div class="icon">
 							<figure>
 								<img src="img/logo_health.png" alt="" />
 							</figure>
 						</div>
-						<div class="app-menu" id="menu">
-							<ul>
-								<!-- Admin -->
-								<li>
-									<a href="#specialities">تخصص‌ها</a>
-								</li>
-								<li>
-									<a href="#doctors">پزشکان</a>
-								</li>
-								<li>
-									<a href="#managers">مدیران</a>
-								</li>
-								<li>
-									<a href="#users">کاربران</a>
-								</li>
-								<!-- Secretary -->
-								<li>
-									<a href="#visits">انواع ویزیت</a>
-								</li>
-								<li>
-									<a href="#shifts">شیفت‌ها</a>
-								</li>
-								<li>
-									<a href="#reservations">رزروها</a>
-								</li>
-							</ul>
-						</div>
-						<div class="user-menu">
+						<h1 class="title">سامانه رزرواسینون پزشک دانشگاه آزاد</h1>
+						<div class="user-menu pull-left">
 							<span class="username"></span>
 							<a href="#" data-toggle="tooltip" title="Logout"><i class="icon-logout"></i></a>
 							<a href="#"><i class="icon-user"></i></a>
 						</div>
-					</div>
-				</aside>
-				<main class="mainbody">
+					</header>
 					<section class="app-main">
 						<div class="app-inner" id="place">
-							
+
 						</div>
 					</section>
 				</main>
