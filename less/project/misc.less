@@ -6,9 +6,9 @@ a { outline: 0 none; transition: @t; }
 .modal { color: @text-color; }
 .modal-dialog { margin-top: 20vh; width: 800px; }
 
-table {
+.table {
     figure {
-        min-width: 75px; max-width: 100px; margin: 0; padding: 0;
+        min-width: 50px; max-width: 100px; margin: 0; padding: 0; text-align: center;
         img { display: inlin-block; width: 100%; height: auto; text-align: center; }
     }
     ul.list-inline {
@@ -16,6 +16,9 @@ table {
             padding: 0;
             /*.btn { padding: 4px 6px; }*/
         }
+    }
+    tbody tr {
+        td { vertical-align: middle; }
     }
 }
 .rtl { direction: rtl; text-align: right; }

@@ -1,0 +1,39 @@
+<script id="ExpertGetAll-template" type="text/x-handlebars-template">
+<div class="itemlist-header">
+	<h2>تخصص‌ها</h2>
+	<!--
+	<ul class="header-icons list-unstyled">
+		<li>
+			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
+		</li>
+	</ul>
+	-->
+</div>
+<div class="tree">
+	<textarea>{{#stringify raw}}{{/stringify}}</textarea>
+</div>
+<div class="modal zoom fade" id="doctors-add" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">مورد جدید</h4>
+			</div>
+			<form class="manager-add-form form-horizontal" role="form" action="ExpertAdd" data-next="toast">
+				<input type="hidden" name="ParentId" data-identifier="parent" value="" />
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="expert-node-add" class="col-sm-2 control-label">عنوان</label>
+						<div class="col-sm-10">
+							<input type="text" name="Name" class="form-control rtl" id="expert-node-add" placeholder="عنوان" required />
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">ثبت</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</script>

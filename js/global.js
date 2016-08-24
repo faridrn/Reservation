@@ -89,7 +89,7 @@ var Location = {
         } else {
             debug && console.warn(Global.t() + ' No url fragments!');
             // Go to main page
-            Location.redirect('reservations', true);
+            Location.redirect('doctors', true);
         }
         return false;
     }
@@ -233,5 +233,100 @@ var Global = {
             output = (showSign) ? output + sign : output;
         }
         return output;
+    }
+    , handlebarHelpers: function() {
+        Handlebars.registerHelper('times', function (n, block) { // Loop a block starting at 0
+            var accum = '';
+            for (var i = 0; i < n; ++i)
+                accum += block.fn(i);
+            return accum;
+        });
+        Handlebars.registerHelper('date', function (offset, options) {
+            var output = '';
+            if (typeof offset === 'undefined' || offset === '')
+                offset = 0;
+            var date = new Date();
+            date.setDate(date.getDate() + offset);
+            var dd = date.getDate();
+            var mm = date.getMonth() + 1; //January is 0!
+            var yyyy = date.getFullYear();
+            if (dd < 10)
+                dd = '0' + dd;
+            if (mm < 10)
+                mm = '0' + mm;
+            output = mm + '/' + dd + '/' + yyyy;
+            return output;
+        });
+        Handlebars.registerHelper('htimes', function (n, block) { // Loop a block starting at 1 [human-readable times]
+            var accum = '';
+            for (var i = 1; i < (n + 1); ++i)
+                accum += block.fn(i);
+            return accum;
+        });
+        Handlebars.registerHelper('for', function (from, to, incr, block) { // For loop {{#for i to steps}} -> {{#for 0 10 2}}
+            var accum = '';
+            for (var i = from; i < to; i += incr)
+                accum += block.fn(i);
+            return accum;
+        });
+        Handlebars.registerHelper('ifCond', function (v1, v2, options) {
+            if (v1 === v2) {
+                return options.fn(this);
+            }
+            return options.inverse(this);
+        });
+        Handlebars.registerHelper('ifCondNot', function (v1, v2, options) {
+            if (v1 !== v2) {
+                return options.fn(this);
+            }
+            return options.inverse(this);
+        });
+        Handlebars.registerHelper('ifActive', function (val, options) {
+            var currentID = (typeof Location.parts[2] === "undefined") ? 0 : Location.parts[2];
+            if (parseInt(val) === parseInt(currentID)) {
+                return "grey-cascade";
+            }
+            return "btn-default";
+        });
+        Handlebars.registerHelper('stringify', function (obj, options) {
+            return JSON.stringify(obj);
+        });
+        Handlebars.registerHelper('Bool2Label', function (val, options) {
+            var output = '';
+            if (val === true) {
+                output = '<span class="label label-success">Yes</label>';
+            } else {
+                output = '<span class="label label-warning">No</label>';
+            }
+            return output;
+        });
+        Handlebars.registerHelper('Num2Label', function (val, options) {
+            var output = '';
+            switch (val) {
+                case 0:
+                    output = '<span class="label label-warning">No</label>';
+                    break;
+                case 1:
+                    output = '<span class="label label-success">Yes</label>';
+                    break;
+            }
+            return output;
+        });
+        Handlebars.registerHelper('isChecked', function (val, options) {
+            var output = '';
+            if (val === true || val === 1) {
+                output = 'checked';
+            }
+            return output;
+        });
+        Handlebars.registerHelper('cycle', function (value, block) {
+            var values = value.split(' ');
+            return values[block.data.index % (values.length + 1)];
+        });
+        window.Handlebars.registerHelper('select', function (value, options) {
+            var $el = $('<select />').html(options.fn(this));
+            $el.find('[value=' + value + ']').attr({'selected': 'selected'});
+            return $el.html();
+        });
     }
 };

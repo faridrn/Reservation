@@ -3,7 +3,7 @@
 	<h2>پزشکان</h2>
 	<ul class="header-icons list-unstyled">
 		<li>
-			<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#doctors-add"><i class="icon-plus"></i> مورد جدید</a>
+			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
 		</li>
 	</ul>
 </div>
@@ -20,7 +20,10 @@
 	<tbody>
 		{{#each []}}
         <tr data-id="{{Guid}}">
-            <td>{{Name}}</td>
+            <td>
+				{{Name}}
+				<textarea class="raw" style="display: none">{{#stringify raw}}{{/stringify}}</textarea>
+			</td>
             <td>{{Famili}}</td>
             <td>{{Code}}</td>
             <td>{{NationalId}}</td>
@@ -32,9 +35,9 @@
 			</td>
 			<td>
 				<ul class="list-inline list-unstyled text-center">
-					<li><button class="btn btn-sm"><i class="icon-search"></i> مشاهده</button></li>
-					<li><button class="btn btn-sm"><i class="icon-edit"></i> ویرایش</button></li>
-					<li><button class="btn btn-sm"><i class="icon-minus"></i> حذف</button></li>
+					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده</button></li>
+					<li><button class="btn btn-sm btn-warning manipulate" data-type="edit"><i class="icon-edit"></i> ویرایش</button></li>
+					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
 				</ul>
 			</td>
         </tr>
@@ -48,7 +51,8 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title">مورد جدید</h4>
 			</div>
-			<form class="manager-add-form form-horizontal" role="form" action="DoctorsAdd" data-next="toast">
+			<form class="manager-add-form form-horizontal" role="form" action="DoctorsAdd" data-service-add="DoctorsAdd" data-service-edit="DoctorsUpdate" data-service-delete="DoctorRemove" data-next="toast">
+				<input type="hidden" name="Guid" value="" />
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="doctors-gender-select" class="col-sm-2 control-label">جنسیت</label>

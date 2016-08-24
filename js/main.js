@@ -16,6 +16,7 @@ function app() {
     this.initPlugins = function () {
 //        Global.periodicals();
         User.getData();
+        Global.handlebarHelpers();
         toastr.options = {
             "closeButton": true,
             "debug": false,
@@ -131,12 +132,11 @@ var Data = {
     }
     , show: function (data, tmpl, place) {
         place = (typeof place === "undefined") ? '#place' : place;
-//        tmpl = (typeof tmpl === "undefined") ? data.Action : tmpl;
         tmpl = Global.loadTemplate(tmpl);
         debug && console.log(Global.t() + ' DataShow: Selected template is: ' + tmpl);
         var template = $(tmpl).html();
         var handlebarsTemplate = Handlebars.compile(template);
-        var d = Data.handleItems(data.Items);
+        var d = Data.handleItems(Data.createDataFullString(Data.createDataString(data.Items)));
         var output = handlebarsTemplate(d);
         if ($(place).length) {
             $(place).empty();
@@ -144,6 +144,19 @@ var Data = {
                 Data.handleContent(place);
             });
         }
+    }
+    , createDataString: function (o) {
+        if (typeof o === "object") {
+            $.each(o, function () {
+                this.raw = JSON.stringify(this);
+            });
+            return o;
+        }
+        return null;
+    }
+    , createDataFullString: function (o) {
+        o.raw = o;
+        return o;
     }
     , reload: function (page) {
         if (typeof page === "object" && page.length > 0) {
@@ -158,6 +171,19 @@ var Data = {
         // After render
         if ($(place).find("table").length) {
             $('table').bootstrapTable({locale: 'fa-IR', sortable: true, pagination: true, cache: false, pageSize: 20, clickToSelect: false});
+        }
+        if ($(place).find(".tree").length) {
+            var data = Data.prepareTree($('.tree textarea').val());
+            $('.tree').on('ready.jstree', function () {
+            }).on('hover_node.jstree', function (e, node) {
+                $('#' + node.node.id).find("> a").append('<button class="btn btn-link btn-xs manipulate" data-type="append" data-id="' + node.node.id + ' "><i class="icon-plus"></i></button>');
+            }).on('dehover_node.jstree', function (e, node) {
+                $('#' + node.node.id).find("button").remove();
+            }).jstree({
+                core: {
+                    data: data
+                }
+            });
         }
         if ($(place).find(".datepicker").length) {
             $(".datepicker").each(function () {
@@ -177,6 +203,43 @@ var Data = {
                 });
             });
         }
+    }
+    , prepareTree: function (rawData) {
+        var data = JSON.parse(rawData);
+        $.each(data, function (i, item) {
+            item.id = item.Id;
+            item.parent = (item.ParentId === null) ? '#' : item.ParentId;
+//            item.parent = item.ParentId;
+            item.text = item.Name;
+            item.state = {opened: true};
+//            item.li_attr = {'data-id': item.Id};
+            delete item.ParentId;
+            delete item.Name;
+            delete item.Id;
+            delete item.raw;
+        });
+        return data;
+        return Data.treeify(data);
+    }
+    , treeify: function (list) {
+        var treeList = [];
+        var lookup = {};
+        $.each(list, function (i, item) {
+            lookup[item.id] = item;
+            item.children = [];
+        });
+        $.each(list, function () {
+            if (this.parent !== null) {
+                lookup[this.parent]['children'].push(this);
+            } else {
+                treeList.push(this);
+            }
+        });
+        $.each(treeList, function () {
+            if (this.parent === null)
+                this.parent = '#';
+        });
+        return treeList;
     }
 };
 var Forms = {
@@ -228,6 +291,10 @@ var User = {
             $.ajax(o);
         }
     }
+    , logout: function () {
+        Cookie.delete();
+        window.location.href = 'login.html';
+    }
 };
 
 $.fn.serializeObject = function () { // serializeArray - serialize form as an array instead of default object
@@ -266,4 +333,62 @@ new app();
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
+    $(document).on('click', 'button.manipulate', function (e) {
+        e.preventDefault;
+        var $modal = $(".app-inner").find(".modal");
+        var $form = $modal.find("form:first");
+        var task = $(this).attr("data-type");
+        if (task !== 'add' && task !== 'append')
+            var data = JSON.parse(JSON.parse($(this).parents("tr:first").find(".raw").val()));
+        switch (task) {
+            case 'append':
+                var parent_id = $(this).attr('data-id');
+                $modal.find('[data-identifier="parent"]').val(parent_id);
+                $modal.addClass('refresh-after');
+                break;
+            case 'add':
+                $form.trigger('reset');
+                $modal.find('input, textarea, select, button').prop('disabled', false);
+                $modal.find('[name="Guid"]').val('');
+                $form.attr('action', $form.attr('data-service-add'));
+                $modal.addClass('refresh-after');
+                break;
+            case 'view':
+                for (var prop in data) {
+                    $modal.find('[name="' + prop + '"]').val(data[prop]);
+                    $modal.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
+                }
+                break;
+            case 'edit':
+                for (var prop in data) {
+                    $modal.find('[name="' + prop + '"]').val(data[prop]);
+                    $modal.find('input, textarea, select, button').prop('disabled', false);
+                    $form.attr('action', $form.attr('data-service-edit'));
+                    $modal.addClass('refresh-after');
+                }
+                break;
+            case 'delete':
+                var id = $(this).parents("tr").attr("data-id");
+                if (confirm('Are you sure?')) {
+                    var data = {
+                        Action: $form.attr('data-service-delete')
+                        , Params: {Guid: id}
+                    };
+                    Data.post(data, $form.attr('data-next'));
+                }
+                break;
+        }
+        if (task !== 'delete')
+            $modal.modal('show').on('hidden.bs.modal', function () {
+               if ($modal.hasClass('refresh-after')) 
+                   Location.refresh();
+            });
+    });
+    $(document).on('click', 'a[data-task]', function (e) {
+        var task = $(this).attr('data-task');
+        e.preventDefault();
+        if (task === 'logout') {
+            User.logout();
+        }
+    });
 });
