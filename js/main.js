@@ -87,7 +87,11 @@ var Data = {
             , headers: {"Token": (token !== "") ? token.data : ''}
             , data: JSON.stringify(data)
             , error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status + '/' + JSON.parse(xhr.responseText).ExceptionMessage);
+                if(xhr.status==403)
+                    User.logout();
+            }
+            , fail: function() {
+                alert();
             }
         };
         debug && console.log(Global.t() + ' Request Object: ' + JSON.stringify(object));
@@ -176,7 +180,15 @@ var Data = {
             var data = Data.prepareTree($('.tree textarea').val());
             $('.tree').on('ready.jstree', function () {
             }).on('hover_node.jstree', function (e, node) {
-                $('#' + node.node.id).find("> a").append('<button class="btn btn-link btn-xs manipulate" data-type="append" data-id="' + node.node.id + ' "><i class="icon-plus"></i></button>');
+                var rawData = {
+                    ParentId: $('#' + node.node.id).parents("li:first").attr('id')
+                    , Name: $('#' + node.node.id).find("> a").text()
+                    , Id: node.node.id
+                };
+                $('#' + node.node.id).find("> a")
+                        .append('<button class="btn btn-link btn-xs manipulate" data-type="append" data-id="' + node.node.id + ' "><i class="icon-plus"></i></button>')
+                        .append('<button class="btn btn-link btn-xs manipulate" data-type="delete" data-id="' + node.node.id + ' "><i class="icon-minus"></i></button>')
+                        .append('<button class="btn btn-link btn-xs manipulate" data-type="edit" data-id="' + node.node.id + ' " data-raw=\'' + JSON.stringify(rawData) + '\'><i class="icon-edit"></i></button>');
             }).on('dehover_node.jstree', function (e, node) {
                 $('#' + node.node.id).find("button").remove();
             }).jstree({
@@ -218,6 +230,7 @@ var Data = {
             delete item.Id;
             delete item.raw;
         });
+//        console.log(data);
         return data;
         return Data.treeify(data);
     }
@@ -240,6 +253,12 @@ var Data = {
                 this.parent = '#';
         });
         return treeList;
+    }
+    , createTreeOptions: function (tree) {
+        
+    }
+    , addOptionPrefixes: function (id, title, level) {
+        
     }
 };
 var Forms = {
@@ -338,8 +357,13 @@ $(function () {
         var $modal = $(".app-inner").find(".modal");
         var $form = $modal.find("form:first");
         var task = $(this).attr("data-type");
-        if (task !== 'add' && task !== 'append')
-            var data = JSON.parse(JSON.parse($(this).parents("tr:first").find(".raw").val()));
+        if (task !== 'add' && task !== 'append') {
+            if ($(this).parents("tr:first").find(".raw").length)
+                var data = JSON.parse(JSON.parse($(this).parents("tr:first").find(".raw").val()));
+            else
+                var data = JSON.parse($(this).attr("data-raw"));
+        }
+        console.log(data);
         switch (task) {
             case 'append':
                 var parent_id = $(this).attr('data-id');
@@ -371,11 +395,12 @@ $(function () {
                 }
                 break;
             case 'delete':
-                var id = $(this).parents("tr").attr("data-id");
+                var id = (typeof $(this).attr("data-id") === "undefined" && $(this).parents("tr").length) ? $(this).parents("tr").attr("data-id") : $(this).attr("data-id");
+                var action = $modal.find("[data-service-delete]:first").attr("data-service-delete");
                 if (confirm('Are you sure?')) {
                     var data = {
-                        Action: $form.attr('data-service-delete')
-                        , Params: {Guid: id}
+                        Action: action
+                        , Params: {Guid: id, Id: id}
                     };
                     Data.post(data, $form.attr('data-next'));
                 }

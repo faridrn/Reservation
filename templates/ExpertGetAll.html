@@ -19,8 +19,9 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title">مورد جدید</h4>
 			</div>
-			<form class="manager-add-form form-horizontal" role="form" action="ExpertAdd" data-next="toast">
+			<form class="manager-add-form form-horizontal" role="form" action="ExpertAdd" data-service-add="ExpertAdd" data-service-edit="ExpertUpdate" data-service-delete="ExpertRemove" data-next="toast">
 				<input type="hidden" name="ParentId" data-identifier="parent" value="" />
+				<input type="hidden" name="Id" data-identifier="node" value="" />
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="expert-node-add" class="col-sm-2 control-label">عنوان</label>
