@@ -347,22 +347,25 @@ $(function () {
                 $modal.addClass('refresh-after');
                 break;
             case 'add':
+                $modal.find(".modal-title").text("مورد جدید");
                 $form.trigger('reset');
-                $modal.find('input, textarea, select, button').prop('disabled', false);
+                $form.find('input, textarea, select, button').prop('disabled', false);
                 $modal.find('[name="Guid"]').val('');
                 $form.attr('action', $form.attr('data-service-add'));
                 $modal.addClass('refresh-after');
                 break;
             case 'view':
+                $modal.find(".modal-title").text("مشاهده جزئیات");
                 for (var prop in data) {
                     $modal.find('[name="' + prop + '"]').val(data[prop]);
-                    $modal.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
+                    $form.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
                 }
                 break;
             case 'edit':
+                $modal.find(".modal-title").text("ویرایش");
                 for (var prop in data) {
                     $modal.find('[name="' + prop + '"]').val(data[prop]);
-                    $modal.find('input, textarea, select, button').prop('disabled', false);
+                    $form.find('input, textarea, select, button').prop('disabled', false);
                     $form.attr('action', $form.attr('data-service-edit'));
                     $modal.addClass('refresh-after');
                 }
