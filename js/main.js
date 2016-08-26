@@ -363,7 +363,6 @@ $(function () {
             else
                 var data = JSON.parse($(this).attr("data-raw"));
         }
-        console.log(data);
         switch (task) {
             case 'append':
                 var parent_id = $(this).attr('data-id');
@@ -381,6 +380,8 @@ $(function () {
             case 'view':
                 $modal.find(".modal-title").text("مشاهده جزئیات");
                 for (var prop in data) {
+                    if (prop === "BirthDate")
+                        $modal.find('[name="BirthDatePicker"]').val(Global.convertDate(data[prop]));
                     $modal.find('[name="' + prop + '"]').val(data[prop]);
                     $form.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
                 }

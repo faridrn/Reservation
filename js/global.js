@@ -329,4 +329,10 @@ var Global = {
             return $el.html();
         });
     }
+    , convertDate: function(datetime) {
+        var JDate = require('jdate');
+        var d = datetime.split(' ')[0].split("/").reverse();
+        var jdate = new JDate(new Date(d[0], d[1], d[2]));
+        return jdate.date.join('-');
+    }
 };
