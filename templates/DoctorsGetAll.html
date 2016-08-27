@@ -29,9 +29,11 @@
             <td>{{NationalId}}</td>
             <td>{{Phone}}</td>
             <td>
+				{{#if ImageAddress}}
 				<figure>
 					<img src="{{ImageAddress}}" alt="{{Guid}}" />
 				</figure>
+				{{/if}}
 			</td>
 			<td>
 				<ul class="list-inline list-unstyled text-center">
