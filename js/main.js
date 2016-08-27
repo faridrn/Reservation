@@ -47,15 +47,20 @@ function app() {
 
 var Data = {
     temp: []
-    , post: function (data, action, service) {
+    , post: function (data, action, service, reload) {
         var o = Data.createObject(data, service, 'post');
+        var results = '';
         o.success = function (d) {
+            results = d;
             d = (typeof d === "string") ? JSON.parse(d) : d;
             debug && console.log(Global.t() + ' Received Data: ' + JSON.stringify(d));
+            debug && reload && console.log(Global.t() + ' Reloading Contents');
             if (d.Result !== "OK") {
                 Data.handleAction('toast', d.Result, 'error');
                 return false;
             }
+            if (typeof reload !== "undefined" && reload === true)
+                Data.reload();
             // Service Type
             switch (data.Action) {
                 default:
@@ -75,6 +80,7 @@ var Data = {
             }
         };
         $.ajax(o);
+        return results;
     }
     , createObject: function (data, service, type) {
         type = (typeof type === "undefined") ? 'post' : type;
@@ -87,10 +93,10 @@ var Data = {
             , headers: {"Token": (token !== "") ? token.data : ''}
             , data: JSON.stringify(data)
             , error: function (xhr, ajaxOptions, thrownError) {
-                if(xhr.status==403)
+                if (xhr.status == 403)
                     User.logout();
             }
-            , fail: function() {
+            , fail: function () {
                 alert();
             }
         };
@@ -165,7 +171,12 @@ var Data = {
     , reload: function (page) {
         if (typeof page === "object" && page.length > 0) {
             Data.load(page[0]);
+        } else {
+            page = Location.parts;
+            Data.load(page[0]);
         }
+        if ($(".modal-backdrop").length && $(".modal-backdrop").hasClass("in"))
+            $(".modal-backdrop").removeClass("in");
     }
     , handleItems: function (items) {
         // Before render
@@ -180,17 +191,25 @@ var Data = {
             var data = Data.prepareTree($('.tree textarea').val());
             $('.tree').on('ready.jstree', function () {
             }).on('hover_node.jstree', function (e, node) {
+//                var rawData = {
+//                    ParentId: $('#' + node.node.id).parents("li:first").attr('id')
+//                    , Name: $('#' + node.node.id).find("> a").text()
+//                    , Id: node.node.id
+//                };
+//                $('#' + node.node.id).find("> a")
+//                        .append('<button class="btn btn-link btn-xs manipulate" data-type="append" data-id="' + node.node.id + ' "><i class="icon-plus"></i></button>')
+//                        .append('<button class="btn btn-link btn-xs manipulate" data-type="delete" data-id="' + node.node.id + ' "><i class="icon-minus"></i></button>');
+            }).on('deselect_node.jstree', function (e, node) {
+                $(".header-icons").find("li").attr("data-id", '').attr("data-raw", '').parent().addClass("enableby-request");
+            }).on('select_node.jstree', function (e, node) {
                 var rawData = {
                     ParentId: $('#' + node.node.id).parents("li:first").attr('id')
                     , Name: $('#' + node.node.id).find("> a").text()
                     , Id: node.node.id
                 };
-                $('#' + node.node.id).find("> a")
-                        .append('<button class="btn btn-link btn-xs manipulate" data-type="append" data-id="' + node.node.id + ' "><i class="icon-plus"></i></button>')
-                        .append('<button class="btn btn-link btn-xs manipulate" data-type="delete" data-id="' + node.node.id + ' "><i class="icon-minus"></i></button>')
-                        .append('<button class="btn btn-link btn-xs manipulate" data-type="edit" data-id="' + node.node.id + ' " data-raw=\'' + JSON.stringify(rawData) + '\'><i class="icon-edit"></i></button>');
+                $(".header-icons").find("li button").attr("data-id", rawData.Id).attr("data-raw", JSON.stringify(rawData)).parents("ul").removeClass("enableby-request");
             }).on('dehover_node.jstree', function (e, node) {
-                $('#' + node.node.id).find("button").remove();
+//                $('#' + node.node.id).find("button").remove();
             }).jstree({
                 core: {
                     data: data
@@ -255,10 +274,10 @@ var Data = {
         return treeList;
     }
     , createTreeOptions: function (tree) {
-        
+
     }
     , addOptionPrefixes: function (id, title, level) {
-        
+
     }
 };
 var Forms = {
@@ -270,7 +289,8 @@ var Forms = {
                 , Params: $form.serializeObject()
             };
             debug && console.log(Global.t() + ' Form Data: ' + JSON.stringify(data));
-            Data.post(data, $form.attr('data-next'), Config.api);
+            reload = ($form.parents(".refresh-after").length) ? true : false;
+            Data.post(data, $form.attr('data-next'), Config.api, reload);
             e.preventDefault();
             return false;
         });
@@ -403,14 +423,15 @@ $(function () {
                         Action: action
                         , Params: {Guid: id, Id: id}
                     };
-                    Data.post(data, $form.attr('data-next'));
+                    Data.post(data, $form.attr('data-next'), Config.api, true);
                 }
                 break;
         }
         if (task !== 'delete')
             $modal.modal('show').on('hidden.bs.modal', function () {
-               if ($modal.hasClass('refresh-after')) 
-                   Location.refresh();
+                if ($modal.hasClass('refresh-after'))
+                    Data.reload(Location.parts);
+//                    Location.refresh();
             });
     });
     $(document).on('click', 'a[data-task]', function (e) {

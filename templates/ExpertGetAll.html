@@ -1,13 +1,14 @@
 <script id="ExpertGetAll-template" type="text/x-handlebars-template">
 <div class="itemlist-header">
 	<h2>تخصص‌ها</h2>
-	<!--
-	<ul class="header-icons list-unstyled">
+	<ul class="header-icons list-unstyled enableby-request">
 		<li>
-			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
+			<button class="btn btn-primary manipulate" data-type="append" data-raw='' data-id=""><i class="icon-plus"></i> زیرمجموعه جدید</button>
+		</li>
+		<li>
+			<button class="btn btn-danger manipulate" data-type="delete" data-raw='' data-id=""><i class="icon-minus"></i> حذف مورد</button>
 		</li>
 	</ul>
-	-->
 </div>
 <div class="tree">
 	<textarea>{{#stringify raw}}{{/stringify}}</textarea>

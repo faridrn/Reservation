@@ -36,6 +36,13 @@
                     .header-icons {
                         float: left; height: @header-height; padding-top: 0; display: table;
                         & > * { display: table-cell; vertical-align: middle; }
+                        li {
+                            transition: 0.2s all;
+                            & ~ li { padding-right: @grid-gutter-width / 2; }
+                        }
+                        &.enableby-request {
+                            li { visibility: hidden; opacity: 0; }
+                        }
                     }
                     h2 { display: inline-block; margin: 0; line-height: @header-height; float: right; }
                 }
