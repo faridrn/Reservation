@@ -169,14 +169,15 @@ var Data = {
         return o;
     }
     , reload: function (page) {
-        if (typeof page === "object" && page.length > 0) {
-            Data.load(page[0]);
+//        Data.handleReload();
+        page = (typeof page === "object" && page.length > 0) ? page : Location.parts;
+        if ($(".refresh-after").length && $("body").hasClass("modal-open")) {
+            $(".refresh-after").modal('hide').on('hidden.bs.modal', function (e) {
+                Data.load(page[0]);
+            });
         } else {
-            page = Location.parts;
             Data.load(page[0]);
         }
-        if ($(".modal-backdrop").length && $(".modal-backdrop").hasClass("in"))
-            $(".modal-backdrop").removeClass("in");
     }
     , handleItems: function (items) {
         // Before render
@@ -185,7 +186,13 @@ var Data = {
     , handleContent: function (place) {
         // After render
         if ($(place).find("table").length) {
-            $('table').bootstrapTable({locale: 'fa-IR', sortable: true, pagination: true, cache: false, pageSize: 20, clickToSelect: false});
+            $('table').bootstrapTable({
+                locale: 'fa-IR'
+                , pagination: true
+                , cache: false
+                , pageSize: 20
+                , clickToSelect: false
+            });
         }
         if ($(place).find(".tree").length) {
             var data = Data.prepareTree($('.tree textarea').val());
@@ -233,6 +240,11 @@ var Data = {
                     }
                 });
             });
+        }
+    }
+    , handleReload: function () {
+        if ($(place).find("table").length) {
+            $('table').bootstrapTable('destroy');
         }
     }
     , prepareTree: function (rawData) {
@@ -381,6 +393,7 @@ $(function () {
             if ($(this).parents("tr:first").find(".raw").length)
                 var data = JSON.parse(JSON.parse($(this).parents("tr:first").find(".raw").val()));
             else
+            if (typeof $(this).attr("data-raw") !== "undefined")
                 var data = JSON.parse($(this).attr("data-raw"));
         }
         switch (task) {
@@ -408,12 +421,14 @@ $(function () {
                 break;
             case 'edit':
                 $modal.find(".modal-title").text("ویرایش");
-                for (var prop in data) {
-                    $modal.find('[name="' + prop + '"]').val(data[prop]);
-                    $form.find('input, textarea, select, button').prop('disabled', false);
-                    $form.attr('action', $form.attr('data-service-edit'));
-                    $modal.addClass('refresh-after');
+                if (!$(this).parents('.modal-header').length) {
+                    for (var prop in data) {
+                        $modal.find('[name="' + prop + '"]').val(data[prop]);
+                    }
                 }
+                $form.find('input, textarea, select, button').prop('disabled', false);
+                $form.attr('action', $form.attr('data-service-edit'));
+                $modal.addClass('refresh-after');
                 break;
             case 'delete':
                 var id = (typeof $(this).attr("data-id") === "undefined" && $(this).parents("tr").length) ? $(this).parents("tr").attr("data-id") : $(this).attr("data-id");
@@ -429,6 +444,9 @@ $(function () {
         }
         if (task !== 'delete')
             $modal.modal('show').on('hidden.bs.modal', function () {
+//                alert();
+//                $('.modal-backdrop').remove();
+//                $("body").removeClass('modal-open');
                 if ($modal.hasClass('refresh-after'))
                     Data.reload(Location.parts);
 //                    Location.refresh();

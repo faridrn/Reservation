@@ -336,3 +336,15 @@ var Global = {
         return jdate.date.join('-');
     }
 };
+
+$(document).ajaxStart(function (e) {
+    if ($("#progress").length === 0) { //only add progress bar if added yet.
+        $("body").append($("<div><dt/><dd/></div>").attr("id", "progress"));
+        $("#progress").width((50 + Math.random() * 30) + "%");
+    }
+});
+$(document).ajaxComplete(function () {
+    $("#progress").width("101%").delay(200).fadeOut(400, function () { //End loading animation
+//        $(this).remove();
+    });
+});

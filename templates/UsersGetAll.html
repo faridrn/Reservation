@@ -37,8 +37,8 @@
 			</td>
 			<td>
 				<ul class="list-inline list-unstyled text-center">
-					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده</button></li>
-					<li><button class="btn btn-sm btn-warning manipulate" data-type="edit"><i class="icon-edit"></i> ویرایش</button></li>
+					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
+					<!--li><button class="btn btn-sm btn-warning manipulate" data-type="edit"><i class="icon-edit"></i> ویرایش</button></li-->
 					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
 				</ul>
 			</td>
@@ -51,6 +51,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="btn btn-sm btn-warning manipulate pull-left" data-type="edit"><i class="icon-edit"></i> ویرایش</button>
 				<h4 class="modal-title">مورد جدید</h4>
 			</div>
 			<form class="user-add-form form-horizontal" role="form" action="UsersAdd" data-service-add="UsersAdd" data-service-edit="UsersUpdate" data-service-delete="UsersRemove" data-next="toast">
