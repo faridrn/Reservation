@@ -404,6 +404,7 @@ $(function () {
                 break;
             case 'add':
                 $modal.find(".modal-title").text("مورد جدید");
+                $modal.find(".manipulate").hide();
                 $form.trigger('reset');
                 $form.find('input, textarea, select, button').prop('disabled', false);
                 $modal.find('[name="Guid"]').val('');
@@ -412,6 +413,7 @@ $(function () {
                 break;
             case 'view':
                 $modal.find(".modal-title").text("مشاهده جزئیات");
+                $modal.find(".manipulate").show();
                 for (var prop in data) {
                     if (prop === "BirthDate")
                         $modal.find('[name="BirthDatePicker"]').val(Global.convertDate(data[prop]));
