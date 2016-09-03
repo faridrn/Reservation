@@ -234,7 +234,7 @@ var Global = {
         }
         return output;
     }
-    , handlebarHelpers: function() {
+    , handlebarHelpers: function () {
         Handlebars.registerHelper('times', function (n, block) { // Loop a block starting at 0
             var accum = '';
             for (var i = 0; i < n; ++i)
@@ -256,6 +256,25 @@ var Global = {
                 mm = '0' + mm;
             output = mm + '/' + dd + '/' + yyyy;
             return output;
+        });
+        Handlebars.registerHelper('id', function (offset, options) {
+            if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
+                return Location.parts[1];
+        });
+        Handlebars.registerHelper('getDoctorName', function (value, options) {
+            var data = '';
+            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
+            if (id) {
+                var o = Data.createObject({Action: 'DoctorsGetOne', Params: {Guid: id}});
+                o.async = false;
+                o.success = function(d) {
+                    d = typeof d === "string" ? JSON.parse(d) : d;
+//                    console.log(d);
+                    data = d.Items[0].Name + ' ' + d.Items[0].Famili;
+                }
+                $.ajax(o);
+                return data;
+            }
         });
         Handlebars.registerHelper('htimes', function (n, block) { // Loop a block starting at 1 [human-readable times]
             var accum = '';
@@ -329,7 +348,7 @@ var Global = {
             return $el.html();
         });
     }
-    , convertDate: function(datetime) {
+    , convertDate: function (datetime) {
         var JDate = require('jdate');
         var d = datetime.split(' ')[0].split("/").reverse();
         var jdate = new JDate(new Date(d[0], d[1], d[2]));

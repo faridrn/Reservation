@@ -35,7 +35,6 @@ function app() {
             "hideMethod": "fadeOut"
         };
     };
-
     var __construct = function (that) {
         debug && console.log(Global.t() + ' App started.');
         // Check Token Globally
@@ -114,12 +113,17 @@ var Data = {
         }
     }
     , load: function (type) {
+        var params = {};
         switch (type) {
             case 'specialities':
                 service = 'ExpertGetAll';
                 break;
             case 'doctors':
                 service = 'DoctorsGetAll';
+                break;
+            case 'clinics':
+                service = 'ClinicGetByDoctor';
+                params = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? {Params: {Guid: Location.parts[1]}} : {};
                 break;
             case 'managers':
                 service = 'ManagerGetAll';
@@ -137,8 +141,10 @@ var Data = {
                 service = 'ReserveTimeGetByFreeTime';
                 break;
         }
-        if (typeof service !== "undefined")
-            Data.post({Action: service}, 'show');
+        if (typeof service !== "undefined") {
+            
+            Data.post({Action: service, Params: params}, 'show');
+        }
     }
     , show: function (data, tmpl, place) {
         place = (typeof place === "undefined") ? '#place' : place;
@@ -153,6 +159,8 @@ var Data = {
             $(place).html(output).promise().done(function () {
                 Data.handleContent(place);
             });
+        } else {
+            return output;
         }
     }
     , createDataString: function (o) {
@@ -165,7 +173,8 @@ var Data = {
         return null;
     }
     , createDataFullString: function (o) {
-        o.raw = o;
+        if (o)
+            o.raw = o;
         return o;
     }
     , reload: function (page) {
@@ -180,11 +189,11 @@ var Data = {
         }
     }
     , handleItems: function (items) {
-        // Before render
+// Before render
         return items;
     }
     , handleContent: function (place) {
-        // After render
+// After render
         if ($(place).find("table").length) {
             $('table').bootstrapTable({
                 locale: 'fa-IR'
@@ -347,7 +356,6 @@ var User = {
         window.location.href = 'login.html';
     }
 };
-
 $.fn.serializeObject = function () { // serializeArray - serialize form as an array instead of default object
     var o = {};
     var a = this.serializeArray();
@@ -381,7 +389,6 @@ $(window).resize(function () { // Change width value on user resize, after DOM
     responsive_resize();
 });
 new app();
-
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
     $(document).on('click', 'button.manipulate', function (e) {
@@ -443,8 +450,31 @@ $(function () {
                     Data.post(data, $form.attr('data-next'), Config.api, true);
                 }
                 break;
+            case 'clinics':
+                var id = $(this).parents("tr:first").attr('data-id');
+                var modal2 = new tingle.modal({
+                    footer: true
+                    , stickyFooter: false
+//                    , cssClass: ['custom-class-1', 'custom-class-2']
+                    , onOpen: function () {
+                        console.log('modal open');
+                    }
+                    , onClose: function () {
+                        modal2.destroy();
+                    }
+                });
+//                 var data = 
+                var o = Data.createObject({Action: 'ClinicGetByDoctor', Params: {Guid: id}});
+//                console.log(o);
+                o.success = function(d) {
+                    var data = Data.show(d, 'ClinicGetByDoctor', 'not-available-container');
+                    modal2.setContent(data);
+                    modal2.open();
+                }
+                $.ajax(o);
+                break;
         }
-        if (task !== 'delete')
+        if (task !== 'delete' && task !== 'clinics')
             $modal.modal('show').on('hidden.bs.modal', function () {
 //                alert();
 //                $('.modal-backdrop').remove();

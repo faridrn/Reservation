@@ -11,9 +11,10 @@
 	<thead>
 		<th class="col-xs-2">نام</th>
 		<th class="col-xs-2">نام خانوادگی</th>
-		<th class="col-xs-2">کد</th>
+		<th class="col-xs-1">کد</th>
 		<th class="col-xs-2">کدملی</th>
 		<th class="col-xs-2">موبایل</th>
+		<th class="col-xs-1">مطب‌ها</th>
 		<th class=""></th>
 		<th class="col-xs-2"></th>
 	</thead>
@@ -28,7 +29,10 @@
             <td>{{Code}}</td>
             <td>{{NationalId}}</td>
             <td>{{Phone}}</td>
-            <td>
+			<td class="text-center">
+				<a href="#clinics/{{Guid}}" class="btn btn-sm btn-info"><i class="icon-edit"></i> مطب‌ها</a>
+			</td>
+            <td class="text-center">
 				{{#if ImageAddress}}
 				<figure>
 					<img src="{{ImageAddress}}" alt="{{Guid}}" />

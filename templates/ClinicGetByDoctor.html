@@ -1,0 +1,57 @@
+<script id="ClinicGetByDoctor-template" type="text/x-handlebars-template">
+	<div class="itemlist-header">
+		<h2>مطب‌ها: {{#getDoctorName}}{{/getDoctorName}}</h2>
+		<ul class="header-icons list-unstyled">
+			<li>
+				<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
+			</li>
+		</ul>
+	</div>
+	<table class="table table-condensed table-border table-hover table-striped">
+		<thead>
+			<th class="col-xs-3">نام مطب</th>
+			<th class="col-xs-8">آدرس مطب</th>
+			<th class="col-xs-1"></th>
+		</thead>
+		<tbody>
+		{{#each []}}
+			<tr data-id="{{Guid}}">
+				<td>{{Name}}</td>
+				<td>{{Address}}</td>
+				<td>
+					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
+				</td>
+			</tr>
+		{{else}}
+			No Clinics
+		{{/each}}
+		</tbody>
+	</table>
+	<div class="modal zoom fade" id="doctors-add" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<button type="button" class="btn btn-sm btn-warning manipulate pull-left" data-type="edit"><i class="icon-edit"></i> ویرایش</button>
+					<h4 class="modal-title">مورد جدید</h4>
+				</div>
+				<form class="form-inlnie form-horizontal" action="ClinicAdd" role="form" data-next="toast">
+					<input type="hidden" name="DoctorGuid" value="{{#id}}{{/id}}" />
+					<div class="modal-body">
+						<div class="form-group">
+							<div class="col-sm-3">
+								<input type="text" class="form-control rtl" name="Name" placeholder="نام مطب" />
+							</div>
+							<div class="col-sm-9">
+								<input type="text" class="form-control rtl" name="Address" placeholder="آدرس مطب" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">ثبت</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</script>
