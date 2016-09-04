@@ -12,12 +12,6 @@ UsersCreateSmsKey	UserName: varchar(50), Phone: varchar(12)
 UsersGetOne	Guid: bigint(8)
 UsersLogin	SmsKey: int(4), UserName: varchar(50)
 UsersUpdate	Gender: int(4), BirthDate: datetime(8), Guid: bigint(8), Tel: varchar(12), Phone: varchar(12), NationalId: varchar(10), Name: nvarchar(100), Famili: nvarchar(100), Email: nvarchar(100), ImageAddress: nvarchar(400), Address: nvarchar(400), SpecialDisease: nvarchar(400), Descr: nvarchar(400), InsuranceId: nvarchar(100), InsuranceType: nvarchar(100), Name: sysname(100), Famili: sysname(100), Email: sysname(100), ImageAddress: sysname(400), Address: sysname(400), SpecialDisease: sysname(400), Descr: sysname(400), InsuranceId: sysname(100), InsuranceType: sysname(100)
-* VisitAdd	CostWithInsurance: int(4), CostWithoutInsurance: int(4), TimeInSecond: int(4), ClinicGuid: bigint(8), ExpertId: bigint(8), Name: nvarchar(100), Descr: nvarchar(400), Name: sysname(100), Descr: sysname(400)
-* VisitGetByClinic	ClinicGuid: bigint(8)
-* VisitGetOne	Guid: bigint(8)
-* VisitRemove	Guid: bigint(8)
-* VisitUpdate	Guid: bigint(8), Descr: nvarchar(400), Descr: sysname(400)
-
 
 === Postponed ===
 ClinicGetOne	Guid: bigint(8)
@@ -54,3 +48,8 @@ UsersSearch	Gender: int(4), BirthDate: datetime(8), UserName: varchar(50), Tel: 
 * UsersAdd	Gender: int(4), BirthDate: datetime(8), UserName: varchar(50), Tel: varchar(12), Phone: varchar(12), NationalId: varchar(10), Name: nvarchar(100), Famili: nvarchar(100), Email: nvarchar(100), ImageAddress: nvarchar(400), Address: nvarchar(400), SpecialDisease: nvarchar(400), Descr: nvarchar(400), InsuranceId: nvarchar(100), InsuranceType: nvarchar(100), Name: sysname(100), Famili: sysname(100), Email: sysname(100), ImageAddress: sysname(400), Address: sysname(400), SpecialDisease: sysname(400), Descr: sysname(400), InsuranceId: sysname(100), InsuranceType: sysname(100)
 * UsersGetAll	No Parameters
 * UsersRemove	Guid: bigint(8)
+* VisitAdd	CostWithInsurance: int(4), CostWithoutInsurance: int(4), TimeInSecond: int(4), ClinicGuid: bigint(8), ExpertId: bigint(8), Name: nvarchar(100), Descr: nvarchar(400), Name: sysname(100), Descr: sysname(400)
+* VisitGetByClinic	ClinicGuid: bigint(8)
+* VisitGetOne	Guid: bigint(8)
+* VisitRemove	Guid: bigint(8)
+* VisitUpdate	Guid: bigint(8), Descr: nvarchar(400), Descr: sysname(400)
