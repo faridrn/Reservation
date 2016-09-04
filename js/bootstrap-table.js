@@ -711,7 +711,7 @@
                     }
                 }
 
-                var field = that.columns[x].field;
+                var field = (typeof that.columns[x] !== "undefined") ? that.columns[x].field : null;
 
                 row[field] = $(this).html();
                 // save td's id, class and data-* attributes

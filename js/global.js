@@ -264,6 +264,10 @@ var Global = {
             if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
                 return Location.parts[1];
         });
+        Handlebars.registerHelper('pageHasId', function (options) {
+            if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
+                return options.fn(this);
+        });
         Handlebars.registerHelper('debug', function (value, options) {
             console.log(value);
         });
@@ -374,6 +378,12 @@ var Global = {
         window.Handlebars.registerHelper('select', function (value, options) {
             var $el = $('<select />').html(options.fn(this));
             $el.find('[value=' + value + ']').attr({'selected': 'selected'});
+            return $el.html();
+        });
+        window.Handlebars.registerHelper('selectByPageId', function (options) {
+            var $el = $('<select />').html(options.fn(this));
+            if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
+                $el.find('[value=' + Location.parts[1] + ']').attr({'selected': 'selected'});
             return $el.html();
         });
     }

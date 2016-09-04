@@ -1,162 +1,20 @@
 <script id="ManagerClinicByManager-template" type="text/x-handlebars-template">
-<div class="itemlist-header">
-	<h2>کاربران</h2>
-	<ul class="header-icons list-unstyled">
-		<li>
-			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
-		</li>
-	</ul>
-</div>
-<table class="table table-bordered table-hover table-striped table-condensed rtl">
-	<thead>
-		<th class="col-xs-2">نام</th>
-		<th class="col-xs-2">نام خانوادگی</th>
-		<th class="col-xs-2">شماره بیمه</th>
-		<th class="col-xs-2">کدملی</th>
-		<th class="col-xs-2">موبایل</th>
-		<th class=""></th>
-		<th class="col-xs-2"></th>
-	</thead>
-	<tbody>
-		{{#each []}}
-        <tr data-id="{{Guid}}">
-            <td>
-				{{Name}}
-				<textarea class="raw" style="display: none">{{#stringify raw}}{{/stringify}}</textarea>
-			</td>
-            <td>{{Famili}}</td>
-            <td>{{InsuranceId}}</td>
-            <td>{{NationalId}}</td>
-            <td>{{Phone}}</td>
-            <td>
-				{{#if ImageAddress}}
-				<figure>
-					<img src="{{ImageAddress}}" alt="{{Guid}}" />
-				</figure>
-				{{/if}}
-			</td>
-			<td>
-				<ul class="list-inline list-unstyled text-center">
-					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
-					<!--li><button class="btn btn-sm btn-warning manipulate" data-type="edit"><i class="icon-edit"></i> ویرایش</button></li-->
-					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
-				</ul>
-			</td>
-        </tr>
-		{{/each}}
-    </tbody>
-</table>
-<div class="modal zoom fade" id="users-add" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<button type="button" class="btn btn-sm btn-warning manipulate pull-left" data-type="edit"><i class="icon-edit"></i> ویرایش</button>
-				<h4 class="modal-title">مورد جدید</h4>
-			</div>
-			<form class="user-add-form form-horizontal" role="form" action="UsersAdd" data-service-add="UsersAdd" data-service-edit="UsersUpdate" data-service-delete="UsersRemove" data-next="toast">
-				<input type="hidden" name="Guid" value="" />
-				<div class="modal-body">
-					<div class="form-group">
-						<label for="users-gender-select" class="col-sm-2 control-label">جنسیت</label>
-						<div class="col-sm-10">
-							<select name="Gender" class="form-control rtl" id="users-gender-select" required>
-								<option value="0">مرد</option>
-								<option value="1">زن</option>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-birthdate-input" class="col-sm-2 control-label">تاریخ تولد</label>
-						<div class="col-sm-10">
-							<input type="hidden" name="BirthDate" id="dpicker-1" value="" required />
-							<input type="text" name="BirthDatePicker" data-chain="#dpicker-1" class="form-control datepicker" id="users-birthdate-input" placeholder="تاریخ تولد" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-tel-input" class="col-sm-2 control-label">تلفن</label>
-						<div class="col-sm-10">
-							<input type="text" name="Tel" class="form-control" id="users-add-tel-input" placeholder="تلفن" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-cell-input" class="col-sm-2 control-label">موبایل</label>
-						<div class="col-sm-10">
-							<input type="text" name="Phone" class="form-control" id="users-add-cell-input" placeholder="موبایل" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-natid-input" class="col-sm-2 control-label">کدملی</label>
-						<div class="col-sm-10">
-							<input type="text" name="NationalId" class="form-control" id="users-add-natid-input" placeholder="کدملی" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-username-input" class="col-sm-2 control-label">نام کاربری</label>
-						<div class="col-sm-10">
-							<input type="text" name="UserName" class="form-control" id="users-add-username-input" placeholder="نام کاربری" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-name-input" class="col-sm-2 control-label">نام</label>
-						<div class="col-sm-10">
-							<input type="text" name="Name" class="form-control rtl" id="users-add-name-input" placeholder="نام" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-family-input" class="col-sm-2 control-label">نام خانوادگی</label>
-						<div class="col-sm-10">
-							<input type="text" name="Famili" class="form-control rtl" id="users-add-family-input" placeholder="نام خانوادگی" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-email-input" class="col-sm-2 control-label">ایمیل</label>
-						<div class="col-sm-10">
-							<input type="email" name="Email" class="form-control" id="users-add-email-input" placeholder="ایمیل" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-img-input" class="col-sm-2 control-label">آدرس تصویر</label>
-						<div class="col-sm-10">
-							<input type="text" name="ImageAddress" class="form-control" id="users-add-img-input" placeholder="آدرس تصویر" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-address-textarea" class="col-sm-2 control-label">آدرس</label>
-						<div class="col-sm-10">
-							<textarea name="Address" class="form-control rtl" id="users-add-address-textarea" placeholder="آدرس" required></textarea>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-disease-textarea" class="col-sm-2 control-label">بیماری خاص</label>
-						<div class="col-sm-10">
-							<textarea name="SpecialDisease" class="form-control rtl" id="users-add-disease-textarea" placeholder="بیماری خاص" required></textarea>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-desc-textarea" class="col-sm-2 control-label">توضیحات</label>
-						<div class="col-sm-10">
-							<textarea name="Descr" class="form-control rtl" id="users-add-desc-textarea" placeholder="توضیحات" required></textarea>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-insuranceid-input" class="col-sm-2 control-label">شماره بیمه</label>
-						<div class="col-sm-10">
-							<input type="text" name="InsuranceId" class="form-control" id="users-add-insuranceid-input" placeholder="شماره بیمه" required />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="users-add-insurancetype-input" class="col-sm-2 control-label">نوع بیمه</label>
-						<div class="col-sm-10">
-							<input type="text" name="InsuranceType" class="form-control rtl" id="users-add-insurancetype-input" placeholder="نوع بیمه" required />
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">ثبت</button>
-				</div>
-			</form>
-		</div>
+<div class="row">
+	<div class="col-xs-2">
+		<label>انتخاب مطب</label>
+	</div>
+	<div class="col-xs-10">
+		<select class="form-control rtl" onChange="window.location = '#visits/' + $(this).val();">
+			{{#selectByPageId}}
+				<option value="">انتخاب مطب</option>
+				{{#each []}}
+				<option value="{{ClinicGuid}}">{{ClinicName}} - {{DoctorName}}</option>
+				{{/each}}
+			{{/selectByPageId}}
+		</select>
 	</div>
 </div>
+{{#pageHasId}}
+<div id="place-inner" data-service="VisitGetByClinic" data-template="VisitGetByClinic" data-params='{"ClinicGuid":"{{#id}}{{/id}}"}'></div>
+{{/pageHasId}}
 </script>

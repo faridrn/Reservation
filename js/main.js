@@ -253,6 +253,16 @@ var Data = {
                 });
             });
         }
+        if ($(place).find("#place-inner").length) {
+            var $legend = $(place).find("#place-inner");
+            console.info($legend.attr("data-params"));
+            console.info(JSON.parse($legend.attr("data-params").toString()));
+            var o = Data.createObject({Action: $legend.attr("data-service"), Params: JSON.parse($legend.attr("data-params"))});
+            o.success = function (d) {
+                var data = Data.show(d, $legend.attr("data-service"), '#place-inner');
+            }
+            $.ajax(o);
+        }
     }
     , handleReload: function () {
         if ($(place).find("table").length) {
