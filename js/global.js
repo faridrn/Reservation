@@ -122,7 +122,7 @@ var Location = {
             }
         });
     }
-    , getId: function() {
+    , getId: function () {
         return (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
     }
 };
@@ -264,15 +264,17 @@ var Global = {
             if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
                 return Location.parts[1];
         });
+        Handlebars.registerHelper('debug', function (value, options) {
+            console.log(value);
+        });
         Handlebars.registerHelper('getDoctorName', function (value, options) {
             var data = '';
             var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
             if (id) {
                 var o = Data.createObject({Action: 'DoctorsGetOne', Params: {Guid: id}});
                 o.async = false;
-                o.success = function(d) {
+                o.success = function (d) {
                     d = typeof d === "string" ? JSON.parse(d) : d;
-//                    console.log(d);
                     data = d.Items[0].Name + ' ' + d.Items[0].Famili;
                 }
                 $.ajax(o);
@@ -283,18 +285,18 @@ var Global = {
             var data = '<select name="ManagerGuid" class="form-control">';
 //            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
 //            if (id) {
-                var o = Data.createObject({Action: 'ManagerGetAll', Params: {}});
-                o.async = false;
-                o.success = function(d) {
-                    d = typeof d === "string" ? JSON.parse(d) : d;
-                    $.each(d.Items, function() {
-                        data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' ['  + this.UserName + ']' + '</option>';
-                    });
-                    data += '</select>';
+            var o = Data.createObject({Action: 'ManagerGetAll', Params: {}});
+            o.async = false;
+            o.success = function (d) {
+                d = typeof d === "string" ? JSON.parse(d) : d;
+                $.each(d.Items, function () {
+                    data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' [' + this.UserName + ']' + '</option>';
+                });
+                data += '</select>';
 //                    data = d;
-                }
-                $.ajax(o);
-                return data;
+            }
+            $.ajax(o);
+            return data;
 //            }
         });
         Handlebars.registerHelper('htimes', function (n, block) { // Loop a block starting at 1 [human-readable times]
@@ -329,7 +331,13 @@ var Global = {
             return "btn-default";
         });
         Handlebars.registerHelper('stringify', function (obj, options) {
-            return JSON.stringify(obj);
+            if (typeof obj === "object") {
+                $.each(obj, function () {
+                    delete this.raw;
+                });
+            }
+            var output = (typeof obj === "object") ? JSON.stringify(obj) : obj;
+            return output;
         });
         Handlebars.registerHelper('Bool2Label', function (val, options) {
             var output = '';

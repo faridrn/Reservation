@@ -132,7 +132,8 @@ var Data = {
                 service = 'UsersGetAll';
                 break;
             case 'visits':
-                service = 'VisitGetByClinic';
+                service = 'ManagerClinicByManager';
+                params = {ManagerGuid: token.giud};
                 break;
             case 'shifts':
                 service = 'FreeTimeGetByClinicAndDate';
@@ -142,7 +143,6 @@ var Data = {
                 break;
         }
         if (typeof service !== "undefined") {
-            
             Data.post({Action: service, Params: params}, 'show');
         }
     }
@@ -152,7 +152,7 @@ var Data = {
         debug && console.log(Global.t() + ' DataShow: Selected template is: ' + tmpl);
         var template = $(tmpl).html();
         var handlebarsTemplate = Handlebars.compile(template);
-        var d = Data.handleItems(Data.createDataFullString(Data.createDataString(data.Items)));
+        var d = Data.handleItems(Data.createDataString(data));
         var output = handlebarsTemplate(d);
         if ($(place).length) {
             $(place).empty();
@@ -165,17 +165,20 @@ var Data = {
     }
     , createDataString: function (o) {
         if (typeof o === "object") {
-            $.each(o, function () {
+            $.each(o.Items, function () {
                 this.raw = JSON.stringify(this);
             });
+            return o.Items;
+        } else if (typeof o === "string") {
+            var ob = JSON.parse(o);
+            $.each(ob.Items, function () {
+                this.raw = JSON.stringify(this);
+            });
+            return ob.Items;
+        } else {
             return o;
         }
         return null;
-    }
-    , createDataFullString: function (o) {
-        if (o)
-            o.raw = o;
-        return o;
     }
     , reload: function (page) {
 //        Data.handleReload();
@@ -257,20 +260,17 @@ var Data = {
         }
     }
     , prepareTree: function (rawData) {
-        var data = JSON.parse(rawData);
+        var data = (typeof rawData === "string") ? JSON.parse(rawData) : rawData;
         $.each(data, function (i, item) {
             item.id = item.Id;
             item.parent = (item.ParentId === null) ? '#' : item.ParentId;
-//            item.parent = item.ParentId;
             item.text = item.Name;
             item.state = {opened: true};
-//            item.li_attr = {'data-id': item.Id};
             delete item.ParentId;
             delete item.Name;
             delete item.Id;
             delete item.raw;
         });
-//        console.log(data);
         return data;
         return Data.treeify(data);
     }
@@ -397,9 +397,10 @@ $(function () {
         var $form = $modal.find("form:first");
         var task = $(this).attr("data-type");
         if (task !== 'add' && task !== 'append') {
-            if ($(this).parents("tr:first").find(".raw").length)
-                var data = JSON.parse(JSON.parse($(this).parents("tr:first").find(".raw").val()));
-            else
+            if ($(this).parents("tr:first").find(".raw").length) {
+                var rawData = JSON.parse($(this).parents("tr:first").find(".raw").val());
+                var data = (typeof rawData === "object") ? rawData : JSON.parse(rawData);
+            } else
             if (typeof $(this).attr("data-raw") !== "undefined")
                 var data = JSON.parse($(this).attr("data-raw"));
         }
@@ -450,22 +451,35 @@ $(function () {
                     Data.post(data, $form.attr('data-next'), Config.api, true);
                 }
                 break;
+            case 'delete-clinic-manager':
+                alert();
+                var $row = $(this).parents("tr:first");
+                if (confirm('Are you sure?')) {
+                    var data = {
+                        Action: 'ManagerClinicRemove'
+                        , Params: {
+                            ManagerGuid: $row.attr("data-manager-id")
+                            , ClinicGuid: $row.attr("data-clinic-id")
+                        }
+                    };
+                    Data.post(data, $form.attr('data-next'), Config.api, true);
+                }
+                break;
             case 'assign':
-//                var id = Location.getId();
                 var id = $(this).parents("tr:first").attr("data-id");
                 var modal2 = new tingle.modal({
                     footer: true
                     , stickyFooter: false
-//                    , cssClass: ['custom-class-1', 'custom-class-2']
                     , onOpen: function () {
                         $("input[name=ClinicGuid]").val(id);
                     }
                     , onClose: function () {
                         modal2.destroy();
+                        Data.reload(Location.parts);
                     }
                 });
                 var o = Data.createObject({Action: 'ManagerClinicByClinic', Params: {ClinicGuid: id}});
-                o.success = function(d) {
+                o.success = function (d) {
                     var data = Data.show(d, 'ManagerClinicByClinic', 'not-available-container');
                     modal2.setContent(data);
                     modal2.open();
@@ -473,7 +487,7 @@ $(function () {
                 $.ajax(o);
                 break;
         }
-        if (task !== 'delete' && task !== 'assign')
+        if (task !== 'delete' && task !== 'assign' && task !== 'delete-clinic-manager')
             $modal.modal('show').on('hidden.bs.modal', function () {
                 if ($modal.hasClass('refresh-after'))
                     Data.reload(Location.parts);
