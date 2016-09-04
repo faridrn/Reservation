@@ -10,16 +10,22 @@
 	<table class="table table-condensed table-border table-hover table-striped">
 		<thead>
 			<th class="col-xs-3">نام مطب</th>
-			<th class="col-xs-8">آدرس مطب</th>
-			<th class="col-xs-1"></th>
+			<th class="col-xs-7">آدرس مطب</th>
+			<th class="col-xs-2"></th>
 		</thead>
 		<tbody>
 		{{#each []}}
 			<tr data-id="{{Guid}}">
-				<td>{{Name}}</td>
+				<td>
+					{{Name}}
+					<textarea class="raw" style="display: none">{{#stringify raw}}{{/stringify}}</textarea>
+				</td>
 				<td>{{Address}}</td>
 				<td>
-					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
+					<ul class="list-inline list-unstyled text-center">
+						<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
+						<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
+					</ul>
 				</td>
 			</tr>
 		{{else}}

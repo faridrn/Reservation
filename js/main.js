@@ -123,7 +123,7 @@ var Data = {
                 break;
             case 'clinics':
                 service = 'ClinicGetByDoctor';
-                params = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? {Params: {Guid: Location.parts[1]}} : {};
+                params = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? {DoctorGuid: Location.parts[1]} : {};
                 break;
             case 'managers':
                 service = 'ManagerGetAll';
@@ -463,9 +463,7 @@ $(function () {
                         modal2.destroy();
                     }
                 });
-//                 var data = 
                 var o = Data.createObject({Action: 'ClinicGetByDoctor', Params: {Guid: id}});
-//                console.log(o);
                 o.success = function(d) {
                     var data = Data.show(d, 'ClinicGetByDoctor', 'not-available-container');
                     modal2.setContent(data);
@@ -476,12 +474,8 @@ $(function () {
         }
         if (task !== 'delete' && task !== 'clinics')
             $modal.modal('show').on('hidden.bs.modal', function () {
-//                alert();
-//                $('.modal-backdrop').remove();
-//                $("body").removeClass('modal-open');
                 if ($modal.hasClass('refresh-after'))
                     Data.reload(Location.parts);
-//                    Location.refresh();
             });
     });
     $(document).on('click', 'a[data-task]', function (e) {
