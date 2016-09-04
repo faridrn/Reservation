@@ -1,9 +1,4 @@
-ClinicAdd	DoctorGuid: bigint(8), Name: nvarchar(100), Address: nvarchar(400), Name: sysname(100), Address: sysname(400)
-ClinicGetByDoctor	DoctorGuid: bigint(8)
 ClinicGetOne	Guid: bigint(8)
-ClinicRemove	Guid: bigint(8)
-ClinicUpdate	Guid: bigint(8), Name: nvarchar(100), Address: nvarchar(400), Name: sysname(100), Address: sysname(400)
-DoctorsGetOne	Guid: bigint(8)
 DoctorsSearch	Gender: int(4), BirthDate: datetime(8), Tel: varchar(12), Phone: varchar(12), NationalId: varchar(10), Code: varchar(50), Name: nvarchar(100), Famili: nvarchar(100), Email: nvarchar(100), Descr: nvarchar(400), Name: sysname(100), Famili: sysname(100), Email: sysname(100), Descr: sysname(400)
 ExpertGetOne	Id: bigint(8)
 FreeTimeAdd	State: int(4), StartTime: datetime(8), EndTime: datetime(8), ClinicGuid: bigint(8), Descr: nvarchar(100), Descr: sysname(100)
@@ -34,9 +29,14 @@ VisitUpdate	Guid: bigint(8), Descr: nvarchar(400), Descr: sysname(400)
 
 
 === Done ===
+* ClinicAdd	DoctorGuid: bigint(8), Name: nvarchar(100), Address: nvarchar(400), Name: sysname(100), Address: sysname(400)
+* ClinicGetByDoctor	DoctorGuid: bigint(8)
+* ClinicRemove	Guid: bigint(8)
+* ClinicUpdate	Guid: bigint(8), Name: nvarchar(100), Address: nvarchar(400), Name: sysname(100), Address: sysname(400)
 * DoctorRemove	Guid: bigint(8)
 * DoctorsAdd	Gender: int(4), BirthDate: datetime(8), Tel: varchar(12), Phone: varchar(12), NationalId: varchar(10), Code: varchar(50), Name: nvarchar(100), Famili: nvarchar(100), Email: nvarchar(100), ImageAddress: nvarchar(400), Descr: nvarchar(400), Name: sysname(100), Famili: sysname(100), Email: sysname(100), ImageAddress: sysname(400), Descr: sysname(400)
 * DoctorsGetAll	No Parameters
+* DoctorsGetOne	Guid: bigint(8)
 * DoctorsUpdate	Gender: int(4), BirthDate: datetime(8), Guid: bigint(8), Tel: varchar(12), Phone: varchar(12), NationalId: varchar(10), Name: nvarchar(100), Famili: nvarchar(100), Email: nvarchar(100), ImageAddress: nvarchar(400), Descr: nvarchar(400), Name: sysname(100), Famili: sysname(100), Email: sysname(100), ImageAddress: sysname(400), Descr: sysname(400)
 * ExpertAdd	ParentId: bigint(8), Name: nvarchar(100), Name: sysname(100)
 * ExpertGetAll	No Parameters

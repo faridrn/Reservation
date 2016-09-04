@@ -9,18 +9,22 @@
 	</div>
 	<table class="table table-condensed table-border table-hover table-striped">
 		<thead>
-			<th class="col-xs-3">نام مطب</th>
+			<th class="col-xs-2">نام مطب</th>
 			<th class="col-xs-7">آدرس مطب</th>
+			<th class="col-xs-1"></th>
 			<th class="col-xs-2"></th>
 		</thead>
 		<tbody>
 		{{#each []}}
-			<tr data-id="{{Guid}}">
+			<tr data-id="{{Guid}}" data-doctor-id="{{DoctorGuid}}">
 				<td>
 					{{Name}}
 					<textarea class="raw" style="display: none">{{#stringify raw}}{{/stringify}}</textarea>
 				</td>
 				<td>{{Address}}</td>
+				<td>
+					<button class="btn btn-sm btn-info manipulate" data-type="assign"><i class="icon-edit"></i> تعیین مدیران </button>
+				</td>
 				<td>
 					<ul class="list-inline list-unstyled text-center">
 						<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
@@ -41,7 +45,7 @@
 					<button type="button" class="btn btn-sm btn-warning manipulate pull-left" data-type="edit"><i class="icon-edit"></i> ویرایش</button>
 					<h4 class="modal-title">مورد جدید</h4>
 				</div>
-				<form class="form-inlnie form-horizontal" action="ClinicAdd" role="form" data-next="toast">
+				<form class="form-inlnie form-horizontal" action="ClinicAdd" role="form" data-service-add="ClinicAdd" data-service-edit="ClinicUpdate" data-service-delete="ClinicRemove" data-next="toast">
 					<input type="hidden" name="DoctorGuid" value="{{#id}}{{/id}}" />
 					<div class="modal-body">
 						<div class="form-group">

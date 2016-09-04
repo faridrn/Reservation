@@ -122,6 +122,9 @@ var Location = {
             }
         });
     }
+    , getId: function() {
+        return (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
+    }
 };
 var Global = {
     trimChar: function (string, charToRemove) {
@@ -275,6 +278,24 @@ var Global = {
                 $.ajax(o);
                 return data;
             }
+        });
+        Handlebars.registerHelper('managersSelect', function (value, options) {
+            var data = '<select name="ManagerGuid" class="form-control">';
+//            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
+//            if (id) {
+                var o = Data.createObject({Action: 'ManagerGetAll', Params: {}});
+                o.async = false;
+                o.success = function(d) {
+                    d = typeof d === "string" ? JSON.parse(d) : d;
+                    $.each(d.Items, function() {
+                        data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' ['  + this.UserName + ']' + '</option>';
+                    });
+                    data += '</select>';
+//                    data = d;
+                }
+                $.ajax(o);
+                return data;
+//            }
         });
         Handlebars.registerHelper('htimes', function (n, block) { // Loop a block starting at 1 [human-readable times]
             var accum = '';

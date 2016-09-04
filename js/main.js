@@ -38,9 +38,9 @@ function app() {
     var __construct = function (that) {
         debug && console.log(Global.t() + ' App started.');
         // Check Token Globally
-        that.delegateForms();
-        that.handleBrowser();
         that.initPlugins();
+        that.handleBrowser();
+        that.delegateForms();
     }(this);
 }
 
@@ -450,29 +450,30 @@ $(function () {
                     Data.post(data, $form.attr('data-next'), Config.api, true);
                 }
                 break;
-            case 'clinics':
-                var id = $(this).parents("tr:first").attr('data-id');
+            case 'assign':
+//                var id = Location.getId();
+                var id = $(this).parents("tr:first").attr("data-id");
                 var modal2 = new tingle.modal({
                     footer: true
                     , stickyFooter: false
 //                    , cssClass: ['custom-class-1', 'custom-class-2']
                     , onOpen: function () {
-                        console.log('modal open');
+                        $("input[name=ClinicGuid]").val(id);
                     }
                     , onClose: function () {
                         modal2.destroy();
                     }
                 });
-                var o = Data.createObject({Action: 'ClinicGetByDoctor', Params: {Guid: id}});
+                var o = Data.createObject({Action: 'ManagerClinicByClinic', Params: {ClinicGuid: id}});
                 o.success = function(d) {
-                    var data = Data.show(d, 'ClinicGetByDoctor', 'not-available-container');
+                    var data = Data.show(d, 'ManagerClinicByClinic', 'not-available-container');
                     modal2.setContent(data);
                     modal2.open();
                 }
                 $.ajax(o);
                 break;
         }
-        if (task !== 'delete' && task !== 'clinics')
+        if (task !== 'delete' && task !== 'assign')
             $modal.modal('show').on('hidden.bs.modal', function () {
                 if ($modal.hasClass('refresh-after'))
                     Data.reload(Location.parts);

@@ -1,0 +1,29 @@
+<script id="ManagerClinicByClinic-template" type="text/x-handlebars-template">
+	<table class="table table-condensed table-border table-hover table-striped">
+		<tbody>
+			{{#each []}}
+			<tr data-id="{{Guid}}">
+				<td class="col-xs-10">
+					{{Name}}
+				</td>
+				<td class="col-xs-2">
+					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
+				</td>
+			</tr>
+			{{else}}
+			No records!
+			{{/each}}
+		</tbody>
+	</table>
+	<br />
+	<hr />
+	<form role="form" action="ManagerClinicAdd">
+		<h4>افزودن مدیر جدید</h4>
+		<input type="hidden" name="ClinicGuid" value="" />
+		<div class="form-group">
+			{{#managersSelect}}{{/managersSelect}}
+		<div>
+		<br />
+		<button type="submit" class="btn btn-primary">ثبت</button>
+	</form>
+</script>

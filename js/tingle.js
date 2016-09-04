@@ -237,11 +237,11 @@
 
     function _checkOverflow() {
         // only if the modal is currently shown
-        if (this.modal.hasClass('tingle-modal--visible')) {
+        if ($(this.modal).hasClass('tingle-modal--visible')) {
             if (this.isOverflow()) {
-                this.modal.addClass('tingle-modal--overflow');
+                $(this.modal).addClass('tingle-modal--overflow');
             } else {
-                this.modal.removeClass('tingle-modal--overflow');
+                $(this.modal).removeClass('tingle-modal--overflow');
             }
 
             // TODO: remove offset
