@@ -1,20 +1,36 @@
 <script id="ManagerClinicByManager_visits-template" type="text/x-handlebars-template">
+<div class="itemlist-header">
+	<h2>ویزیت‌ها</h2>
+	{{#pageHasId}}
+	<ul class="header-icons list-unstyled">
+		<li>
+			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
+		</li>
+	</ul>
+	{{/pageHasId}}
+</div>
 <div class="row">
-	<div class="col-xs-2">
-		<label>انتخاب مطب</label>
+	<div class="col-xs-12 col-md-3 col-lg-2">
+		<div class="row">
+			<div class="col-xs-12">
+				<label>انتخاب مطب</label>
+			</div>
+			<div class="col-xs-12">
+				<select class="form-control rtl" onChange="window.location = '#visits/' + $(this).val();">
+					{{#selectByPageId}}
+						<option value="">انتخاب مطب</option>
+						{{#each []}}
+						<option value="{{ClinicGuid}}">{{ClinicName}} - {{DoctorName}}</option>
+						{{/each}}
+					{{/selectByPageId}}
+				</select>
+			</div>
+		</div>
 	</div>
-	<div class="col-xs-10">
-		<select class="form-control rtl" onChange="window.location = '#visits/' + $(this).val();">
-			{{#selectByPageId}}
-				<option value="">انتخاب مطب</option>
-				{{#each []}}
-				<option value="{{ClinicGuid}}">{{ClinicName}} - {{DoctorName}}</option>
-				{{/each}}
-			{{/selectByPageId}}
-		</select>
+	<div class="col-xs-12 col-md-9 col-lg-10">
+		{{#pageHasId}}
+			<div id="place-inner" data-service="VisitGetByClinic" data-template="VisitGetByClinic" data-params='{"ClinicGuid":"{{#id}}{{/id}}"}'></div>
+		{{/pageHasId}}
 	</div>
 </div>
-{{#pageHasId}}
-<div id="place-inner" data-service="VisitGetByClinic" data-template="VisitGetByClinic" data-params='{"ClinicGuid":"{{#id}}{{/id}}"}'></div>
-{{/pageHasId}}
 </script>

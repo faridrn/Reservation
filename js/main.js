@@ -143,6 +143,7 @@ var Data = {
                 break;
             case 'reservations':
                 service = 'ReserveTimeGetByFreeTime';
+                params = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? {FreeTimeGuid: Location.parts[1]} : {};
                 break;
         }
         if (typeof service !== "undefined") {

@@ -1,18 +1,11 @@
 <script id="FreeTimeGetByClinicAndDate-template" type="text/x-handlebars-template">
 {{#pageHasId}}
-<div class="itemlist-header">
-	<h2>شیفت‌ها</h2>
-	<ul class="header-icons list-unstyled">
-		<li>
-			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
-		</li>
-	</ul>
-</div>
 <table class="table table-bordered table-hover table-striped table-condensed rtl">
 	<thead>
 		<th class="col-xs-2">ساعت شروع</th>
 		<th class="col-xs-2">ساعت پایان</th>
-		<th class="col-xs-4">توضیحات</th>
+		<th class="col-xs-3">توضیحات</th>
+		<th class="col-xs-1"></th>
 		<th class="col-xs-2"></th>
 	</thead>
 	<tbody>
@@ -24,6 +17,9 @@
 			</td>
             <td>{{EndTime}}</td>
             <td>{{Descr}}</td>
+			<td class="text-center">
+				<a href="#reservation/{{Guid}}" class="btn btn-sm btn-info"><i class="icon-calendar"></i> رزروهای این شیفت</a>
+			</td>
 			<td>
 				<ul class="list-inline list-unstyled text-center">
 					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
