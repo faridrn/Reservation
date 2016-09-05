@@ -1,0 +1,88 @@
+<script id="FreeTimeGetByClinicAndDate-template" type="text/x-handlebars-template">
+{{#pageHasId}}
+<div class="itemlist-header">
+	<h2>شیفت‌ها</h2>
+	<ul class="header-icons list-unstyled">
+		<li>
+			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
+		</li>
+	</ul>
+</div>
+<table class="table table-bordered table-hover table-striped table-condensed rtl">
+	<thead>
+		<th class="col-xs-2">ساعت شروع</th>
+		<th class="col-xs-2">ساعت پایان</th>
+		<th class="col-xs-4">توضیحات</th>
+		<th class="col-xs-2"></th>
+	</thead>
+	<tbody>
+		{{#each []}}
+        <tr data-id="{{Guid}}">
+            <td>
+				{{StartTime}}
+				<textarea class="raw" style="display: none">{{#stringify raw}}{{/stringify}}</textarea>
+			</td>
+            <td>{{EndTime}}</td>
+            <td>{{Descr}}</td>
+			<td>
+				<ul class="list-inline list-unstyled text-center">
+					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
+					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
+				</ul>
+			</td>
+        </tr>
+		{{/each}}
+    </tbody>
+</table>
+<div class="modal zoom fade" id="users-add" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="btn btn-sm btn-warning manipulate pull-left" data-type="edit"><i class="icon-edit"></i> ویرایش</button>
+				<h4 class="modal-title">مورد جدید</h4>
+			</div>
+			<form class="shift-add-form form-horizontal" role="form" action="FreeTimeAdd" data-service-add="FreeTimeAdd" data-service-edit="FreeTimeUpdate" data-next="toast">
+				<input type="hidden" name="Guid" value="" />
+				<input type="hidden" name="ClinicGuid" value="{{#id}}{{/id}}" />
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="shift-state-select" class="col-sm-2 control-label">وضعیت</label>
+						<div class="col-sm-10">
+							<select name="State" class="form-control" id="shift-state-select" required>
+								<option value="0">State 0</option>
+								<option value="1">State 1</option>
+								<option value="2">State 2</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shift-starttime-input" class="col-sm-2 control-label">ساعت شروع</label>
+						<div class="col-sm-10">
+							<input type="hidden" name="StartTime" id="dpicker-1" value="" required />
+							<input type="text" name="StartTimePicker" class="form-control datetimepicker" data-chain="#dpicker-1" id="shift-starttime-input" placeholder="ساعت شروع" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shift-endtime-input" class="col-sm-2 control-label">ساعت پایان</label>
+						<div class="col-sm-10">
+							<input type="hidden" name="EndTime" id="dpicker-2" value="" required />
+							<input type="text" name="EndTimePicker" class="form-control datetimepicker" data-chain="#dpicker-2" id="shift-endtime-input" placeholder="ساعت پایان" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shift-desc-textarea" class="col-sm-2 control-label">توضیحات</label>
+						<div class="col-sm-10">
+							<textarea name="Descr" class="form-control rtl" id="shift-desc-textarea" placeholder="توضیحات" required></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">ثبت</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{/pageHasId}}
+</script>

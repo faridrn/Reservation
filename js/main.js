@@ -47,6 +47,8 @@ function app() {
 var Data = {
     temp: []
     , post: function (data, action, service, reload) {
+        var postfix = (data.Action.indexOf('_') !== -1) ? data.Action.split('_')[1] : '';
+        data.Action = data.Action.split('_')[0];
         var o = Data.createObject(data, service, 'post');
         var results = '';
         o.success = function (d) {
@@ -64,11 +66,11 @@ var Data = {
             switch (data.Action) {
                 default:
                     if (typeof action !== "undefined" && action === 'show') {
-                        Data.show(d, data.Action);
+                        Data.show(d, data.Action, '#place', postfix);
                     }
                     break;
                 case 'toast':
-                    Data.handleAction('toast', d.Result, 'success');
+                    Data.handleAction('toast', d.Result, 'info');
                     break;
                 case 'ManagerLogin':
 //                    token = d.Items[0].token;
@@ -132,11 +134,12 @@ var Data = {
                 service = 'UsersGetAll';
                 break;
             case 'visits':
-                service = 'ManagerClinicByManager';
+                service = 'ManagerClinicByManager_visits';
                 params = {ManagerGuid: token.giud};
                 break;
             case 'shifts':
-                service = 'FreeTimeGetByClinicAndDate';
+                service = 'ManagerClinicByManager_shifts';
+                params = {ManagerGuid: token.giud};
                 break;
             case 'reservations':
                 service = 'ReserveTimeGetByFreeTime';
@@ -146,9 +149,11 @@ var Data = {
             Data.post({Action: service, Params: params}, 'show');
         }
     }
-    , show: function (data, tmpl, place) {
+    , show: function (data, tmpl, place, postfix) {
         place = (typeof place === "undefined") ? '#place' : place;
+        tmpl = (postfix) ? tmpl + '_' + postfix : tmpl;
         tmpl = Global.loadTemplate(tmpl);
+//        console.log($(tmpl).length);
         debug && console.log(Global.t() + ' DataShow: Selected template is: ' + tmpl);
         var template = $(tmpl).html();
         var handlebarsTemplate = Handlebars.compile(template);
@@ -243,10 +248,31 @@ var Data = {
                     , onSelect: function (d, e, f) {
                         if ($datepicker.attr("data-chain").length > 1) {
                             var date = new Date(d);
-//                            $("#date-input").val(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
                             var $target = $($datepicker.attr("data-chain"));
-//                            var greg_date = JDate.to_gregorian(date.getFullYear(), (date.getMonth() + 1), date.getDate());
                             var greg_date = date.getFullYear() + '-' + Global.zeroFill(date.getMonth() + 1) + '-' + Global.zeroFill(date.getDate());
+                            $target.val(greg_date);
+                        }
+                    }
+                });
+            });
+        }
+        if ($(place).find(".datetimepicker").length) {
+            $(".datetimepicker").each(function () {
+                var $datepicker = $(this);
+                $datepicker.pDatepicker({
+                    format: 'YYYY-MM-DD H:m'
+                    , timePicker: {
+                        enabled: true
+                        , showSeconds: false
+                        , showMeridian: false
+                    }
+                    , onSelect: function (d, e, f) {
+                        if ($datepicker.attr("data-chain").length > 1) {
+                            var $target = $($datepicker.attr("data-chain"));
+                            var date = new Date(d);
+                            var time = $datepicker.val().split(' ')[1];
+                            var greg_date = date.getFullYear() + '-' + Global.zeroFill(date.getMonth() + 1) + '-' + Global.zeroFill(date.getDate());
+                            greg_date += ' ' + time + ':00';
                             $target.val(greg_date);
                         }
                     }
@@ -255,8 +281,6 @@ var Data = {
         }
         if ($(place).find("#place-inner").length) {
             var $legend = $(place).find("#place-inner");
-            console.info($legend.attr("data-params"));
-            console.info(JSON.parse($legend.attr("data-params").toString()));
             var o = Data.createObject({Action: $legend.attr("data-service"), Params: JSON.parse($legend.attr("data-params"))});
             o.success = function (d) {
                 var data = Data.show(d, $legend.attr("data-service"), '#place-inner');
@@ -435,6 +459,10 @@ $(function () {
                 for (var prop in data) {
                     if (prop === "BirthDate")
                         $modal.find('[name="BirthDatePicker"]').val(Global.convertDate(data[prop]));
+                    if (prop === "StartTime")
+                        $modal.find('[name="StartTime"]').val(Global.convertDateTime(data[prop]));
+                    if (prop === "EndTime")
+                        $modal.find('[name="EndTime"]').val(Global.convertDateTime(data[prop]));
                     $modal.find('[name="' + prop + '"]').val(data[prop]);
                     $form.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
                 }

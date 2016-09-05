@@ -257,7 +257,7 @@ var Global = {
                 dd = '0' + dd;
             if (mm < 10)
                 mm = '0' + mm;
-            output = mm + '/' + dd + '/' + yyyy;
+            output = yyyy + '-' + mm + '-' + dd;
             return output;
         });
         Handlebars.registerHelper('id', function (offset, options) {
@@ -392,6 +392,12 @@ var Global = {
         var d = datetime.split(' ')[0].split("/").reverse();
         var jdate = new JDate(new Date(d[0], d[1], d[2]));
         return jdate.date.join('-');
+    }
+    , convertDateTime: function (datetime) {
+        var JDate = require('jdate');
+        var d = datetime.split(' ')[0].split("/").reverse();
+        var jdate = new JDate(new Date(d[0], d[1], d[2]));
+        return jdate.date.join('-') + ' ' + d[1];
     }
 };
 

@@ -1,0 +1,20 @@
+<script id="ManagerClinicByManager_shifts-template" type="text/x-handlebars-template">
+<div class="row">
+	<div class="col-xs-2">
+		<label>انتخاب مطب</label>
+	</div>
+	<div class="col-xs-10">
+		<select class="form-control rtl" onChange="window.location = '#shifts/' + $(this).val();">
+			{{#selectByPageId}}
+				<option value="">انتخاب مطب</option>
+				{{#each []}}
+				<option value="{{ClinicGuid}}">{{ClinicName}} - {{DoctorName}}</option>
+				{{/each}}
+			{{/selectByPageId}}
+		</select>
+	</div>
+</div>
+{{#pageHasId}}
+<div id="place-inner" data-service="FreeTimeGetByClinicAndDate" data-template="FreeTimeGetByClinicAndDate" data-params='{"ClinicGuid":"{{#id}}{{/id}}","StartDate":"{{#date -1}}{{/date}}","EndDate":"{{#date 0}}{{/date}}"}'></div>
+{{/pageHasId}}
+</script>
