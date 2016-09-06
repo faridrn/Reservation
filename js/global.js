@@ -237,71 +237,33 @@ var Global = {
         }
         return output;
     }
+    , createDate: function (offset) {
+        var output = '';
+        if (typeof offset === 'undefined' || offset === '')
+            offset = 0;
+        var date = new Date();
+        date.setDate(date.getDate() + offset);
+        var dd = date.getDate();
+        var mm = date.getMonth() + 1; //January is 0!
+        var yyyy = date.getFullYear();
+        if (dd < 10)
+            dd = '0' + dd;
+        if (mm < 10)
+            mm = '0' + mm;
+        output = yyyy + '-' + mm + '-' + dd;
+        return output;
+    }
     , handlebarHelpers: function () {
+        if (typeof Handlebars === "undefined")
+            return false;
         Handlebars.registerHelper('times', function (n, block) { // Loop a block starting at 0
             var accum = '';
             for (var i = 0; i < n; ++i)
                 accum += block.fn(i);
             return accum;
         });
-        Handlebars.registerHelper('date', function (offset, options) {
-            var output = '';
-            if (typeof offset === 'undefined' || offset === '')
-                offset = 0;
-            var date = new Date();
-            date.setDate(date.getDate() + offset);
-            var dd = date.getDate();
-            var mm = date.getMonth() + 1; //January is 0!
-            var yyyy = date.getFullYear();
-            if (dd < 10)
-                dd = '0' + dd;
-            if (mm < 10)
-                mm = '0' + mm;
-            output = yyyy + '-' + mm + '-' + dd;
-            return output;
-        });
-        Handlebars.registerHelper('id', function (offset, options) {
-            if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
-                return Location.parts[1];
-        });
-        Handlebars.registerHelper('pageHasId', function (options) {
-            if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
-                return options.fn(this);
-        });
         Handlebars.registerHelper('debug', function (value, options) {
             console.log(value);
-        });
-        Handlebars.registerHelper('getDoctorName', function (value, options) {
-            var data = '';
-            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
-            if (id) {
-                var o = Data.createObject({Action: 'DoctorsGetOne', Params: {Guid: id}});
-                o.async = false;
-                o.success = function (d) {
-                    d = typeof d === "string" ? JSON.parse(d) : d;
-                    data = d.Items[0].Name + ' ' + d.Items[0].Famili;
-                }
-                $.ajax(o);
-                return data;
-            }
-        });
-        Handlebars.registerHelper('managersSelect', function (value, options) {
-            var data = '<select name="ManagerGuid" class="form-control">';
-//            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
-//            if (id) {
-            var o = Data.createObject({Action: 'ManagerGetAll', Params: {}});
-            o.async = false;
-            o.success = function (d) {
-                d = typeof d === "string" ? JSON.parse(d) : d;
-                $.each(d.Items, function () {
-                    data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' [' + this.UserName + ']' + '</option>';
-                });
-                data += '</select>';
-//                    data = d;
-            }
-            $.ajax(o);
-            return data;
-//            }
         });
         Handlebars.registerHelper('htimes', function (n, block) { // Loop a block starting at 1 [human-readable times]
             var accum = '';
@@ -375,29 +337,113 @@ var Global = {
             var values = value.split(' ');
             return values[block.data.index % (values.length + 1)];
         });
-        window.Handlebars.registerHelper('select', function (value, options) {
+        Handlebars.registerHelper('select', function (value, options) {
             var $el = $('<select />').html(options.fn(this));
             $el.find('[value=' + value + ']').attr({'selected': 'selected'});
             return $el.html();
         });
-        window.Handlebars.registerHelper('selectByPageId', function (options) {
+        Handlebars.registerHelper('date', function (offset, options) {
+            return Global.createDate(offset);
+        });
+        Handlebars.registerHelper('id', function (offset, options) {
+            if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
+                return Location.parts[1];
+        });
+
+        Handlebars.registerHelper('id2', function (offset, options) {
+            if (typeof Location.parts[2] !== "undefined" && Location.parts[2])
+                return Location.parts[2];
+        });
+        Handlebars.registerHelper('pageHasId', function (options) {
+            if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
+                return options.fn(this);
+        });
+        Handlebars.registerHelper('selectByPageId', function (options) {
             var $el = $('<select />').html(options.fn(this));
             if (typeof Location.parts[1] !== "undefined" && Location.parts[1])
                 $el.find('[value=' + Location.parts[1] + ']').attr({'selected': 'selected'});
             return $el.html();
         });
+        Handlebars.registerHelper('getToken', function (options) {
+            return token.clinic;
+        });
+        Handlebars.registerHelper('selectByTokenClinic', function (options) {
+            var $el = $('<select />').html(options.fn(this));
+            if (typeof token.clinic !== "undefined" && token.clinic)
+                $el.find('[value=' + token.clinic + ']').attr({'selected': 'selected'});
+            return $el.html();
+        });
+        Handlebars.registerHelper('tokenId', function (options) {
+            return token.guid;
+        });
+        Handlebars.registerHelper('getDoctorName', function (value, options) {
+            var data = '';
+            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
+            if (id) {
+                var o = Data.createObject({Action: 'DoctorsGetOne', Params: {Guid: id}});
+                o.async = false;
+                o.success = function (d) {
+                    d = typeof d === "string" ? JSON.parse(d) : d;
+                    data = d.Items[0].Name + ' ' + d.Items[0].Famili;
+                }
+                $.ajax(o);
+                return data;
+            }
+        });
+        Handlebars.registerHelper('managersSelect', function (value, options) {
+            var data = '<select name="ManagerGuid" class="form-control">';
+//            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
+//            if (id) {
+            var o = Data.createObject({Action: 'ManagerGetAll', Params: {}});
+            o.async = false;
+            o.success = function (d) {
+                d = typeof d === "string" ? JSON.parse(d) : d;
+                $.each(d.Items, function () {
+                    data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' [' + this.UserName + ']' + '</option>';
+                });
+                data += '</select>';
+//                    data = d;
+            }
+            $.ajax(o);
+            return data;
+//            }
+        });
+        Handlebars.registerHelper('convert2Jalali', function (value, options) {
+            return Global.convertDateTime(value);
+        });
+        Handlebars.registerHelper('getDate', function (arg1, arg2, options) {
+            var parts = Location.parts;
+            var output = (parts[parseInt(arg1)].length && parts[parseInt(arg1)] !== "undefined") ? parts[parseInt(arg1)] : Global.createDate(parseInt(arg2));
+            return Global.convertDate2Gregorian(output, '-');
+        });
     }
-    , convertDate: function (datetime) {
+    , convertDate: function (datetime, splitter) {
+        splitter = (typeof splitter !== "undefined") ? splitter : '/';
         var JDate = require('jdate');
-        var d = datetime.split(' ')[0].split("/").reverse();
+        var d = datetime.split(' ')[0].split(splitter).reverse();
         var jdate = new JDate(new Date(d[0], d[1], d[2]));
         return jdate.date.join('-');
     }
+    , convertDate2Gregorian: function (datetime, splitter) {
+        splitter = (typeof splitter !== "undefined") ? splitter : '/';
+        var datetime = datetime.split(' ');
+        var date = datetime[0].split(splitter);
+        var JDate = require('jdate');
+        var gdate = JDate.to_gregorian(parseInt(date[0]), parseInt(date[1]), parseInt(date[2]));
+        return greg_date = gdate.getFullYear() + '-' + Global.zeroFill(gdate.getMonth() + 1) + '-' + Global.zeroFill(gdate.getDate());
+    }
     , convertDateTime: function (datetime) {
         var JDate = require('jdate');
-        var d = datetime.split(' ')[0].split("/").reverse();
+        var dt = datetime.split(' ');
+        var d = dt[0].split("/").reverse();
         var jdate = new JDate(new Date(d[0], d[1], d[2]));
-        return jdate.date.join('-') + ' ' + d[1];
+        return jdate.date.join('-') + ' ' + dt[1];
+    }
+    , setClinic: function (element) {
+        token.clinic = $(element).find("option:selected").val();
+        Cookie.set(JSON.stringify(token));
+        Location.refresh();
+        return true;
     }
 };
 

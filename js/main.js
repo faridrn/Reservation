@@ -73,8 +73,7 @@ var Data = {
                     Data.handleAction('toast', d.Result, 'info');
                     break;
                 case 'ManagerLogin':
-//                    token = d.Items[0].token;
-                    token = {data: d.Items[0].Token, giud: d.Items[0].Guid};
+                    token = {data: d.Items[0].Token, guid: d.Items[0].Guid, access: d.Items[0].IsAdmin};
                     Cookie.set(JSON.stringify(token));
                     User.navicateSuccessLogin();
                     break;
@@ -134,12 +133,16 @@ var Data = {
                 service = 'UsersGetAll';
                 break;
             case 'visits':
-                service = 'ManagerClinicByManager_visits';
-                params = {ManagerGuid: token.giud};
+                if (typeof token.clinic === "undefined") {
+                    alert('Please Select Clinic First');
+                    break;
+                }
+                service = 'VisitGetByClinic';
+                params = {ClinicGuid: token.clinic};
                 break;
             case 'shifts':
                 service = 'ManagerClinicByManager_shifts';
-                params = {ManagerGuid: token.giud};
+                params = {ClinicGuid: token.clinic};
                 break;
             case 'reservations':
                 service = 'ReserveTimeGetByFreeTime';
@@ -154,7 +157,6 @@ var Data = {
         place = (typeof place === "undefined") ? '#place' : place;
         tmpl = (postfix) ? tmpl + '_' + postfix : tmpl;
         tmpl = Global.loadTemplate(tmpl);
-//        console.log($(tmpl).length);
         debug && console.log(Global.t() + ' DataShow: Selected template is: ' + tmpl);
         var template = $(tmpl).html();
         var handlebarsTemplate = Handlebars.compile(template);
@@ -197,13 +199,11 @@ var Data = {
             Data.load(page[0]);
         }
     }
-    , handleItems: function (items) {
-// Before render
+    , handleItems: function (items) { // Before render
         return items;
     }
-    , handleContent: function (place) {
-// After render
-        if ($(place).find("table").length) {
+    , handleContent: function (place) { // After render
+        if ($(place).find(".table").length) {
             $('table').bootstrapTable({
                 locale: 'fa-IR'
                 , pagination: true
@@ -265,28 +265,46 @@ var Data = {
                     , timePicker: {
                         enabled: true
                         , showSeconds: false
-                        , showMeridian: false
+//                        , showMeridian: false
                     }
                     , onSelect: function (d, e, f) {
                         if ($datepicker.attr("data-chain").length > 1) {
                             var $target = $($datepicker.attr("data-chain"));
-                            var date = new Date(d);
-                            var time = $datepicker.val().split(' ')[1];
-                            var greg_date = date.getFullYear() + '-' + Global.zeroFill(date.getMonth() + 1) + '-' + Global.zeroFill(date.getDate());
-                            greg_date += ' ' + time + ':00';
-                            $target.val(greg_date);
+                            var datetime = $datepicker.val().split(' ');
+                            var date = datetime[0].split('-');
+                            var JDate = require('jdate');
+                            var gdate = JDate.to_gregorian(parseInt(date[0]), parseInt(date[1]), parseInt(date[2]));
+                            var greg_date = gdate.getFullYear() + '-' + Global.zeroFill(gdate.getMonth() + 1) + '-' + Global.zeroFill(gdate.getDate());
+                            $target.val(greg_date + ' ' + datetime[1] + ':00');
                         }
                     }
                 });
             });
         }
-        if ($(place).find("#place-inner").length) {
-            var $legend = $(place).find("#place-inner");
-            var o = Data.createObject({Action: $legend.attr("data-service"), Params: JSON.parse($legend.attr("data-params"))});
-            o.success = function (d) {
-                var data = Data.show(d, $legend.attr("data-service"), '#place-inner');
-            }
-            $.ajax(o);
+        if ($(".get-url").length) {
+            $(".get-url").each(function () {
+                var part = parseInt($(this).attr("data-part"));
+                if (typeof Location.parts[part] !== "undefined" && Location.parts[part] !== "")
+                    $(this).val(Location.parts[part]);
+            });
+        }
+        if ($(".load-data").length) {
+            $.each($(".load-data"), function () {
+                var $handler = $(this);
+                if ($handler.html().length === 0) {
+                    var params = $handler.attr("data-params").replace(/{token.guid}/g, token.guid).replace(/{token.clinic}/g, token.clinic);
+                    var o = Data.createObject({Action: $handler.attr("data-service"), Params: JSON.parse(params)});
+                    o.success = function (d) {
+                        var data = Data.show(d, $handler.attr("data-template"), '#' + $handler.attr("id"));
+                    };
+                    $.ajax(o);
+                }
+            });
+        }
+        if ($("select.form-control").length) {
+            $.each($("select.form-control"), function () {
+                $(this).select2({});
+            });
         }
     }
     , handleReload: function () {
@@ -373,7 +391,7 @@ var User = {
     }
     , getData: function () {
         if (token !== "") {
-            var guid = token.giud;
+            var guid = token.guid;
             var data = {
                 Action: 'ManagerGetOne'
                 , Params: {Guid: guid}
@@ -475,7 +493,7 @@ $(function () {
                         $modal.find('[name="' + prop + '"]').val(data[prop]);
                     }
                 }
-                $form.find('input, textarea, select, button').prop('disabled', false);
+                $form.find('input, textarea, select, button').not(".no-edit").prop('disabled', false);
                 $form.attr('action', $form.attr('data-service-edit'));
                 $modal.addClass('refresh-after');
                 break;
