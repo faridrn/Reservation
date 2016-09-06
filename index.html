@@ -15,6 +15,7 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/bootstrap-table.js"></script>
 		<script src="js/bootstrap-table/locale/bootstrap-table-fa-IR.js"></script>
+		<script src="js/select2.full.min.js"></script>
 		<script src="js/toastr.min.js"></script>
 		<script src="js/jdate.min.js"></script>
 		<script src="js/persian-date-0.1.8.min.js"></script>
@@ -38,7 +39,13 @@
 				<aside class="sidebar">
 					<div class="sidebar-inner">
 						<div class="app-menu" id="menu">
+							
 							<ul>
+								<li>
+									<div class="col-xs-12">
+										<div id="clinic-selector" class="load-data" data-service="ManagerClinicByManager" data-template="clinicList" data-params='{"ManagerGuid": "{token.guid}"}'></div>
+									</div>
+								</li>
 								<!-- Admin -->
 								<li>
 									<a href="#specialities">
@@ -98,7 +105,7 @@
 						<div class="user-menu pull-left">
 							<span class="username"></span>
 							<a href="#logout" data-task="logout" title="Logout"><i class="icon-logout"></i></a>
-							<a ><i class="icon-user"></i></a>
+							<a><i class="icon-user"></i></a>
 						</div>
 					</header>
 					<section class="app-main">
@@ -109,5 +116,16 @@
 				</main>
 			</div>
 		</div>
+		<script id="clinicList-template" type="text/x-handlebars-template">
+			
+			<select class="form-control rtl" onChange="Global.setClinic(this);">
+				{{#selectByTokenClinic}}
+					<option value="">انتخاب مطب</option>
+					{{#each []}}
+					<option value="{{ClinicGuid}}">{{ClinicName}} - {{DoctorName}}</option>
+					{{/each}}
+				{{/selectByTokenClinic}}
+			</select>
+		</script>
 	</body>
 </html>
