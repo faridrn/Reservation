@@ -35,12 +35,25 @@ function app() {
             "hideMethod": "fadeOut"
         };
     };
+    this.checkAccess = function () {
+        $(function() {
+            debug && console.info(Global.t() + ' Hiding menu items requiring access larger than ' + token.access + ' (' + $("[data-access]").length + ' items)');
+            if ($("[data-access]").length) {
+                var $items = $("[data-access]");
+                $.each($items, function () {
+                    if (parseInt($(this).attr("data-access")) > parseInt(token.access))
+                        $(this).hide();
+                });
+            }
+        });
+    };
     var __construct = function (that) {
         debug && console.log(Global.t() + ' App started.');
         // Check Token Globally
         that.initPlugins();
         that.handleBrowser();
         that.delegateForms();
+        that.checkAccess();
     }(this);
 }
 
@@ -134,13 +147,19 @@ var Data = {
                 break;
             case 'visits':
                 if (typeof token.clinic === "undefined") {
-                    alert('Please Select Clinic First');
+                    alert('لطفاً مطب را انتخاب کنید');
+                    Location.goBack();
                     break;
                 }
                 service = 'VisitGetByClinic';
                 params = {ClinicGuid: token.clinic};
                 break;
             case 'shifts':
+                if (typeof token.clinic === "undefined") {
+                    alert('لطفاً مطب را انتخاب کنید');
+                    Location.goBack();
+                    break;
+                }
                 service = 'ManagerClinicByManager_shifts';
                 params = {ClinicGuid: token.clinic};
                 break;

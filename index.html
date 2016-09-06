@@ -39,52 +39,51 @@
 				<aside class="sidebar">
 					<div class="sidebar-inner">
 						<div class="app-menu" id="menu">
-							
 							<ul>
-								<li>
+								<li data-access="0">
 									<div class="col-xs-12">
 										<div id="clinic-selector" class="load-data" data-service="ManagerClinicByManager" data-template="clinicList" data-params='{"ManagerGuid": "{token.guid}"}'></div>
 									</div>
 								</li>
 								<!-- Admin -->
-								<li>
+								<li data-access="1">
 									<a href="#specialities">
 										<i class="icon-tree"></i> 
 										تخصص‌ها
 									</a>
 								</li>
-								<li>
+								<li data-access="1">
 									<a href="#doctors">
 										<i class="icon-user-md"></i> 
 										پزشکان
 									</a>
 								</li>
-								<li>
+								<li data-access="1">
 									<a href="#managers">
 										<i class="icon-users-1"></i> 
 										مدیران
 									</a>
 								</li>
-								<li>
+								<li data-access="1">
 									<a href="#users">
 										<i class="icon-users"></i> 
 										کاربران
 									</a>
 								</li>
 								<!-- Secretary -->
-								<li>
+								<li data-access="0">
 									<a href="#visits">
 										<i class="icon-address-book"></i> 
 										انواع ویزیت
 									</a>
 								</li>
-								<li>
+								<li data-access="0">
 									<a href="#shifts">
 										<i class="icon-calendar-grid"></i> 
 										شیفت‌ها
 									</a>
 								</li>
-								<li>
+								<li data-access="0" class="hide">
 									<a href="#reservations">
 										<i class="icon-calendar-plus-o"></i> 
 										رزروها

@@ -84,7 +84,7 @@ var Location = {
         if (typeof fragments !== "undefined") {
             var parts = fragments.split('/');
             Location.parts = parts;
-            debug && console.warn(Global.t() + ' Parts: ' + parts);
+            debug && console.log(Global.t() + ' Parts: ' + parts);
             return parts;
         } else {
             debug && console.warn(Global.t() + ' No url fragments!');
