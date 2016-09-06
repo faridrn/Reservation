@@ -1,30 +1,110 @@
 <script id="ReserveTimeGetByFreeTime-template" type="text/x-handlebars-template">
 <div class="itemlist-header">
 	<h2>رزروها</h2>
+	<ul class="header-icons list-unstyled">
+		<li>
+			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
+		</li>
+	</ul>
 </div>
 <table class="table table-bordered table-hover table-striped table-condensed rtl">
 	<thead>
 		<th class="col-xs-2">کاربر</th>
 		<th class="col-xs-2">نوع ویزیت</th>
-		<th class="col-xs-2">مدیر</th>
+		<th class="col-xs-2">منشی</th>
 		<th class="col-xs-2">زمان شروع</th>
 		<th class="col-xs-2">زمان پایین</th>
-		<th class="col-xs-2">وضعیت</th>
+		<th class="col-xs-">وضعیت</th>
+		<th></th>
 	</thead>
 	<tbody>
 		{{#each []}}
         <tr data-id="{{Guid}}">
             <td>
-				{{UserGuid}}
+				{{#getUserName UserGuid}}{{/getUserName}}
 				<textarea class="raw" style="display: none">{{#stringify raw}}{{/stringify}}</textarea>
 			</td>
-            <td>{{VisitGuid}}</td>
-            <td>{{ManagerGuid}}</td>
-            <td>{{StartTime}}</td>
-            <td>{{EndTime}}</td>
-            <td>{{State}}</td>
+            <td>{{#getVisitName VisitGuid}}{{/getVisitName}}</td>
+            <td>{{#getManagerName ManagerGuid}}{{/getManagerName}}</td>
+            <td class="ltr">{{#convert2Jalali StartTime}}{{/convert2Jalali}}</td>
+            <td class="ltr">{{#convert2Jalali EndTime}}{{/convert2Jalali}}</td>
+            <td>
+				<select name="State" class="form-control" id="shift-state-select" disabled>
+					{{#select State}}
+					<option value="0">درخواست شده</option>
+					<option value="1">قبول شده</option>
+					<option value="2">رد شده</option>
+					<option value="3">کنسل‌شده توسط کاربر</option>
+					<option value="4">پایان یافته</option>
+					{{/select}}
+				</select>
+			</td>
+			<td>
+				<ul class="list-inline list-unstyled text-center">
+					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
+				</ul>
+			</td>
         </tr>
 		{{/each}}
     </tbody>
 </table>
+<div class="modal zoom fade" id="reservation-add" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="btn btn-sm btn-warning manipulate pull-left" data-type="edit"><i class="icon-edit"></i> ویرایش</button>
+				<h4 class="modal-title">مورد جدید</h4>
+			</div>
+			<form class="reservation-add-form form-horizontal" role="form" action="ReserveTimeAdd" data-service-add="ReserveTimeAdd" data-service-edit="ReserveTimeUpdate" data-next="toast">
+				<input type="hidden" name="Guid" value="" />
+				<input type="hidden" name="FreeTimeGuid" value="{{#id}}{{/id}}" />
+				<input type="hidden" name="ManagerGuid" value="{{#tokenId}}{{/tokenId}}" />
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="shift-state-select" class="col-sm-2 control-label">وضعیت</label>
+						<div class="col-sm-10">
+							<select name="State" class="form-control" id="shift-state-select" required>
+								<option value="0">درخواست شده</option>
+								<option value="1">قبول شده</option>
+								<option value="2">رد شده</option>
+								<option value="3">کنسل‌شده توسط کاربر</option>
+								<option value="4">پایان یافته</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shift-starttime-input" class="col-sm-2 control-label">ساعت شروع</label>
+						<div class="col-sm-10">
+							<input type="hidden" name="StartTime" id="dpicker-1" value="" required />
+							<input type="text" name="StartTimePicker" class="form-control datetimepicker no-edit" data-chain="#dpicker-1" id="shift-starttime-input" placeholder="ساعت شروع" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shift-endtime-input" class="col-sm-2 control-label">ساعت پایان</label>
+						<div class="col-sm-10">
+							<input type="hidden" name="EndTime" id="dpicker-2" value="" required />
+							<input type="text" name="EndTimePicker" class="form-control datetimepicker no-edit" data-chain="#dpicker-2" id="shift-endtime-input" placeholder="ساعت پایان" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="reservation-user-input" class="col-sm-2 control-label">کاربر</label>
+						<div class="col-sm-10">
+							{{#usersSelect noedit}}{{/usersSelect}}
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="reservation-visit-input" class="col-sm-2 control-label">نوع ویزیت</label>
+						<div class="col-sm-10">
+							{{#visitsSelect noedit}}{{/visitsSelect}}
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">ثبت</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 </script>

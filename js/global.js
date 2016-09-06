@@ -390,10 +390,47 @@ var Global = {
                 return data;
             }
         });
+        Handlebars.registerHelper('getUserName', function (value, options) {
+            var data = '';
+            if (value) {
+                var o = Data.createObject({Action: 'UsersGetOne', Params: {Guid: value}});
+                o.async = false;
+                o.success = function (d) {
+                    d = typeof d === "string" ? JSON.parse(d) : d;
+                    data = d.Items[0].Name + ' ' + d.Items[0].Famili;
+                }
+                $.ajax(o);
+                return data;
+            }
+        });
+        Handlebars.registerHelper('getVisitName', function (value, options) {
+            var data = '';
+            if (value) {
+                var o = Data.createObject({Action: 'VisitGetOne', Params: {Guid: value}});
+                o.async = false;
+                o.success = function (d) {
+                    d = typeof d === "string" ? JSON.parse(d) : d;
+                    data = d.Items[0].Name;
+                }
+                $.ajax(o);
+                return data;
+            }
+        });
+        Handlebars.registerHelper('getManagerName', function (value, options) {
+            var data = '';
+            if (value) {
+                var o = Data.createObject({Action: 'ManagerGetOne', Params: {Guid: value}});
+                o.async = false;
+                o.success = function (d) {
+                    d = typeof d === "string" ? JSON.parse(d) : d;
+                    data = d.Items[0].Name + ' ' + d.Items[0].Famili;
+                }
+                $.ajax(o);
+                return data;
+            }
+        });
         Handlebars.registerHelper('managersSelect', function (value, options) {
             var data = '<select name="ManagerGuid" class="form-control">';
-//            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
-//            if (id) {
             var o = Data.createObject({Action: 'ManagerGetAll', Params: {}});
             o.async = false;
             o.success = function (d) {
@@ -402,11 +439,39 @@ var Global = {
                     data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' [' + this.UserName + ']' + '</option>';
                 });
                 data += '</select>';
-//                    data = d;
             }
             $.ajax(o);
             return data;
-//            }
+        });
+        Handlebars.registerHelper('usersSelect', function (value, arg, options) {
+            cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
+            var data = '<select name="UserGuid" class="form-control' + cssClass + '">';
+            var o = Data.createObject({Action: 'UsersGetAll', Params: {}});
+            o.async = false;
+            o.success = function (d) {
+                d = typeof d === "string" ? JSON.parse(d) : d;
+                $.each(d.Items, function () {
+                    data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' [' + this.UserName + ']' + '</option>';
+                });
+                data += '</select>';
+            }
+            $.ajax(o);
+            return data;
+        });
+        Handlebars.registerHelper('visitsSelect', function (value, arg, options) {
+            cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
+            var data = '<select name="VisitGuid" class="form-control' + cssClass + '">';
+            var o = Data.createObject({Action: 'VisitGetByClinic', Params: {ClinicGuid: token.clinic}});
+            o.async = false;
+            o.success = function (d) {
+                d = typeof d === "string" ? JSON.parse(d) : d;
+                $.each(d.Items, function () {
+                    data += '<option value="' + this.Guid + '">' + this.Name + '</option>';
+                });
+                data += '</select>';
+            }
+            $.ajax(o);
+            return data;
         });
         Handlebars.registerHelper('convert2Jalali', function (value, options) {
             return Global.convertDateTime(value);

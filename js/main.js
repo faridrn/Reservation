@@ -303,7 +303,9 @@ var Data = {
         }
         if ($("select.form-control").length) {
             $.each($("select.form-control"), function () {
-                $(this).select2({});
+                $(this).select2({
+                    width: '100%'
+                });
             });
         }
     }
