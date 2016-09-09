@@ -5,8 +5,9 @@
 		<th class="col-xs-2">ساعت شروع</th>
 		<th class="col-xs-2">ساعت پایان</th>
 		<th class="col-xs-3">توضیحات</th>
+		<th class="col-xs-1">وضعیت</th>
 		<th class="col-xs-1"></th>
-		<th class="col-xs-2"></th>
+		<th class="col-xs-1"></th>
 	</thead>
 	<tbody>
 		{{#each []}}
@@ -17,13 +18,22 @@
 			</td>
             <td class="ltr">{{#convert2Jalali EndTime}}{{/convert2Jalali}}</td>
             <td>{{Descr}}</td>
+            <td>
+				<select name="State" class="form-control" id="shift-state-select" disabled>
+					{{#select State}}
+					<option value="0">نرمال</option>
+					<option value="1">قفل شده</option>
+					<option value="2">حذف شده</option>
+					{{/select}}
+				</select>
+			</td>
 			<td class="text-center">
 				<a href="#reservations/{{Guid}}" class="btn btn-sm btn-info"><i class="icon-calendar"></i> رزروهای این شیفت</a>
 			</td>
 			<td>
 				<ul class="list-inline list-unstyled text-center">
 					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
-					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
+					<!--<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>-->
 				</ul>
 			</td>
         </tr>

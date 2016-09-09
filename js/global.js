@@ -466,11 +466,12 @@ var Global = {
             return data;
         });
         Handlebars.registerHelper('visitsSelect', function (value, arg, options) {
-            if (typeof cache.VisitGetByClinic[token.clinic] !== "undefined")
-                return cache.VisitGetByClinic[token.clinic];
+            var clinic = String(token.clinic);
+//            if (typeof cache.VisitGetByClinic[clinic] !== "undefined")
+//                return cache.VisitGetByClinic[clinic];
             cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
             var data = '<select name="VisitGuid" class="form-control' + cssClass + '">';
-            var o = Data.createObject({Action: 'VisitGetByClinic', Params: {ClinicGuid: token.clinic}});
+            var o = Data.createObject({Action: 'VisitGetByClinic', Params: {ClinicGuid: clinic}});
             o.async = false;
             o.success = function (d) {
                 d = typeof d === "string" ? JSON.parse(d) : d;
@@ -478,7 +479,7 @@ var Global = {
                     data += '<option value="' + this.Guid + '">' + this.Name + '</option>';
                 });
                 data += '</select>';
-                cache.VisitGetByClinic[token.clinic] = data;
+//                cache.VisitGetByClinic[clinic] = data;
             }
             $.ajax(o);
             return data;
