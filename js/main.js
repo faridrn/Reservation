@@ -36,7 +36,7 @@ function app() {
         };
     };
     this.checkAccess = function () {
-        $(function() {
+        $(function () {
             debug && console.info(Global.t() + ' Hiding menu items requiring access larger than ' + token.access + ' (' + $("[data-access]").length + ' items)');
             if ($("[data-access]").length) {
                 var $items = $("[data-access]");
@@ -58,7 +58,7 @@ function app() {
 }
 
 var Data = {
-    temp: []
+    temp: {}
     , post: function (data, action, service, reload) {
         var postfix = (data.Action.indexOf('_') !== -1) ? data.Action.split('_')[1] : '';
         data.Action = data.Action.split('_')[0];
@@ -144,6 +144,10 @@ var Data = {
                 break;
             case 'users':
                 service = 'UsersGetAll';
+                break;
+            case 'me':
+                service = 'ManagerGetOne';
+                params = {Guid: token.guid};
                 break;
             case 'visits':
                 if (typeof token.clinic === "undefined") {
@@ -267,10 +271,13 @@ var Data = {
                     format: 'YYYY-MM-DD'
                     , onSelect: function (d, e, f) {
                         if ($datepicker.attr("data-chain").length > 1) {
-                            var date = new Date(d);
-                            var $target = $($datepicker.attr("data-chain"));
-                            var greg_date = date.getFullYear() + '-' + Global.zeroFill(date.getMonth() + 1) + '-' + Global.zeroFill(date.getDate());
-                            $target.val(greg_date);
+                            var date = $datepicker.val();
+                            $target.convertDate2Gregorian(date);
+                            
+//                            var date = new Date(d);
+//                            var $target = $($datepicker.attr("data-chain"));
+//                            var greg_date = date.getFullYear() + '-' + Global.zeroFill(date.getMonth() + 1) + '-' + Global.zeroFill(date.getDate());
+//                            $target.val(greg_date);
                         }
                     }
                 });
@@ -322,9 +329,11 @@ var Data = {
         }
         if ($("select.form-control").length) {
             $.each($("select.form-control"), function () {
-                $(this).select2({
-                    width: '100%'
-                });
+                if (!$(this).hasClass("simple")) {
+                    $(this).select2({
+                        width: '100%'
+                    });
+                }
             });
         }
     }
@@ -345,31 +354,50 @@ var Data = {
             delete item.Id;
             delete item.raw;
         });
-        return data;
         return Data.treeify(data);
+        return data;
     }
     , treeify: function (list) {
-        var treeList = [];
-        var lookup = {};
-        $.each(list, function (i, item) {
-            lookup[item.id] = item;
-            item.children = [];
-        });
-        $.each(list, function () {
-            if (this.parent !== null) {
-                lookup[this.parent]['children'].push(this);
-            } else {
-                treeList.push(this);
-            }
-        });
-        $.each(treeList, function () {
-            if (this.parent === null)
-                this.parent = '#';
-        });
-        return treeList;
+        for (var i = 0; i < list.length; i++) {
+            list[i].children = [];
+            list[i].depth = 0;
+        }
+        var copy = Object.assign([], list);
+//        Data.buildSectionTree(copy);
+//        
+//        for (var i = 1; i < copy.length; i++) {
+//            Data.temp += "<option value='" + copy[i].id + "'>" + Data.indentGen(copy[i].depth) + copy[i].text + "</option>";
+//        }
+        return list;
     }
-    , createTreeOptions: function (tree) {
-
+    , buildSectionTree: function (tree, item) {
+//        console.log(tree);
+        if (typeof item !== "undefined") {
+            for (var i = 0; i < tree.length; i++) {
+                if (String(tree[i].id) === String(item.parent)) {
+                    item.depth = tree[i].depth + 1;
+                    tree[i].childs.push(item);
+                    break;
+                }
+                else
+                    Data.buildSectionTree(tree[i].childs, item);
+            }
+        } else {
+            var idx = 0;
+            while (idx < tree.length)
+                if (tree[idx].parent !== 1)
+                    Data.buildSectionTree(tree, tree.splice(idx, 1)[0]);
+                else
+                    idx++;
+        }
+    }
+    , indentGen: function (n) {
+        var ret = '';
+        for (i = 0; i < n - 1; i++)
+            ret += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        if (n > 0)
+            ret += '|---';
+        return ret;
     }
     , addOptionPrefixes: function (id, title, level) {
 
@@ -492,6 +520,7 @@ $(function () {
                 $modal.find('[name="Guid"]').val('');
                 $form.attr('action', $form.attr('data-service-add'));
                 $modal.addClass('refresh-after');
+                $form.find("[name=ClinicGuid]").val(token.clinic);
                 break;
             case 'view':
                 $modal.find(".modal-title").text("مشاهده جزئیات");

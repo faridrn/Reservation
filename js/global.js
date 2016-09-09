@@ -1,5 +1,5 @@
 var debug = true;
-var cache = {tree: '', idx: 0, listTree: []};
+var cache = {tree: '', idx: 0, listTree: [], clinic: []};
 
 var Config = {
     title: 'Reservation'
@@ -467,8 +467,8 @@ var Global = {
         });
         Handlebars.registerHelper('visitsSelect', function (value, arg, options) {
             var clinic = String(token.clinic);
-//            if (typeof cache.VisitGetByClinic[clinic] !== "undefined")
-//                return cache.VisitGetByClinic[clinic];
+            if (typeof cache.clinic[clinic] !== "undefined")
+                return cache.clinic[clinic];
             cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
             var data = '<select name="VisitGuid" class="form-control' + cssClass + '">';
             var o = Data.createObject({Action: 'VisitGetByClinic', Params: {ClinicGuid: clinic}});
@@ -479,7 +479,7 @@ var Global = {
                     data += '<option value="' + this.Guid + '">' + this.Name + '</option>';
                 });
                 data += '</select>';
-//                cache.VisitGetByClinic[clinic] = data;
+                cache.clinic[clinic] = data;
             }
             $.ajax(o);
             return data;

@@ -10,12 +10,12 @@
 <table class="table table-bordered table-hover table-striped table-condensed rtl">
 	<thead>
 		<th class="col-xs-2">کاربر</th>
-		<th class="col-xs-2">نوع ویزیت</th>
+		<th class="col-xs-1">نوع ویزیت</th>
 		<th class="col-xs-2">منشی</th>
 		<th class="col-xs-2">زمان شروع</th>
 		<th class="col-xs-2">زمان پایین</th>
-		<th class="col-xs-">وضعیت</th>
-		<th></th>
+		<th class="col-xs-1">وضعیت</th>
+		<th class="col-xs-2"></th>
 	</thead>
 	<tbody>
 		{{#each []}}
@@ -42,6 +42,7 @@
 			<td>
 				<ul class="list-inline list-unstyled text-center">
 					<li><button class="btn btn-sm btn-success manipulate" data-type="view"><i class="icon-search"></i> مشاهده </button></li>
+					<li><button class="btn btn-sm btn-warning manipulate" data-type="edit"><i class="icon-edit"></i> ویرایش</button></li>
 				</ul>
 			</td>
         </tr>
@@ -64,7 +65,7 @@
 					<div class="form-group">
 						<label for="shift-state-select" class="col-sm-2 control-label">وضعیت</label>
 						<div class="col-sm-10">
-							<select name="State" class="form-control" id="shift-state-select" required>
+							<select name="State" class="form-control simple rtl" id="shift-state-select" required>
 								<option value="0">درخواست شده</option>
 								<option value="1">قبول شده</option>
 								<option value="2">رد شده</option>
@@ -88,13 +89,13 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="reservation-user-input" class="col-sm-2 control-label">کاربر</label>
+						<label for="reservation-user-input" class="col-sm-2 control-label simple">کاربر</label>
 						<div class="col-sm-10">
 							{{#usersSelect noedit}}{{/usersSelect}}
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="reservation-visit-input" class="col-sm-2 control-label">نوع ویزیت</label>
+						<label for="reservation-visit-input" class="col-sm-2 control-label simple">نوع ویزیت</label>
 						<div class="col-sm-10">
 							{{#visitsSelect noedit}}{{/visitsSelect}}
 						</div>
