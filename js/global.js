@@ -1,5 +1,5 @@
 var debug = true;
-var cache = {};
+var cache = {tree: '', idx: 0, listTree: []};
 
 var Config = {
     title: 'Reservation'
@@ -494,6 +494,8 @@ var Global = {
     }
     , convertDate: function (datetime, splitter) {
         splitter = (typeof splitter !== "undefined") ? splitter : '/';
+        if (typeof datetime !== "string")
+            return '';
         var JDate = require('jdate');
         var d = datetime.split(' ')[0].split(splitter).reverse();
         var jdate = new JDate(new Date(d[0], d[1], d[2]));
