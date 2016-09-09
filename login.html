@@ -43,7 +43,8 @@
 								</div>
 								<div class="form-group">
 									<ul>
-										<li><a href="#" data-toggle="modal" data-target="#myModal">بازیابی رمز عبور</a></li>
+										<li><a href="#" data-toggle="modal" data-target="#ManagerCreateSmsKey">بازیابی رمز عبور</a></li>
+										<li><a href="#" data-toggle="modal" data-target="#ManagerSetPassword">تغییر رمز عبور</a></li>
 									</ul>
 								</div>
 							</form>
@@ -52,7 +53,7 @@
 				</div>
 			</div>
 		</section>
-		<div class="modal zoom fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal zoom fade" id="ManagerCreateSmsKey" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -65,11 +66,37 @@
 								<input type="text" name="UserName" class="form-control" id="register-username-input" placeholder="نام کاربری" required />
 							</div>
 							<div class="form-group">
-								<input type="text" name="Phone" class="form-control rtl" id="register-name-input" placeholder="نام" required />
+								<input type="text" name="Phone" class="form-control" id="register-phone-input" placeholder="شماره تلفن" required />
 							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="submit" class="btn btn-primary">بازیابی</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal zoom fade" id="ManagerSetPassword" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">بازیابی کلمه عبور</h4>
+					</div>
+					<form class="register-form" role="form" action="ManagerSetPassword" data-next="toast">
+						<div class="modal-body">
+							<div class="form-group">
+								<input type="text" name="UserName" class="form-control" id="register-username-input" placeholder="نام کاربری" required />
+							</div>
+							<div class="form-group">
+								<input type="text" name="Phone" class="form-control" id="register-phone-input" placeholder="شماره تلفن" required />
+							</div>
+							<div class="form-group">
+								<input type="password" name="Password" class="form-control" id="register-password-input" placeholder="رمز عبور جدید" required />
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">ثبت رمز عبور جدید</button>
 						</div>
 					</form>
 				</div>
