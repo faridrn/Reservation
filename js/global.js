@@ -1,4 +1,5 @@
 var debug = true;
+var cache = {};
 
 var Config = {
     title: 'Reservation'
@@ -430,6 +431,8 @@ var Global = {
             }
         });
         Handlebars.registerHelper('managersSelect', function (value, options) {
+            if (typeof cache.ManagerGetAll !== "undefined")
+                return cache.ManagerGetAll;
             var data = '<select name="ManagerGuid" class="form-control">';
             var o = Data.createObject({Action: 'ManagerGetAll', Params: {}});
             o.async = false;
@@ -439,11 +442,14 @@ var Global = {
                     data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' [' + this.UserName + ']' + '</option>';
                 });
                 data += '</select>';
+                cache.ManagerGetAll = data;
             }
             $.ajax(o);
             return data;
         });
         Handlebars.registerHelper('usersSelect', function (value, arg, options) {
+            if (typeof cache.UsersGetAll !== "undefined")
+                return cache.UsersGetAll;
             cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
             var data = '<select name="UserGuid" class="form-control' + cssClass + '">';
             var o = Data.createObject({Action: 'UsersGetAll', Params: {}});
@@ -454,11 +460,14 @@ var Global = {
                     data += '<option value="' + this.Guid + '">' + this.Name + ' ' + this.Famili + ' [' + this.UserName + ']' + '</option>';
                 });
                 data += '</select>';
+                cache.UsersGetAll = data;
             }
             $.ajax(o);
             return data;
         });
         Handlebars.registerHelper('visitsSelect', function (value, arg, options) {
+            if (typeof cache.VisitGetByClinic[token.clinic] !== "undefined")
+                return cache.VisitGetByClinic[token.clinic];
             cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
             var data = '<select name="VisitGuid" class="form-control' + cssClass + '">';
             var o = Data.createObject({Action: 'VisitGetByClinic', Params: {ClinicGuid: token.clinic}});
@@ -469,6 +478,7 @@ var Global = {
                     data += '<option value="' + this.Guid + '">' + this.Name + '</option>';
                 });
                 data += '</select>';
+                cache.VisitGetByClinic[token.clinic] = data;
             }
             $.ajax(o);
             return data;
