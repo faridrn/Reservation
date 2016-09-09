@@ -499,7 +499,7 @@ var Global = {
             return '';
         var JDate = require('jdate');
         var d = datetime.split(' ')[0].split(splitter).reverse();
-        var jdate = new JDate(new Date(d[0], d[1], d[2]));
+        var jdate = new JDate(new Date(d[0], (parseInt(d[2]) - 1), d[1]));
         return jdate.date.join('-');
     }
     , convertDate2Gregorian: function (datetime, splitter) {

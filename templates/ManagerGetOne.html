@@ -1,0 +1,38 @@
+<script id="ManagerGetOne-template" type="text/x-handlebars-template">
+	{{#each []}}
+	<h1 class="page-header">
+	{{Name}} {{Famili}}
+	</h1>
+	<dl class="dl-horizontal">
+		<dt>نام کاربری</dt>
+		<dd>{{UserName}}</dd>
+		<dt>دسترسی</dt>
+		<dd>
+			<select name="IsAdmin" class="form-control disabled simple rtl" disabled>
+				{{#select IsAdmin}}
+				<option value="0">دسترسی منشی</option>
+				<option value="1">دسترسی مدیریت</option>
+				{{/select}}
+			</select>
+		</dd>
+		<dt>تلفن</dt>
+		<dd>{{Tel}}</dd>
+		<dt>موبایل</dt>
+		<dd>{{Phone}}</dd>
+		<dt>کدملی</dt>
+		<dd>{{NationalId}}</dd>
+		<dt>ایمیل</dt>
+		<dd>{{Email}}</dd>
+		<dt>آدرس تصویر</dt>
+		<dd>
+			{{#if ImageAddress}}
+			<figure>
+				<img src="{{ImageAddress}}" alt="{{Guid}}" />
+			</figure>
+			{{/if}}
+		</dd>
+		<dt>توضیحات</dt>
+		<dd>{{Descr}}</dd>
+	</dl>
+	{{/each}}
+</script>
