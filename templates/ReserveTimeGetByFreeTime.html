@@ -11,7 +11,6 @@
 	<thead>
 		<th class="col-xs-2">کاربر</th>
 		<th class="col-xs-1">نوع ویزیت</th>
-		<th class="col-xs-2">منشی</th>
 		<th class="col-xs-2">زمان شروع</th>
 		<th class="col-xs-2">زمان پایین</th>
 		<th class="col-xs-1">وضعیت</th>
@@ -21,11 +20,10 @@
 		{{#each []}}
         <tr data-id="{{Guid}}">
             <td>
-				{{#getUserName UserGuid}}{{/getUserName}}
+				{{UsersName}} {{UsersFamili}}
 				<textarea class="raw" style="display: none">{{#stringify raw}}{{/stringify}}</textarea>
 			</td>
-            <td>{{#getVisitName VisitGuid}}{{/getVisitName}}</td>
-            <td>{{#getManagerName ManagerGuid}}{{/getManagerName}}</td>
+            <td>{{VistName}}</td>
             <td class="ltr">{{#convert2Jalali StartTime}}{{/convert2Jalali}}</td>
             <td class="ltr">{{#convert2Jalali EndTime}}{{/convert2Jalali}}</td>
             <td>
