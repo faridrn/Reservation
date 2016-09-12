@@ -450,8 +450,8 @@ var Global = {
         Handlebars.registerHelper('usersSelect', function (value, arg, options) {
             if (typeof cache.UsersGetAll !== "undefined")
                 return cache.UsersGetAll;
-            cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
-            var data = '<select name="UserGuid" class="form-control' + cssClass + '">';
+//            cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
+            var data = '<select name="UserGuid" class="form-control simple no-edit rtl">';
             var o = Data.createObject({Action: 'UsersGetAll', Params: {}});
             o.async = false;
             o.success = function (d) {
@@ -465,12 +465,12 @@ var Global = {
             $.ajax(o);
             return data;
         });
-        Handlebars.registerHelper('visitsSelect', function (value, arg, options) {
+        Handlebars.registerHelper('visitsSelect', function (value, options) {
             var clinic = String(token.clinic);
             if (typeof cache.clinic[clinic] !== "undefined")
                 return cache.clinic[clinic];
-            cssClass = (typeof arg !== "undefined" && arg !== "") ? ' ' + arg : '';
-            var data = '<select name="VisitGuid" class="form-control' + cssClass + '">';
+//            cssClass = (typeof value !== "undefined" && value !== "") ? ' ' + value : '';
+            var data = '<select name="VisitGuid" class="form-control simple no-edit rtl">';
             var o = Data.createObject({Action: 'VisitGetByClinic', Params: {ClinicGuid: clinic}});
             o.async = false;
             o.success = function (d) {
