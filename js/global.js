@@ -524,6 +524,93 @@ var Global = {
         Location.refresh();
         return true;
     }
+    , dynamicSort: function (property) {
+        var sortOrder = 1;
+        if (property[0] === "-") {
+            sortOrder = -1;
+            property = property.substr(1);
+        }
+        return function (a, b) {
+            var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+            return result * sortOrder;
+        }
+    }
+    , cloneObject: function (obj) {
+        var copy;
+        if (null == obj || "object" != typeof obj)
+            return obj;
+        // Handle Date
+        if (obj instanceof Date) {
+            copy = new Date();
+            copy.setTime(obj.getTime());
+            return copy;
+        }
+        // Handle Array
+        if (obj instanceof Array) {
+            copy = [];
+            for (var i = 0, len = obj.length; i < len; i++) {
+                copy[i] = Global.cloneObject(obj[i]);
+            }
+            return copy;
+        }
+        // Handle Object
+        if (obj instanceof Object) {
+            copy = {};
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr))
+                    copy[attr] = Global.cloneObject(obj[attr]);
+            }
+            return copy;
+        }
+        throw new Error("Unable to copy obj! Its type isn't supported.");
+    }
+    , unflatten: function (flat) {
+        var result = {};
+        var parentObj = result;
+
+        var keys = Object.keys(flat);
+        for (var i = 0; i < keys.length; ++i) {
+
+            var key = keys[i];
+            var subkeys = key.split('.');
+            var last = subkeys.pop();
+
+            for (var ii = 0; ii < subkeys.length; ++ii) {
+                var subkey = subkeys[ii];
+                parentObj[subkey] = typeof parentObj[subkey] === 'undefined' ? {} : parentObj[subkey];
+                parentObj = parentObj[subkey];
+            }
+
+            parentObj[last] = flat[key];
+            parentObj = result;
+        }
+
+        return result;
+    }
+    , flatten: function (data) {
+        var result = {};
+
+        function recurse(cur, prop) {
+            if (Object(cur) !== cur) {
+                result[prop] = cur;
+            } else if (Array.isArray(cur)) {
+                for (var i = 0, l = cur.length; i < l; i++)
+                    recurse(cur[i], prop + "[" + i + "]");
+                if (l == 0)
+                    result[prop] = [];
+            } else {
+                var isEmpty = true;
+                for (var p in cur) {
+                    isEmpty = false;
+                    recurse(cur[p], prop ? prop + "." + p : p);
+                }
+                if (isEmpty && prop)
+                    result[prop] = {};
+            }
+        }
+        recurse(data, "");
+        return result;
+    }
 };
 
 $(document).ajaxStart(function (e) {

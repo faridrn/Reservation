@@ -345,10 +345,12 @@ var Data = {
     , prepareTree: function (rawData) {
         var data = (typeof rawData === "string") ? JSON.parse(rawData) : rawData;
         $.each(data, function (i, item) {
-            item.id = item.Id;
-            item.parent = (item.ParentId === null) ? '#' : item.ParentId;
+            item.id = parseInt(item.Id);
+            item.parent = (item.ParentId === null) ? '#' : parseInt(item.ParentId);
             item.text = item.Name;
             item.state = {opened: true};
+            item.children = [];
+            item.depth = 0;
             delete item.ParentId;
             delete item.Name;
             delete item.Id;
@@ -358,16 +360,57 @@ var Data = {
         return data;
     }
     , treeify: function (list) {
-        for (var i = 0; i < list.length; i++) {
-            list[i].children = [];
-            list[i].depth = 0;
+        var tree = Data.createTreeOptions(Global.cloneObject(list));
+        $("#test").html(tree);
+
+        return list;
+    }
+    , createTreeOptions: function (items) {
+        if (!items.length)
+            return '';
+        var html = '', children = [], l;
+        var map = {}, node, roots = [];
+
+        $.each(items, function () {
+            if (this.parent === "#")
+                this.parent = 0;
+        });
+        items.sort(function (a, b) {
+            return (a.parent > b.parent) ? 1 : ((b.parent > a.parent) ? -1 : 0);
+        });
+        
+        var roots = Global.cloneObject(items);
+
+        $.each(roots, function () {
+            l = (typeof children[this.parent] !== "undefined") ? children[this.parent] : [];
+            l.push(this);
+            children[this.parent] = l;
+        });
+
+        var tree = Data.treeRecurse(0, '', [], children, 0);
+        $.each(tree, function () {
+            if (typeof this.id !== "undefined")
+                html += '<option value="' + this.id + '" data-parent="' + this.parent + '">' + this.treemenu + '</option>';
+        });
+        return html;
+    }
+    , treeRecurse: function (id, indent, list, children, level) {
+        if (typeof children[id] !== "undefined" && children[id]) {
+            $.each(children[id], function () {
+                var v = this;
+                var id = v.id;
+                if (v.parent === 0)
+                    text = v.text;
+                else
+                    text = '|_ ' + v.text;
+
+                list[id] = v;
+                list[id].treemenu = indent + text;
+                list[id].children = (typeof children[id] !== "undefined") ? children[id].length : 0;
+                level++;
+                list = Data.treeRecurse(id, indent + ' -', list, children, level);
+            });
         }
-        var copy = Object.assign([], list);
-//        Data.buildSectionTree(copy);
-//        
-//        for (var i = 1; i < copy.length; i++) {
-//            Data.temp += "<option value='" + copy[i].id + "'>" + Data.indentGen(copy[i].depth) + copy[i].text + "</option>";
-//        }
         return list;
     }
     , buildSectionTree: function (tree, item) {
@@ -554,7 +597,7 @@ $(function () {
                     $form.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
                     if (prop === "ImageAddress") {
 //                        $.get(Config.media + data[prop]).done(function() {
-                            $modal.find(".item-picture img:first").attr('src', Config.media + data[prop]);
+                        $modal.find(".item-picture img:first").attr('src', Config.media + data[prop]);
 //                        });
                     }
                 }
@@ -630,7 +673,7 @@ $(function () {
             User.logout();
         }
     });
-    $(document).on('change', "#form-upload", function() {
+    $(document).on('change', "#form-upload", function () {
         $(this).parents("form:first").submit();
     });
 });
