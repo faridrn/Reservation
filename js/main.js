@@ -273,7 +273,7 @@ var Data = {
                         if ($datepicker.attr("data-chain").length > 1) {
                             var date = $datepicker.val();
                             $target.convertDate2Gregorian(date);
-                            
+
 //                            var date = new Date(d);
 //                            var $target = $($datepicker.attr("data-chain"));
 //                            var greg_date = date.getFullYear() + '-' + Global.zeroFill(date.getMonth() + 1) + '-' + Global.zeroFill(date.getDate());
@@ -405,7 +405,7 @@ var Data = {
 };
 var Forms = {
     init: function () {
-        $(document).on('submit', 'form', function (e) {
+        $(document).on('submit', 'form:not(.standalone)', function (e) {
             var $form = Forms.validate($(this));
             var data = {
                 Action: $form.attr('action')
@@ -414,6 +414,24 @@ var Forms = {
             debug && console.log(Global.t() + ' Form Data: ' + JSON.stringify(data));
             reload = ($form.parents(".refresh-after").length) ? true : false;
             Data.post(data, $form.attr('data-next'), Config.api, reload);
+            e.preventDefault();
+            return false;
+        });
+        $(document).on('submit', "form.image-upload", function (e) {
+            var filename = $(this).find('input[type=file]').val().split('\\').pop();
+            var FileName = filename.split('.')[0];
+            var FileExtension = filename.split('.')[1];
+            $(this).ajaxSubmit({
+                headers: {
+                    FileName: FileName
+                    , FileExtension: FileExtension
+                }
+                , success: function (d) {
+                    var restult = (typeof d === "object") ? d : JSON.parse(d);
+                    $(document).find("input[name=ImageAddress]").val(Config.media + restult.Result);
+                    $(document).find(".item-picture img").attr('src', Config.media + restult.Result);
+                }
+            });
             e.preventDefault();
             return false;
         });
@@ -496,7 +514,7 @@ $(function () {
     $(document).on('click', 'button.manipulate', function (e) {
         e.preventDefault;
         var $modal = $(".app-inner").find(".modal");
-        var $form = $modal.find("form:first");
+        var $form = $modal.find("form");
         var task = $(this).attr("data-type");
         if (task !== 'add' && task !== 'append') {
             if ($(this).parents("tr:first").find(".raw").length) {
@@ -534,6 +552,11 @@ $(function () {
                         $modal.find('[name="EndTime"]').val(Global.convertDateTime(data[prop]));
                     $modal.find('[name="' + prop + '"]').val(data[prop]);
                     $form.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
+                    if (prop === "ImageAddress") {
+//                        $.get(Config.media + data[prop]).done(function() {
+                            $modal.find(".item-picture img:first").attr('src', Config.media + data[prop]);
+//                        });
+                    }
                 }
                 break;
             case 'edit':
@@ -606,5 +629,8 @@ $(function () {
         if (task === 'logout') {
             User.logout();
         }
+    });
+    $(document).on('change', "#form-upload", function() {
+        $(this).parents("form:first").submit();
     });
 });

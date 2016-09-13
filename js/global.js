@@ -4,6 +4,7 @@ var cache = {tree: '', idx: 0, listTree: [], clinic: []};
 var Config = {
     title: 'Reservation'
     , api: 'http://iranappsazan.ddns.net:8080/myapi/api/action/reservation'
+    , media: 'http://iranappsazan.ddns.net:8080/myapi/api/file/download/image/'
 };
 var Cookie = {
     lifetime: 1000000 // exp in seconds
