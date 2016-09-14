@@ -239,14 +239,6 @@ var Data = {
             var data = Data.prepareTree($('.tree textarea').val());
             $('.tree').on('ready.jstree', function () {
             }).on('hover_node.jstree', function (e, node) {
-//                var rawData = {
-//                    ParentId: $('#' + node.node.id).parents("li:first").attr('id')
-//                    , Name: $('#' + node.node.id).find("> a").text()
-//                    , Id: node.node.id
-//                };
-//                $('#' + node.node.id).find("> a")
-//                        .append('<button class="btn btn-link btn-xs manipulate" data-type="append" data-id="' + node.node.id + ' "><i class="icon-plus"></i></button>')
-//                        .append('<button class="btn btn-link btn-xs manipulate" data-type="delete" data-id="' + node.node.id + ' "><i class="icon-minus"></i></button>');
             }).on('deselect_node.jstree', function (e, node) {
                 $(".header-icons").find("li").attr("data-id", '').attr("data-raw", '').parent().addClass("enableby-request");
             }).on('select_node.jstree', function (e, node) {
@@ -360,90 +352,25 @@ var Data = {
         return data;
     }
     , treeify: function (list) {
-        var tree = Data.createTreeOptions(Global.cloneObject(list));
-        $("#test").html(tree);
-
+        cache.tree = '';
+        cache.imagine = $('<div><div class="hierarchy-0"></div></div>');
+        Data.createTree(Global.cloneObject(list));
+        Data.findChildren(cache.imagine.find('.hierarchy-0'), 0)
+        cache.tree = ('<select name="ExpertId" class="form-control simple rtl no-edit">' + cache.tree + '</select>');
         return list;
     }
-    , createTreeOptions: function (items) {
-        if (!items.length)
-            return '';
-        var html = '', children = [], l;
-        var map = {}, node, roots = [];
-
-        $.each(items, function () {
-            if (this.parent === "#")
-                this.parent = 0;
+    , createTree: function (items) {
+        $.each(items, function (i, item) {
+            item.parent = (item.parent === "#") ? 0 : item.parent;
+            var parent = cache.imagine.find('.hierarchy-' + item.parent);
+            parent.append('<div class="hierarchy-' + item.id + '"><span>' + item.text + '</span></div>');
         });
-        items.sort(function (a, b) {
-            return (a.parent > b.parent) ? 1 : ((b.parent > a.parent) ? -1 : 0);
+    }
+    , findChildren: function (elem, indent) {
+        elem.children('div').each(function (c, child) {
+            cache.tree += '<option value="' + $(child).attr("class").split("-")[1] + '">' + '| - - '.repeat(indent) + $(child).children('span').text() + '</option>';
+            Data.findChildren($(child), indent + 1);
         });
-        
-        var roots = Global.cloneObject(items);
-
-        $.each(roots, function () {
-            l = (typeof children[this.parent] !== "undefined") ? children[this.parent] : [];
-            l.push(this);
-            children[this.parent] = l;
-        });
-
-        var tree = Data.treeRecurse(0, '', [], children, 0);
-        $.each(tree, function () {
-            if (typeof this.id !== "undefined")
-                html += '<option value="' + this.id + '" data-parent="' + this.parent + '">' + this.treemenu + '</option>';
-        });
-        return html;
-    }
-    , treeRecurse: function (id, indent, list, children, level) {
-        if (typeof children[id] !== "undefined" && children[id]) {
-            $.each(children[id], function () {
-                var v = this;
-                var id = v.id;
-                if (v.parent === 0)
-                    text = v.text;
-                else
-                    text = '|_ ' + v.text;
-
-                list[id] = v;
-                list[id].treemenu = indent + text;
-                list[id].children = (typeof children[id] !== "undefined") ? children[id].length : 0;
-                level++;
-                list = Data.treeRecurse(id, indent + ' -', list, children, level);
-            });
-        }
-        return list;
-    }
-    , buildSectionTree: function (tree, item) {
-//        console.log(tree);
-        if (typeof item !== "undefined") {
-            for (var i = 0; i < tree.length; i++) {
-                if (String(tree[i].id) === String(item.parent)) {
-                    item.depth = tree[i].depth + 1;
-                    tree[i].childs.push(item);
-                    break;
-                }
-                else
-                    Data.buildSectionTree(tree[i].childs, item);
-            }
-        } else {
-            var idx = 0;
-            while (idx < tree.length)
-                if (tree[idx].parent !== 1)
-                    Data.buildSectionTree(tree, tree.splice(idx, 1)[0]);
-                else
-                    idx++;
-        }
-    }
-    , indentGen: function (n) {
-        var ret = '';
-        for (i = 0; i < n - 1; i++)
-            ret += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        if (n > 0)
-            ret += '|---';
-        return ret;
-    }
-    , addOptionPrefixes: function (id, title, level) {
-
     }
 };
 var Forms = {

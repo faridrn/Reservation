@@ -1,5 +1,5 @@
 var debug = true;
-var cache = {tree: '', idx: 0, listTree: [], clinic: []};
+var cache = {tree: '', clinic: []};
 
 var Config = {
     title: 'Reservation'
@@ -470,7 +470,6 @@ var Global = {
             var clinic = String(token.clinic);
             if (typeof cache.clinic[clinic] !== "undefined")
                 return cache.clinic[clinic];
-//            cssClass = (typeof value !== "undefined" && value !== "") ? ' ' + value : '';
             var data = '<select name="VisitGuid" class="form-control simple no-edit rtl">';
             var o = Data.createObject({Action: 'VisitGetByClinic', Params: {ClinicGuid: clinic}});
             o.async = false;
@@ -484,6 +483,18 @@ var Global = {
             }
             $.ajax(o);
             return data;
+        });
+        Handlebars.registerHelper('expertSelect', function (value, options) {
+            if (typeof cache.tree === "undefined" || cache.tree === "") {
+                var o = Data.createObject({Action: 'ExpertGetAll'});
+                o.async = false;
+                o.success = function (d) {
+                    d = (typeof d !== "object") ? JSON.parse(d).Items : d.Items;
+                    Data.prepareTree(d);
+                }
+                $.ajax(o);
+            }
+            return cache.tree;
         });
         Handlebars.registerHelper('convert2Jalali', function (value, options) {
             return Global.convertDateTime(value);
