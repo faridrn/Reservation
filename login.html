@@ -45,7 +45,7 @@
 								<div class="form-group">
 									<ul>
 										<li><a href="#" data-toggle="modal" data-target="#ManagerCreateSmsKey">بازیابی رمز عبور</a></li>
-										<li><a href="#" data-toggle="modal" data-target="#ManagerSetPassword">تغییر رمز عبور</a></li>
+										<!--<li><a href="#" data-toggle="modal" data-target="#ManagerSetPassword">تغییر رمز عبور</a></li>-->
 									</ul>
 								</div>
 							</form>
@@ -84,13 +84,13 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title">بازیابی کلمه عبور</h4>
 					</div>
-					<form class="register-form" role="form" action="ManagerSetPassword" data-next="toast">
+					<form class="register-form" role="form" action="ManagerSetPasswordBySmsKey" data-next="toast">
 						<div class="modal-body">
 							<div class="form-group">
 								<input type="text" name="UserName" class="form-control" id="register-username-input" placeholder="نام کاربری" required />
 							</div>
 							<div class="form-group">
-								<input type="text" name="Phone" class="form-control" id="register-phone-input" placeholder="شماره تلفن" required />
+								<input type="text" name="SmsKey" class="form-control" id="register-phone-input" placeholder="کد ارسال شده به تلفن همراه شما" required />
 							</div>
 							<div class="form-group">
 								<input type="password" name="Password" class="form-control" id="register-password-input" placeholder="رمز عبور جدید" required />

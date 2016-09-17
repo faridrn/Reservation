@@ -90,6 +90,15 @@ var Data = {
                     Cookie.set(JSON.stringify(token));
                     User.navicateSuccessLogin();
                     break;
+                case 'ManagerCreateSmsKey':
+                    $("#ManagerCreateSmsKey").modal('hide');
+                    $("#ManagerCreateSmsKey").on('hidden.bs.modal', function () {
+                        $("#ManagerSetPassword").modal('show');
+                    });
+                    break;
+                case 'ManagerSetPassword':
+                    Data.handleAction('toast', d.Result, 'success');
+                    break;
             }
         };
         $.ajax(o);
@@ -227,7 +236,8 @@ var Data = {
     }
     , handleContent: function (place) { // After render
         if ($(place).find(".table").length) {
-            $('table').bootstrapTable({
+            var $table = ($("#place-inner").length) ? $("#place-inner").find('.table') : $("#place").find(".table");
+            $table.bootstrapTable({
                 locale: 'fa-IR'
                 , pagination: true
                 , cache: false
