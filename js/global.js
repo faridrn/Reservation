@@ -91,7 +91,10 @@ var Location = {
         } else {
             debug && console.warn(Global.t() + ' No url fragments!');
             // Go to main page
-            Location.redirect('doctors', true);
+            if (token.access == 0)
+                Location.redirect('me', true);
+            else 
+                Location.redirect('doctors', true);
         }
         return false;
     }
@@ -379,45 +382,49 @@ var Global = {
             return token.guid;
         });
         Handlebars.registerHelper('getDoctorName', function (value, options) {
-            var data = '';
-            var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
-            if (id) {
-                var o = Data.createObject({Action: 'DoctorsGetOne', Params: {Guid: id}});
-                o.async = false;
-                o.success = function (d) {
-                    d = typeof d === "string" ? JSON.parse(d) : d;
-                    data = d.Items[0].Name + ' ' + d.Items[0].Famili;
+            if (typeof Location.parts[2] !== "undefined" && Location.parts[2])
+                return Location.parts[2];
+            else {
+                var data = '';
+                var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
+                if (id) {
+                    var o = Data.createObject({Action: 'DoctorsGetOne', Params: {Guid: id}});
+                    o.async = false;
+                    o.success = function (d) {
+                        d = typeof d === "string" ? JSON.parse(d) : d;
+                        data = d.Items[0].Name + ' ' + d.Items[0].Famili;
+                    }
+                    $.ajax(o);
+                    return data;
                 }
-                $.ajax(o);
-                return data;
             }
         });
-        Handlebars.registerHelper('getUserName', function (value, options) {
-            var data = '';
-            if (value) {
-                var o = Data.createObject({Action: 'UsersGetOne', Params: {Guid: value}});
-                o.async = false;
-                o.success = function (d) {
-                    d = typeof d === "string" ? JSON.parse(d) : d;
-                    data = d.Items[0].Name + ' ' + d.Items[0].Famili;
-                }
-                $.ajax(o);
-                return data;
-            }
-        });
-        Handlebars.registerHelper('getVisitName', function (value, options) {
-            var data = '';
-            if (value) {
-                var o = Data.createObject({Action: 'VisitGetOne', Params: {Guid: value}});
-                o.async = false;
-                o.success = function (d) {
-                    d = typeof d === "string" ? JSON.parse(d) : d;
-                    data = d.Items[0].Name;
-                }
-                $.ajax(o);
-                return data;
-            }
-        });
+//        Handlebars.registerHelper('getUserName', function (value, options) {
+//            var data = '';
+//            if (value) {
+//                var o = Data.createObject({Action: 'UsersGetOne', Params: {Guid: value}});
+//                o.async = false;
+//                o.success = function (d) {
+//                    d = typeof d === "string" ? JSON.parse(d) : d;
+//                    data = d.Items[0].Name + ' ' + d.Items[0].Famili;
+//                }
+//                $.ajax(o);
+//                return data;
+//            }
+//        });
+//        Handlebars.registerHelper('getVisitName', function (value, options) {
+//            var data = '';
+//            if (value) {
+//                var o = Data.createObject({Action: 'VisitGetOne', Params: {Guid: value}});
+//                o.async = false;
+//                o.success = function (d) {
+//                    d = typeof d === "string" ? JSON.parse(d) : d;
+//                    data = d.Items[0].Name;
+//                }
+//                $.ajax(o);
+//                return data;
+//            }
+//        });
         Handlebars.registerHelper('getManagerName', function (value, options) {
             var data = '';
             if (value) {
