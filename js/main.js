@@ -508,12 +508,13 @@ function responsive_resize() {
         $('body').addClass("_lg").removeClass("_xs _sm _md");
     }
 }
-responsive_resize();
+
 $(window).resize(function () { // Change width value on user resize, after DOM
     responsive_resize();
 });
 new app();
 $(function () {
+    responsive_resize();
     $('[data-toggle="tooltip"]').tooltip();
     $(document).on('click', 'button.manipulate', function (e) {
         e.preventDefault;
@@ -642,6 +643,18 @@ $(function () {
                     $next.modal('show');
                 });
                 break;
+            case 'toggle-menu':
+                var $target = $(document).find($(this).attr("data-target"));
+                if ($target.hasClass('open'))
+                    $target.animate({'height': '150px'}).removeClass('open');
+                else 
+                    $target.animate({'height': '100%'}).addClass('open');
+                break;
+        }
+    });
+    $(document).on('click', "#menu li a", function(e) {
+        if ($(this).parents(".sidebar").hasClass("open") && ($("body").hasClass('_xs') || $("body").hasClass('_sm'))) {
+            $(this).parents(".sidebar").animate({'height': '150px'}).removeClass('open');
         }
     });
     $(document).on('change', "#form-upload", function () {

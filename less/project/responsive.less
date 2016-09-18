@@ -3,7 +3,22 @@
 }
 @media (max-width: @screen-sm-max) {
     .modal-dialog { width: 100% !important; }
+    .app-header {
+        .title { display: none; }
+        .icon { float: right; }
+    }
+    .app-container {
+        .user-menu { width: 220px; }
+        .sidebar {
+            position: relative; width: 100%; height: 150px; overflow: hidden;
+            .app-menu ul { padding: 0; }
+        }
+        .app-inner { padding-top: 100px !important; }
+        .app-main {
+            padding-right: 0 !important;
+        }
+    }
 }
 @media (max-width: @screen-xs-max) {
-   
+
 }

@@ -5,6 +5,7 @@
     .sidebar {
         width: @sidebar-width; height: 100%; position: absolute; top: 0; right: 0; background: @sidebar-bg; z-index: @sidebar-zindex; padding-top: @grid-gutter-width*5;
         .sidebar-inner { position: relative; height: 100%; }
+        .menu-toggler { position: absolute; top: -24px; left: (@grid-gutter-width / 2); z-index: 1000; }
     }
     .user-menu {
         position: absolute; top: 0; left: 0; width: @sidebar-width; height: @header-height; z-index: @sidebar-zindex + 1; background: #1E88E5; line-height: @header-height; padding: 0 @grid-gutter-width; color: #efefef;
