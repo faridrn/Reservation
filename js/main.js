@@ -606,8 +606,18 @@ $(function () {
     $(document).on('click', 'a[data-task]', function (e) {
         var task = $(this).attr('data-task');
         e.preventDefault();
-        if (task === 'logout') {
-            User.logout();
+        switch (task) {
+            case 'logout':
+                User.logout();
+                break;
+            case 'next-modal':
+                var $current = $(this).parents(".modal");
+                var $next = $($(this).attr('data-target'));
+                $current.modal('hide');
+                $current.on('hidden.bs.modal', function() {
+                    $next.modal('show');
+                });
+                break;
         }
     });
     $(document).on('change', "#form-upload", function () {
