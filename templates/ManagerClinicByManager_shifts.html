@@ -8,30 +8,30 @@
 	</ul>
 </div>
 <div class="row">
-	<div class="col-xs-12 col-md-3 col-lg-2">
+	<div class="col-xs-12 col-sm-12 col-lg-2">
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-xs-12 col-sm-1 col-lg-12">
 				<label>روز شروع</label>
 			</div>
-			<div class="col-xs-12">
+			<div class="col-xs-12 col-sm-4 col-lg-12">
 				<div class="form-group">
 					<input type="text" class="form-control datepicker get-url" data-part="1" name="start-time-select" value="" />
 				</div>
 			</div>
-			<div class="col-xs-12">
+			<div class="col-xs-12 col-sm-1 col-lg-12">
 				<label>روز پایان</label>
 			</div>
-			<div class="col-xs-12">
+			<div class="col-xs-12 col-sm-4 col-lg-12">
 				<div class="form-group">
 					<input type="text" class="form-control datepicker get-url" data-part="2" name="end-time-select" value="" />
 				</div>
 			</div>
-			<div class="col-xs-12">
+			<div class="col-xs-12 col-sm-2 col-lg-12">
 				<button class="btn btn-warning" onClick="location.href='#shifts/' + $('input[name=start-time-select]').val() + '/' + $('input[name=end-time-select]').val();">نمایش</button>
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-12 col-md-9 col-lg-10">
+	<div class="col-xs-12 col-md-12 col-lg-10">
 		{{#pageHasId}}
 			<div id="place-inner" class="load-data" data-service="FreeTimeGetByClinicAndDate" data-template="FreeTimeGetByClinicAndDate"
 					data-params='{"ClinicGuid":{token.clinic},"StartDate":"{{#getDate 1 0}}{{/getDate}}","EndDate":"{{#getDate 2 7}}{{/getDate}}"}'></div>
