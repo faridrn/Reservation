@@ -3,9 +3,9 @@ var cache = {tree: '', clinic: []};
 
 var Config = {
     title: 'Reservation'
-    , api: 'http://iranappsazan.ddns.net:8080/myapi/api/action/reservation'
-    , media: 'http://iranappsazan.ddns.net:8080/myapi/api/file/download/image/'
-    , upload: 'http://iranappsazan.ddns.net:8080/myapi/api/file/upload/multi'
+    , api: 'http://78.38.208.95/ReservationApi/action'
+    , media: 'http://78.38.208.95/ReservationApi/download/image/'
+    , upload: 'http://78.38.208.95/ReservationApi/upload/multi'
 };
 var Cookie = {
     lifetime: 1000000 // exp in seconds
@@ -94,7 +94,7 @@ var Location = {
             // Go to main page
             if (token.access == 0)
                 Location.redirect('me', true);
-            else 
+            else
                 Location.redirect('doctors', true);
         }
         return false;

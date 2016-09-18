@@ -298,12 +298,10 @@ var Data = {
                     , onSelect: function (d, e, f) {
                         if ($datepicker.attr("data-chain").length > 1) {
                             var date = $datepicker.val();
-                            $target.convertDate2Gregorian(date);
-
+                            var $target = $($datepicker.attr("data-chain"));
+                            $target.val(Global.convertDate2Gregorian(date, '-'));
 //                            var date = new Date(d);
-//                            var $target = $($datepicker.attr("data-chain"));
 //                            var greg_date = date.getFullYear() + '-' + Global.zeroFill(date.getMonth() + 1) + '-' + Global.zeroFill(date.getDate());
-//                            $target.val(greg_date);
                         }
                     }
                 });
@@ -522,7 +520,7 @@ $(function () {
     $(document).on('click', 'button.manipulate', function (e) {
         e.preventDefault;
         var $modal = $(".app-inner").find(".modal");
-        var $form = $modal.find("form");
+        var $form = $modal.find("form").not(".standalone");
         var task = $(this).attr("data-type");
         if (task !== 'add' && task !== 'append') {
             if ($(this).parents("tr:first").find(".raw").length) {
