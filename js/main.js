@@ -101,6 +101,30 @@ var Data = {
                     break;
             }
         };
+        o.error = function (jqXHR, exception) {
+            var msg = '';
+            var type = 'error';
+            if (jqXHR.status === 0) {
+                msg = 'Not connect.\n Verify Network.';
+            } else if (jqXHR.status == 400) {
+                msg = 'درخواست نا معتبر. [400]';
+            } else if (jqXHR.status == 403) {
+                msg = 'عدم مجوز اجرای دستور. [403]';
+                type = 'warning';
+            } else if (jqXHR.status == 500) {
+                msg = 'خطا در سرور. [500]';
+            } else if (jqXHR.status == 503) {
+                msg = 'خطا در اجرای دستور. [503]';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            } else if (exception === 'abort') {
+                msg = 'Request aborted.';
+                type = 'warning';
+            } else {
+                msg = 'Uncaught Error.\n' + jqXHR.responseText;
+            }
+            Data.handleAction('toast', msg, type);
+        }
         $.ajax(o);
         return results;
     }
@@ -614,7 +638,7 @@ $(function () {
                 var $current = $(this).parents(".modal");
                 var $next = $($(this).attr('data-target'));
                 $current.modal('hide');
-                $current.on('hidden.bs.modal', function() {
+                $current.on('hidden.bs.modal', function () {
                     $next.modal('show');
                 });
                 break;
