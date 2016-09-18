@@ -559,7 +559,8 @@ $(function () {
                     $form.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
                     if (prop === "ImageAddress") {
 //                        $.get(Config.media + data[prop]).done(function() {
-                        $modal.find(".item-picture img:first").attr('src', Config.media + data[prop]);
+                        var img = (data[prop] !== null && data[prop].indexOf('//') !== -1) ? data[prop] : Config.media + data[prop];
+                        $modal.find(".item-picture img:first").attr('src', img);
 //                        });
                     }
                 }

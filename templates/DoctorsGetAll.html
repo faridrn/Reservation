@@ -58,6 +58,21 @@
 				<button type="button" class="btn btn-sm btn-warning manipulate pull-left" data-type="edit"><i class="icon-edit"></i> ویرایش</button>
 				<h4 class="modal-title">مورد جدید</h4>
 			</div>
+			<form class="standalone image-upload" action="http://iranappsazan.ddns.net:8080/myapi/api/file/upload/multi" role="form" data-next="toast" method="post" enctype="multipart/form-data">
+				<div class="form-group">
+					<input type="hidden" class="form-control" name="FileName" value="" />
+					<input type="hidden" class="form-control" name="FileExtension" value="" />
+				</div>
+				<figure class="item-picture">
+					<div class="img">
+						<img src="" />
+					</div>
+					<label for="form-upload">
+						<span class="btn btn-primary btn-xs">انتخاب تصویر</span>
+						<input type="file" class="form-control" name="FileName" value="" id="form-upload" style="display: none" />
+					</label>
+				</figure>
+			</form>
 			<form class="manager-add-form form-horizontal" role="form" action="DoctorsAdd" data-service-add="DoctorsAdd" data-service-edit="DoctorsUpdate" data-service-delete="DoctorRemove" data-next="toast">
 				<input type="hidden" name="Guid" value="" />
 				<div class="modal-body">
@@ -119,7 +134,7 @@
 							<input type="email" name="Email" class="form-control" id="doctors-add-email-input" placeholder="ایمیل" required />
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group hide">
 						<label for="doctors-add-img-input" class="col-sm-2 control-label">آدرس تصویر</label>
 						<div class="col-sm-10">
 							<input type="text" name="ImageAddress" class="form-control" id="doctors-add-img-input" placeholder="آدرس تصویر" required />
