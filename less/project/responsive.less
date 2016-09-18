@@ -1,5 +1,22 @@
+@media (min-width: @screen-md-max) {
+    .app-container .mainbody .app-main {
+        .app-inner {
+            .table {
+                .btn {
+                    i { display: inline-block !important; }
+                }
+            }
+        }
+    }
+}
 @media (max-width: @screen-md-max) {
-
+    .app-container {
+        .app-inner {
+            .table {
+                figure { max-width: 60px; overflow: hidden; }
+            }
+        }
+    }
 }
 @media (max-width: @screen-sm-max) {
     .modal-dialog { width: 100% !important; }
@@ -13,7 +30,17 @@
             position: relative; width: 100%; height: 150px; overflow: hidden;
             .app-menu ul { padding: 0; }
         }
-        .app-inner { padding-top: 100px !important; }
+        .app-inner {
+            padding-top: 100px !important;
+            .table {
+                figure { max-width: 50px; }
+                .btn {
+                    i { display: none; }
+                    padding: 5px 6px; margin-bottom: 5px;
+                }
+                tbody tr td:last-child { padding: 5px 0; }
+            }
+        }
         .app-main {
             padding-right: 0 !important;
         }
