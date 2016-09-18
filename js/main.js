@@ -362,6 +362,9 @@ var Data = {
                 }
             });
         }
+        if ($("form.standalone.image-upload").length) {
+            $("form.standalone.image-upload").attr('action', Config.upload);
+        }
     }
     , handleReload: function () {
         if ($(place).find("table").length) {
