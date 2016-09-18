@@ -245,7 +245,6 @@ var Data = {
         return null;
     }
     , reload: function (page) {
-//        Data.handleReload();
         page = (typeof page === "object" && page.length > 0) ? page : Location.parts;
         if ($(".refresh-after").length && $("body").hasClass("modal-open")) {
             $(".refresh-after").modal('hide').on('hidden.bs.modal', function (e) {
@@ -545,6 +544,10 @@ $(function () {
                 $form.attr('action', $form.attr('data-service-add'));
                 $modal.addClass('refresh-after');
                 $form.find("[name=ClinicGuid]").val(token.clinic);
+                break;
+            case 'change-pass':
+                $form.find('input, textarea, select, button').prop('disabled', false);
+                $modal.addClass('refresh-after');
                 break;
             case 'view':
                 $modal.find(".modal-title").text("مشاهده جزئیات");

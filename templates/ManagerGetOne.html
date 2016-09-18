@@ -1,8 +1,13 @@
 <script id="ManagerGetOne-template" type="text/x-handlebars-template">
-	{{#each []}}
-	<h1 class="page-header">
-	{{Name}} {{Famili}}
-	</h1>
+{{#each []}}
+	<div class="itemlist-header">
+		<h2>{{Name}} {{Famili}}</h2>
+		<ul class="header-icons list-unstyled">
+			<li>
+				<button class="btn btn-info manipulate" data-type="change-pass"><i class="icon-edit"></i> تغییر کلمه عبور</button>
+			</li>
+		</ul>
+	</div>
 	<dl class="dl-horizontal">
 		<dt>نام کاربری</dt>
 		<dd>{{UserName}}</dd>
@@ -34,5 +39,35 @@
 		<dt>توضیحات</dt>
 		<dd>{{Descr}}</dd>
 	</dl>
-	{{/each}}
+	<div class="modal zoom fade" id="change-pass" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">تغییر کلمه عبور</h4>
+				</div>
+				<form class="manager-add-form form-horizontal" role="form" action="ManagerSetPasswordByOldPass" data-next="toast">
+					<input type="hidden" name="Guid" value="{{Guid}}" />
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="doctors-gender-select" class="col-sm-2 control-label">کلمه عبور قبلی</label>
+							<div class="col-sm-10">
+								<input type="password" name="OldPassword" class="form-control" placeholder="کلمه عبور قبلی" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="doctors-gender-select" class="col-sm-2 control-label">کلمه عبور جدید</label>
+							<div class="col-sm-10">
+								<input type="password" name="Password" class="form-control" placeholder="کلمه عبور جدید" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">ثبت</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{{/each}}
 </script>
