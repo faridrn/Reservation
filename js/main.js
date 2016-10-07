@@ -204,6 +204,10 @@ var Data = {
                 service = 'ReserveTimeGetByFreeTime';
                 params = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? {FreeTimeGuid: Location.parts[1]} : {};
                 break;
+            case 'nurses':
+                service = 'DirectRequestGetAll';
+//                params = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? {FreeTimeGuid: Location.parts[1]} : {};
+                break;
         }
         if (typeof service !== "undefined") {
             Data.post({Action: service, Params: params}, 'show');
@@ -626,8 +630,20 @@ $(function () {
                 }
                 $.ajax(o);
                 break;
+            case 'setState':
+                var id = (typeof $(this).attr("data-id") === "undefined" && $(this).parents("tr").length) ? $(this).parents("tr").attr("data-id") : $(this).attr("data-id");
+                var state = $(this).attr("data-state");
+                var action = $modal.find("[data-service-update]:first").attr("data-service-update");
+                if (confirm('Are you sure?')) {
+                    var data = {
+                        Action: action
+                        , Params: {Id: id, State: state}
+                    };
+                    Data.post(data, 'toast', Config.api, true);
+                }
+                break;
         }
-        if (task !== 'delete' && task !== 'assign' && task !== 'delete-clinic-manager')
+        if (task !== 'delete' && task !== 'assign' && task !== 'delete-clinic-manager' && task !== 'setState')
             $modal.modal('show').on('hidden.bs.modal', function () {
                 if ($modal.hasClass('refresh-after'))
                     Data.reload(Location.parts);

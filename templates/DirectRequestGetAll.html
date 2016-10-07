@@ -1,0 +1,48 @@
+<script id="DirectRequestGetAll-template" type="text/x-handlebars-template">
+<div class="itemlist-header">
+	<h2>درخواستهای پرستاری</h2>
+	<ul class="header-icons list-unstyled">
+		<li>
+			<button class="btn btn-primary manipulate" data-type="add"><i class="icon-plus"></i> مورد جدید</button>
+		</li>
+	</ul>
+</div>
+<table class="table table-bordered table-hover table-striped table-condensed">
+	<thead>
+		<th class="col-xs-1">گروه</th>
+		<th class="col-xs-2">عنوان</th>
+		<th class="col-xs-2">توضیحات</th>
+		<th class="col-xs-1">زمان</th>
+		<th class="col-xs-2">آدرس</th>
+		<th class="col-xs-1">اسم ارسال کننده</th>
+		<th class="col-xs-1">تلفن ارسال کننده</th>
+		<th class="col-xs-2"></th>
+	</thead>
+	<tbody>
+		{{#each []}}
+        <tr data-id="{{Id}}">
+            <td>
+				{{DirectRequestType}}
+				<textarea class="raw" style="display: none">{{#stringify raw}}{{/stringify}}</textarea>
+			</td>
+            <td>{{RequestMessage}}</td>
+            <td>{{RequestDesc}}</td>
+            <td>{{Time}}</td>
+            <td>{{Address}}</td>
+            <td>{{UserName}}</td>
+            <td>{{UserPhone}}</td>
+			<td>
+				<ul class="list-inline list-unstyled text-center">
+					<li><button class="btn btn-sm btn-danger manipulate" data-type="delete"><i class="icon-minus"></i> حذف</button></li>
+					<li><button class="btn btn-sm btn-warning manipulate" data-type="setState" data-state="2"><i class="icon-cancel"></i> لغو کردن</button></li>
+					<li><button class="btn btn-sm btn-success manipulate" data-type="setState" data-state="1"><i class="icon-done"></i> انجام شده</button></li>
+				</ul>
+			</td>
+        </tr>
+		{{/each}}
+    </tbody>
+</table>
+<div class="modal" style="display: none !important">
+	<div class="services-helper" data-service-delete="DirectRequestRemove" data-service-update="DirectRequestUpdate"></div>
+</div>
+</script>
