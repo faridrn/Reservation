@@ -644,7 +644,7 @@ $(function () {
                 break;
         }
         if (task !== 'delete' && task !== 'assign' && task !== 'delete-clinic-manager' && task !== 'setState')
-            $modal.modal('show').on('hidden.bs.modal', function () {
+            $modal.modal({backdrop: 'static'}).on('hidden.bs.modal', function () {
                 if ($modal.hasClass('refresh-after'))
                     Data.reload(Location.parts);
             });
