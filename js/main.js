@@ -295,19 +295,21 @@ var Data = {
         }
         if ($(place).find(".datepicker").length) {
             $(".datepicker").each(function () {
+                window.formatPersian = false;
                 var $datepicker = $(this);
+                var offset = (typeof $datepicker.attr("data-offset") !== "undefined") ? persianDate().add('d', 7).format('YYYY-MM-DD') : persianDate().format('YYYY-MM-DD');
+                offset = offset.split('-').toInt();
                 $datepicker.pDatepicker({
                     format: 'YYYY-MM-DD'
                     , onSelect: function (d, e, f) {
-                        if ($datepicker.attr("data-chain").length > 1) {
+                        if (typeof $datepicker.attr("data-chain") !== "undefined" && $datepicker.attr("data-chain").length > 1) {
                             var date = $datepicker.val();
                             var $target = $($datepicker.attr("data-chain"));
                             $target.val(Global.convertDate2Gregorian(date, '-'));
-//                            var date = new Date(d);
-//                            var greg_date = date.getFullYear() + '-' + Global.zeroFill(date.getMonth() + 1) + '-' + Global.zeroFill(date.getDate());
                         }
                     }
                 });
+                $datepicker.pDatepicker('setDate', offset);
             });
         }
         if ($(place).find(".datetimepicker").length) {
@@ -668,12 +670,12 @@ $(function () {
                 var $target = $(document).find($(this).attr("data-target"));
                 if ($target.hasClass('open'))
                     $target.animate({'height': '150px'}).removeClass('open');
-                else 
+                else
                     $target.animate({'height': '100%'}).addClass('open');
                 break;
         }
     });
-    $(document).on('click', "#menu li a", function(e) {
+    $(document).on('click', "#menu li a", function (e) {
         if ($(this).parents(".sidebar").hasClass("open") && ($("body").hasClass('_xs') || $("body").hasClass('_sm'))) {
             $(this).parents(".sidebar").animate({'height': '150px'}).removeClass('open');
         }
@@ -682,3 +684,25 @@ $(function () {
         $(this).parents("form:first").submit();
     });
 });
+
+String.prototype.toEnglishDigits = function () {
+    var charCodeZero = '۰'.charCodeAt(0);
+    return parseInt(this.replace(/[۰-۹]/g, function (w) {
+        return w.charCodeAt(0) - charCodeZero;
+    }));
+};
+Array.prototype.toEnglishDigits = function () {
+    var that = this;
+    for (var i = 0; i < that.length; i++)
+        that[i] = that[i].toEnglishDigits();
+    return that;
+};
+String.prototype.toInt = function () {
+    return parseInt(this);
+};
+Array.prototype.toInt = function () {
+    var that = this;
+    for (var i = 0; i < that.length; i++)
+        that[i] = that[i].toInt();
+    return that;
+};
