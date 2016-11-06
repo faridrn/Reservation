@@ -639,7 +639,7 @@ $(function () {
                 if (confirm('Are you sure?')) {
                     var data = {
                         Action: action
-                        , Params: {Id: id, State: state}
+                        , Params: {Id: id, Guid: id, State: state}
                     };
                     Data.post(data, 'toast', Config.api, true);
                 }
