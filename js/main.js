@@ -96,8 +96,16 @@ var Data = {
                         $("#ManagerSetPassword").modal('show');
                     });
                     break;
+                case 'ManagerSetPasswordBySmsKey':
                 case 'ManagerSetPassword':
                     Data.handleAction('toast', d.Result, 'success');
+                    $("#ManagerSetPassword").modal('hide');
+                    break;
+                case 'ManagerClinicRemove':
+                    $(document).find('tr[data-manager-id="' + data.Params.ManagerGuid + '"]').remove();
+                    break;
+                case 'ManagerClinicAdd':
+                    $(document).find("#manager-clinic-table tbody").append('<tr data-manager-id="' + $("select[name=ManagerGuid]").val() + '" data-clinic-id="' + data.Params.ClinicGuid + '"><td>' + $("select[name=ManagerGuid]").find("option:selected").text().split('[')[0] + '</td><td><button class="btn btn-sm btn-danger manipulate" data-type="delete-clinic-manager"><i class="icon-minus"></i> حذف</button></td></tr>');
                     break;
             }
         };
@@ -424,6 +432,9 @@ var Forms = {
             debug && console.log(Global.t() + ' Form Data: ' + JSON.stringify(data));
             reload = ($form.parents(".refresh-after").length) ? true : false;
             Data.post(data, $form.attr('data-next'), Config.api, reload);
+            if (typeof $form.attr("action") !== "undefined" && $form.attr("action") === "ManagerClinicAdd") {
+                
+            }
             e.preventDefault();
             return false;
         });
@@ -524,7 +535,7 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
     $(document).on('click', 'button.manipulate', function (e) {
         e.preventDefault;
-        var $modal = $(".app-inner").find(".modal");
+        var $modal = $(".app-inner").find(".modal:first");
         var $form = $modal.find("form").not(".standalone");
         var task = $(this).attr("data-type");
         if (task !== 'add' && task !== 'append') {
@@ -598,7 +609,6 @@ $(function () {
                 }
                 break;
             case 'delete-clinic-manager':
-                alert();
                 var $row = $(this).parents("tr:first");
                 if (confirm('Are you sure?')) {
                     var data = {
@@ -608,27 +618,20 @@ $(function () {
                             , ClinicGuid: $row.attr("data-clinic-id")
                         }
                     };
-                    Data.post(data, $form.attr('data-next'), Config.api, true);
+                    Data.post(data, $form.attr('data-next'), Config.api, false);
                 }
                 break;
             case 'assign':
                 var id = $(this).parents("tr:first").attr("data-id");
-                var modal2 = new tingle.modal({
-                    footer: true
-                    , stickyFooter: false
-                    , onOpen: function () {
-                        $("input[name=ClinicGuid]").val(id);
-                    }
-                    , onClose: function () {
-                        modal2.destroy();
-                        Data.reload(Location.parts);
-                    }
-                });
                 var o = Data.createObject({Action: 'ManagerClinicByClinic', Params: {ClinicGuid: id}});
                 o.success = function (d) {
                     var data = Data.show(d, 'ManagerClinicByClinic', 'not-available-container');
-                    modal2.setContent(data);
-                    modal2.open();
+                    $("#clinic-manage").find(".modal-body").html(data);
+                    $("#clinic-manage").modal({backdrop: "static"}).on('shown.bs.modal', function() {
+                        $("input[name=ClinicGuid]").val(id);
+                    }).on('hidden.bs.modal', function() {
+                        Data.reload(Location.parts);
+                    });
                 }
                 $.ajax(o);
                 break;
