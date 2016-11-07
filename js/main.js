@@ -302,7 +302,7 @@ var Data = {
             });
         }
         if ($(place).find(".datepicker").length) {
-            $(".datepicker").each(function () {
+            $(".datepicker:not(:disabled)").each(function () {
                 window.formatPersian = false;
                 var $datepicker = $(this);
                 var offset = (typeof $datepicker.attr("data-offset") !== "undefined") ? persianDate().add('d', 7).format('YYYY-MM-DD') : persianDate().format('YYYY-MM-DD');
@@ -321,7 +321,7 @@ var Data = {
             });
         }
         if ($(place).find(".datetimepicker").length) {
-            $(".datetimepicker").each(function () {
+            $(".datetimepicker:not(:disabled)").each(function () {
                 var $datepicker = $(this);
                 $datepicker.pDatepicker({
                     format: 'YYYY-MM-DD H:m'
@@ -433,7 +433,7 @@ var Forms = {
             reload = ($form.parents(".refresh-after").length) ? true : false;
             Data.post(data, $form.attr('data-next'), Config.api, reload);
             if (typeof $form.attr("action") !== "undefined" && $form.attr("action") === "ManagerClinicAdd") {
-                
+
             }
             e.preventDefault();
             return false;
@@ -572,17 +572,32 @@ $(function () {
                 for (var prop in data) {
                     if (prop === "BirthDate")
                         $modal.find('[name="BirthDatePicker"]').val(Global.convertDate(data[prop]));
-                    if (prop === "StartTime")
+                    if (prop === "StartTime") {
+                        var dateArr = Global.convertDateTime(data[prop]).split(/[\s\-\:]+/);
+                        if (typeof dateArr[dateArr.length - 1] === "string") {
+                            dateArr[dateArr.length - 1].indexOf('ب') !== -1 && (dateArr[dateArr.length - 4] = parseInt(dateArr[dateArr.length - 4]) + 12);
+                            dateArr.pop();
+                        }
+                            dateArr = dateArr.toInt()
+//                        console.info(dateArr)
+                        $modal.find('[name="StartTimePicker"]').pDatepicker('setDate', dateArr);
                         $modal.find('[name="StartTime"]').val(Global.convertDateTime(data[prop]));
-                    if (prop === "EndTime")
+                    }
+                    if (prop === "EndTime") {
+                        var dateArr = Global.convertDateTime(data[prop]).split(/[\s\-\:]+/);
+                        if (typeof dateArr[dateArr.length - 1] === "string") {
+                            dateArr[dateArr.length - 1].indexOf('ب') !== -1 && (dateArr[dateArr.length - 4] = parseInt(dateArr[dateArr.length - 4]) + 12);
+                            dateArr.pop();
+                        }
+                            dateArr = dateArr.toInt()
+                        $modal.find('[name="EndTimePicker"]').pDatepicker('setDate', dateArr);
                         $modal.find('[name="EndTime"]').val(Global.convertDateTime(data[prop]));
+                    }
                     $modal.find('[name="' + prop + '"]').val(data[prop]);
                     $form.find('input, textarea, select, button').not('[type="hidden"]').prop('disabled', true);
                     if (prop === "ImageAddress") {
-//                        $.get(Config.media + data[prop]).done(function() {
                         var img = (data[prop] !== null && data[prop].indexOf('//') !== -1) ? data[prop] : Config.media + data[prop];
                         $modal.find(".item-picture img:first").attr('src', img);
-//                        });
                     }
                 }
                 break;
@@ -627,9 +642,9 @@ $(function () {
                 o.success = function (d) {
                     var data = Data.show(d, 'ManagerClinicByClinic', 'not-available-container');
                     $("#clinic-manage").find(".modal-body").html(data);
-                    $("#clinic-manage").modal({backdrop: "static"}).on('shown.bs.modal', function() {
+                    $("#clinic-manage").modal({backdrop: "static"}).on('shown.bs.modal', function () {
                         $("input[name=ClinicGuid]").val(id);
-                    }).on('hidden.bs.modal', function() {
+                    }).on('hidden.bs.modal', function () {
                         Data.reload(Location.parts);
                     });
                 }
@@ -706,6 +721,6 @@ String.prototype.toInt = function () {
 Array.prototype.toInt = function () {
     var that = this;
     for (var i = 0; i < that.length; i++)
-        that[i] = that[i].toInt();
+        that[i] = (typeof that[i] === "string") ? that[i].toInt() : that[i];
     return that;
 };

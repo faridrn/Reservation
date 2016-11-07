@@ -528,14 +528,20 @@ var Global = {
         var date = datetime[0].split(splitter);
         var JDate = require('jdate');
         var gdate = JDate.to_gregorian(parseInt(date[0]), parseInt(date[1]), parseInt(date[2]));
-        return greg_date = gdate.getFullYear() + '-' + Global.zeroFill(gdate.getMonth() + 1) + '-' + Global.zeroFill(gdate.getDate());
+        greg_date = gdate.getFullYear() + '-' + Global.zeroFill(gdate.getMonth() + 1) + '-' + Global.zeroFill(gdate.getDate());
+        if (typeof datetime[1] !== "undefined")
+            greg_date += ' ' + datetime[1];
+        return greg_date;
     }
     , convertDateTime: function (datetime) {
         var JDate = require('jdate');
         var dt = datetime.split(' ');
         var d = dt[0].split("/").reverse();
-        var jdate = new JDate(new Date(d[0], d[1], d[2]));
-        return jdate.date.join('-') + ' ' + dt[1];
+        var jdate = new JDate(new Date(d[0], (parseInt(d[2]) - 1), d[1]));
+        var output = jdate.date.join('-') + ' ' + dt[1];
+        if (typeof dt[2] !== "undefined")
+            output += ' ' + dt[2].replace('AM', 'ق.ظ.').replace('PM', 'ب.ظ.');
+        return output;
     }
     , setClinic: function (element) {
         token.clinic = $(element).find("option:selected").val();
