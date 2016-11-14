@@ -344,6 +344,54 @@ var Data = {
                 });
             });
         }
+        if ($(place).find(".timepicker").length) {
+            $(".timepicker:not(:disabled)").each(function () {
+                var $timepicker = $(this);
+                $timepicker.pDatepicker({
+                    format: 'H:m'
+                    , timePicker: {
+                        enabled: true
+                        , showSeconds: false
+                    }
+                    , onlyTimePicker: true
+                    , onSelect: function (d, e, f) {
+                        if ($timepicker.attr("data-chain").length > 1) {
+                            var $target = $($timepicker.attr("data-chain"));
+                            $target.val($timepicker.val());
+                        }
+                    }
+                });
+            });
+        }
+        if ($(place).find(".open-datepicker").length) {
+            $(".open-datepicker:not(:disabled)").each(function () {
+                var $datepicker = $(this);
+                $datepicker.pDatepicker({
+                    format: 'H:m'
+                    , timePicker: {
+                        enabled: false
+                    }
+                    , toolbox: {
+                        enabled: false
+                    }
+                    , onSelect: function (d) {
+                        var date = persianDate.unix(d/1000);
+                        var formattedDate = date.format('dddd DD MMMM YYYY');
+                        date.formatPersian = false;
+                        var usableDate = date.format('YYYY-MM-DD').split('-');
+                        var JDate = require('jdate');
+                        var gdate = JDate.to_gregorian(parseInt(usableDate[0]), parseInt(usableDate[1]), parseInt(usableDate[2]));
+                        var greg_date = gdate.getFullYear() + '-' + Global.zeroFill(gdate.getMonth() + 1) + '-' + Global.zeroFill(gdate.getDate());
+                        if (!$(".datelist ul").find("input[value=" + greg_date + "]").length)
+                            $(".datelist ul").append('<li data-value="' + greg_date + '"><a href="#" class="btn btn-sm btn-xs">&times;</a>' + formattedDate + '</li>');
+                    }
+                });
+            });
+            $(document).on('click', ".datelist ul a", function(e) {
+                e.preventDefault();
+                $(this).parent().remove();
+            });
+        }
         if ($(".get-url").length) {
             $(".get-url").each(function () {
                 var part = parseInt($(this).attr("data-part"));
@@ -424,6 +472,10 @@ var Data = {
 var Forms = {
     init: function () {
         $(document).on('submit', 'form:not(.standalone)', function (e) {
+            if ($(this).hasClass("batch")) {
+                Forms.processBatch($(this));
+                return false;
+            }
             var $form = Forms.validate($(this));
             var data = {
                 Action: $form.attr('action')
@@ -467,6 +519,25 @@ var Forms = {
             }
         });
         return $form;
+    }
+    , processBatch: function($form) {
+        if ($form.attr('action') === "FreeTimeAdd") {
+            if (!$(".datelist ul li").length)
+                return false;
+            var data = {
+                Action: $form.attr('action')
+                , Params: $form.serializeObject()
+            };
+            var start = data.Params.StartTime;
+            var end = data.Params.EndTime;
+            $(".datelist ul li").each(function() {
+                data.Params.StartTime = $(this).attr('data-value') + ' ' + start + ':00';
+                data.Params.EndTime = $(this).attr('data-value') + ' ' + end + ':00';
+                
+                debug && console.log(Global.t() + ' Form Data: ' + JSON.stringify(data));
+                Data.post(data, $form.attr('data-next'), Config.api, false);
+            });
+        }
     }
 };
 var User = {
@@ -555,6 +626,16 @@ $(function () {
             case 'add':
                 $modal.find(".modal-title").text("مورد جدید");
                 $modal.find(".manipulate").hide();
+                $form.trigger('reset');
+                $form.find('input, textarea, select, button').prop('disabled', false);
+                $modal.find('[name="Guid"]').val('');
+                $form.attr('action', $form.attr('data-service-add'));
+                $modal.addClass('refresh-after');
+                $form.find("[name=ClinicGuid]").val(token.clinic);
+                break;
+            case 'add-monthly':
+                $modal = $("#monthly-add");
+                $form = $modal.find("form");
                 $form.trigger('reset');
                 $form.find('input, textarea, select, button').prop('disabled', false);
                 $modal.find('[name="Guid"]').val('');

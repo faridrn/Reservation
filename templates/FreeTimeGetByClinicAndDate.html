@@ -90,5 +90,62 @@
 		</div>
 	</div>
 </div>
+<div class="modal zoom fade" id="monthly-add" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">ثبت ماهانه</h4>
+			</div>
+			<form class="shift-add-form form-horizontal batch" role="form" action="FreeTimeAdd" data-service-add="FreeTimeAdd" data-service-edit="FreeTimeUpdate" data-next="toast">
+				<div class="modal-body">
+					<input type="hidden" name="Guid" value="" />
+					<input type="hidden" name="ClinicGuid" value="{{#getToken}}{{/getToken}}" />
+					<div class="form-group">
+						<label for="shift-state-select" class="col-sm-2 control-label">وضعیت</label>
+						<div class="col-sm-10">
+							<select name="State" class="form-control simple rtl" id="shift-state-select" required>
+								<option value="0">نرمال</option>
+								<option value="1">قفل شده</option>
+								<option value="2">حذف شده</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-6">
+							<div class="open-datepicker"></div>
+						</div>
+						<div class="col-xs-6">
+							<div class="datelist">
+								<ul class="list-unstyled"></ul>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shift-starttime-input" class="col-sm-2 control-label">ساعت شروع</label>
+						<div class="col-sm-4">
+							<input type="hidden" name="StartTime" id="tpicker-1" value="" required />
+							<input type="text" name="StartTimePicker" class="form-control timepicker no-edit" data-chain="#tpicker-1" id="shift-starttime-input" placeholder="ساعت شروع" required />
+						</div>
+						<label for="shift-endtime-input" class="col-sm-2 control-label">ساعت پایان</label>
+						<div class="col-sm-4">
+							<input type="hidden" name="EndTime" id="tpicker-2" value="" required />
+							<input type="text" name="EndTimePicker" class="form-control timepicker no-edit" data-chain="#tpicker-2" id="shift-endtime-input" placeholder="ساعت پایان" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="shift-desc-textarea" class="col-sm-2 control-label">توضیحات</label>
+						<div class="col-sm-10">
+							<textarea name="Descr" class="form-control rtl" id="shift-desc-textarea" placeholder="توضیحات"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">ثبت</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 {{/pageHasId}}
 </script>
