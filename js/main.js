@@ -59,7 +59,8 @@ function app() {
 
 var Data = {
     temp: {}
-    , post: function (data, action, service, reload) {
+    , post: function (data, action, service, reload, batch) {
+        var batch = (typeof batch !== "undefined") ? batch : null;
         var postfix = (data.Action.indexOf('_') !== -1) ? data.Action.split('_')[1] : '';
         data.Action = data.Action.split('_')[0];
         var o = Data.createObject(data, service, 'post');
@@ -73,6 +74,10 @@ var Data = {
                 Data.handleAction('toast', d.Result, 'error');
                 return false;
             }
+            if (action === "toast")
+                Data.handleAction('toast', d.Result, 'info');
+            if (batch)
+                $(document).find('[data-value="' + batch + '"]').remove();
             if (typeof reload !== "undefined" && reload === true)
                 Data.reload();
             // Service Type
@@ -279,6 +284,13 @@ var Data = {
                 , pageSize: 20
                 , clickToSelect: false
             });
+        } else {
+            if (Location.parts[0] === "shifts") {
+                // Temp: Until I find a better solution! like checking if the datepicker is compeletely initialized
+                window.setTimeout(function() {
+                    $(".show-records").length && $(".show-records").trigger('click');
+                }, 1000);
+            }
         }
         if ($(place).find(".tree").length) {
             var data = Data.prepareTree($('.tree textarea').val());
@@ -535,7 +547,7 @@ var Forms = {
                 data.Params.EndTime = $(this).attr('data-value') + ' ' + end + ':00';
                 
                 debug && console.log(Global.t() + ' Form Data: ' + JSON.stringify(data));
-                Data.post(data, $form.attr('data-next'), Config.api, false);
+                var results = Data.post(data, 'toast', Config.api, false, $(this).attr('data-value'));
             });
         }
     }
