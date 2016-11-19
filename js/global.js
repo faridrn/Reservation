@@ -1,4 +1,4 @@
-var debug = true;
+var debug = false;
 var cache = {tree: '', clinic: []};
 
 var Config = {
@@ -187,6 +187,7 @@ var Global = {
                 , async: false
                 , success: function (d) {
                     $("body").append(d);
+                    debug && console.log(Global.t() + ' Successfully loaded template file.');
                     callback = '#' + filename + '-template';
                 }
                 , error: function () {

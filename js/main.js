@@ -67,8 +67,8 @@ var Data = {
         var results = '';
         o.success = function (d) {
             results = d;
+            debug && console.log(Global.t() + ' Received Data: ' + d);
             d = (typeof d === "string") ? JSON.parse(d) : d;
-            debug && console.log(Global.t() + ' Received Data: ' + JSON.stringify(d));
             debug && reload && console.log(Global.t() + ' Reloading Contents');
             if (d.Result !== "OK") {
                 Data.handleAction('toast', d.Result, 'error');
@@ -85,6 +85,7 @@ var Data = {
                 default:
                     if (typeof action !== "undefined" && action === 'show') {
                         Data.show(d, data.Action, '#place', postfix);
+//                        console.warn(JSON.stringify(d));
                     }
                     break;
                 case 'toast':
@@ -211,7 +212,8 @@ var Data = {
                     break;
                 }
                 service = 'ManagerClinicByManager_shifts';
-                params = {ClinicGuid: token.clinic};
+                params = {ClinicGuid: token.clinic, ManagerGuid: token.guid};
+//                delete service;
                 break;
             case 'reservations':
                 service = 'ReserveTimeGetByFreeTime';
@@ -227,7 +229,6 @@ var Data = {
         }
     }
     , show: function (data, tmpl, place, postfix) {
-        place = (typeof place === "undefined") ? '#place' : place;
         tmpl = (postfix) ? tmpl + '_' + postfix : tmpl;
         tmpl = Global.loadTemplate(tmpl);
         debug && console.log(Global.t() + ' DataShow: Selected template is: ' + tmpl);
@@ -235,6 +236,7 @@ var Data = {
         var handlebarsTemplate = Handlebars.compile(template);
         var d = Data.handleItems(Data.createDataString(data));
         var output = handlebarsTemplate(d);
+        place = (typeof place === "undefined") ? '#place' : place;
         if ($(place).length) {
             $(place).empty();
             $(place).html(output).promise().done(function () {
@@ -415,8 +417,12 @@ var Data = {
             $.each($(".load-data"), function () {
                 var $handler = $(this);
                 if ($handler.html().length === 0) {
-                    var params = $handler.attr("data-params").replace(/{token.guid}/g, token.guid).replace(/{token.clinic}/g, token.clinic);
-                    var o = Data.createObject({Action: $handler.attr("data-service"), Params: JSON.parse(params)});
+                    var params = JSON.parse($handler.attr("data-params"));
+                    if (typeof params.ClinicGuid !== "undefined")
+                        params.ClinicGuid = token.clinic.toString();
+                    if (typeof params.ManagerGuid !== "undefined")
+                        params.ManagerGuid = token.guid.toString();
+                    var o = Data.createObject({Action: $handler.attr("data-service"), Params: params});
                     o.success = function (d) {
                         var data = Data.show(d, $handler.attr("data-template"), '#' + $handler.attr("id"));
                     };
