@@ -385,7 +385,7 @@ var Global = {
         });
         Handlebars.registerHelper('getDoctorName', function (value, options) {
             if (typeof Location.parts[2] !== "undefined" && Location.parts[2])
-                return Location.parts[2];
+                return decodeURIComponent(Location.parts[2]);
             else {
                 var data = '';
                 var id = (typeof Location.parts[1] !== "undefined" && Location.parts[1]) ? Location.parts[1] : null;
