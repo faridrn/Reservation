@@ -289,7 +289,7 @@ var Data = {
         } else {
             if (Location.parts[0] === "shifts") {
                 // Temp: Until I find a better solution! like checking if the datepicker is compeletely initialized
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                     $(".show-records").length && $(".show-records").trigger('click');
                 }, 1000);
             }
@@ -324,14 +324,19 @@ var Data = {
                 $datepicker.pDatepicker({
                     format: 'YYYY-MM-DD'
                     , onSelect: function (d, e, f) {
+                        var date = $datepicker.val();
+                        $datepicker.parent().find(".input-group-addon").html(persianDate(date.split('-').toInt()).format('dddd'));
                         if (typeof $datepicker.attr("data-chain") !== "undefined" && $datepicker.attr("data-chain").length > 1) {
-                            var date = $datepicker.val();
                             var $target = $($datepicker.attr("data-chain"));
                             $target.val(Global.convertDate2Gregorian(date, '-'));
                         }
                     }
                 });
                 $datepicker.pDatepicker('setDate', offset);
+                if ($datepicker.parent().find(".input-group-addon").length) {
+                    var $addon = $datepicker.parent().find(".input-group-addon");
+                    $addon.html(persianDate(offset).format('dddd'));
+                }
             });
         }
         if ($(place).find(".datetimepicker").length) {
@@ -389,7 +394,7 @@ var Data = {
                         enabled: false
                     }
                     , onSelect: function (d) {
-                        var date = persianDate.unix(d/1000);
+                        var date = persianDate.unix(d / 1000);
                         var formattedDate = date.format('dddd DD MMMM YYYY');
                         date.formatPersian = false;
                         var usableDate = date.format('YYYY-MM-DD').split('-');
@@ -401,7 +406,7 @@ var Data = {
                     }
                 });
             });
-            $(document).on('click', ".datelist ul a", function(e) {
+            $(document).on('click', ".datelist ul a", function (e) {
                 e.preventDefault();
                 $(this).parent().remove();
             });
@@ -538,7 +543,7 @@ var Forms = {
         });
         return $form;
     }
-    , processBatch: function($form) {
+    , processBatch: function ($form) {
         if ($form.attr('action') === "FreeTimeAdd") {
             if (!$(".datelist ul li").length)
                 return false;
@@ -548,10 +553,10 @@ var Forms = {
             };
             var start = data.Params.StartTime;
             var end = data.Params.EndTime;
-            $(".datelist ul li").each(function() {
+            $(".datelist ul li").each(function () {
                 data.Params.StartTime = $(this).attr('data-value') + ' ' + start + ':00';
                 data.Params.EndTime = $(this).attr('data-value') + ' ' + end + ':00';
-                
+
                 debug && console.log(Global.t() + ' Form Data: ' + JSON.stringify(data));
                 var results = Data.post(data, 'toast', Config.api, false, $(this).attr('data-value'));
             });
@@ -677,7 +682,7 @@ $(function () {
                             dateArr[dateArr.length - 1].indexOf('ب') !== -1 && (dateArr[dateArr.length - 4] = parseInt(dateArr[dateArr.length - 4]) + 12);
                             dateArr.pop();
                         }
-                            dateArr = dateArr.toInt()
+                        dateArr = dateArr.toInt()
 //                        console.info(dateArr)
                         $modal.find('[name="StartTimePicker"]').pDatepicker('setDate', dateArr);
                         $modal.find('[name="StartTime"]').val(Global.convertDateTime(data[prop]));
@@ -688,7 +693,7 @@ $(function () {
                             dateArr[dateArr.length - 1].indexOf('ب') !== -1 && (dateArr[dateArr.length - 4] = parseInt(dateArr[dateArr.length - 4]) + 12);
                             dateArr.pop();
                         }
-                            dateArr = dateArr.toInt()
+                        dateArr = dateArr.toInt()
                         $modal.find('[name="EndTimePicker"]').pDatepicker('setDate', dateArr);
                         $modal.find('[name="EndTime"]').val(Global.convertDateTime(data[prop]));
                     }
