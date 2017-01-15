@@ -519,8 +519,8 @@ var Global = {
         if (typeof datetime !== "string")
             return '';
         var JDate = require('jdate');
-        var d = datetime.split(' ')[0].split(splitter).reverse();
-        var jdate = new JDate(new Date(d[0], (parseInt(d[2]) - 1), d[1]));
+        var d = datetime.split(' ')[0].split(splitter).toInt();
+        var jdate = new JDate(new Date(d[0], (d[1] - 1), d[2]));
         return jdate.date.join('-');
     }
     , convertDate2Gregorian: function (datetime, splitter) {
@@ -537,8 +537,8 @@ var Global = {
     , convertDateTime: function (datetime) {
         var JDate = require('jdate');
         var dt = datetime.split(' ');
-        var d = dt[0].split("/").reverse();
-        var jdate = new JDate(new Date(d[0], (parseInt(d[2]) - 1), d[1]));
+        var d = dt[0].split("/").toInt();
+        var jdate = new JDate(new Date(d[0], (parseInt(d[1]) - 1), d[2]));
         var output = jdate.date.join('-') + ' ' + dt[1];
         if (typeof dt[2] !== "undefined")
             output += ' ' + dt[2].replace('AM', 'ق.ظ.').replace('PM', 'ب.ظ.');
